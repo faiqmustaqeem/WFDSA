@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/bioRelativeOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mainll"
+        android:padding="10dp">
+
+
+        <RelativeLayout
+            android:id="@+id/relativeOutline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linearoutline">
+
+            <ImageView
+                android:id="@+id/flag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ar" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/czech" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeOutline2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeOutline"
+            android:background="@drawable/linearoutline"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:padding="5dp"
+                android:text="Lorem Epsom dummy text "
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textStyle="bold"
+
+                />
+
+            <TextView
+                android:id="@+id/company_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/company_name"
+                android:layout_marginStart="4dp"
+                android:padding="5dp"
+                android:text="Lorem Epsom dummy text Lorem Epsom dummy text Lorem Epsom dummy text " />
+
+            <LinearLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/company_address"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/Name_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:padding="6dp"
+                    android:text="Name:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:id="@+id/Name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.4"
+                    android:focusable="false"
+                    android:hint="My name is Khan"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/phonelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameLayout"
+                android:layout_marginStart="2dp"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/Phone_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.63"
+                    android:padding="7dp"
+                    android:paddingEnd="-5dp"
+                    android:text="Phone:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:id="@+id/Phone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.3"
+                    android:focusable="false"
+                    android:hint="04322214217"
+                    android:maxLines="1"
+                    android:layout_marginLeft="-5dp"
+                    android:padding="8dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/faxlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phonelayout"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/Email_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:padding="8dp"
+                    android:text="Fax:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:id="@+id/Fax"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.4"
+                    android:focusable="false"
+                    android:hint="04322214217"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/emaillayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/faxlayout"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/Fax_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:padding="7dp"
+                    android:text="Email:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:id="@+id/Email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.4"
+                    android:focusable="false"
+                    android:hint="info@wfdsa.org"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weblayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emaillayout"
+                android:weightSum="3">
+
+                <TextView
+                    android:id="@+id/Web_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:padding="7dp"
+                    android:text="Web:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:id="@+id/Web"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.4"
+                    android:focusable="false"
+                    android:hint="www.wfdsa.com"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

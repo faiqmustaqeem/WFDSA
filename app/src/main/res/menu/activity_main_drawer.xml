@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_events"
+            android:icon="@drawable/ic_events"
+            android:title="MY EVENTS" />
+        <item
+            android:id="@+id/nav_resources"
+            android:icon="@drawable/ic_resources"
+            android:title="MY RESOURCES" />
+        <item
+            android:id="@+id/nav_my_payment"
+            android:icon="@drawable/ic_payment"
+            android:title="MY PAYMENT" />
+        <item
+            android:id="@+id/nav_announcement"
+            android:icon="@drawable/ic_announcement"
+            android:title="ANNOUNCEMENTS" />
+        <item
+            android:id="@+id/nav_about_wfdsa"
+            android:icon="@drawable/ic_about"
+            android:title="ABOUT WFDSA" />
+        <item
+            android:id="@+id/nav_about_wfdsa_leadership"
+            android:icon="@drawable/ic_about"
+            android:title="WFDSA LEADERSHIP" />
+        <item
+            android:id="@+id/nae_committees"
+            android:icon="@drawable/ic_committees"
+            android:title="COMMITTEES" />
+        <item
+            android:id="@+id/nav_dsa_members"
+            android:icon="@drawable/ic_member"
+            android:title="DSA MEMBERS" />
+        <item
+            android:id="@+id/nav_contact_us"
+            android:icon="@drawable/ic_contact"
+            android:title="CONTACT US" />
+        <item
+            android:id="@+id/nav_app_user_guide"
+            android:icon="@drawable/ic_user_guide"
+            android:title="APP USER GUIDE" />
+    </group>
+    <!--
+        <item android:title="Communicate">
+            <menu>
+                <item
+                    android:id="@+id/nav_share"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="Share" />
+                <item
+                    android:id="@+id/nav_send"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="Send" />
+            </menu>
+        </item>-->
+
+</menu>

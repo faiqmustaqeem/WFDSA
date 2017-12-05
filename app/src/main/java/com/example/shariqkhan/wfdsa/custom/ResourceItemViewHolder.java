@@ -1,0 +1,26 @@
+package com.example.shariqkhan.wfdsa.custom;
+
+import android.view.View;
+import android.widget.TextView;
+
+
+import com.example.shariqkhan.wfdsa.R;
+import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
+
+/**
+ * Created by Codiansoft on 11/15/2017.
+ */
+
+public class ResourceItemViewHolder extends ChildViewHolder {
+
+    private TextView tvTitle;
+
+    public ResourceItemViewHolder(View itemView) {
+        super(itemView);
+        tvTitle = (TextView) itemView.findViewById(R.id.list_item_artist_name);
+    }
+
+    public void setTitle(String name) {
+        tvTitle.setText(name);
+    }
+}
