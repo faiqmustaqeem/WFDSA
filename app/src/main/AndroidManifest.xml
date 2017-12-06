@@ -1,75 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.shariqkhan.wfdsa"
+    package="com.example.shariqkhan.wfdsa">
 
-    >
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
-        >
-
-
-
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
-
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_key"/>
-
-
-
-        <activity android:name=".SplashActivity" android:screenOrientation="portrait">
-
-
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MemberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ContactActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyPaymentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AnnouncementsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AllEventsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SelectedEventActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProfileActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".MainActivity"  android:screenOrientation="portrait"/>
-        <activity android:name=".MemberActivity"  android:screenOrientation="portrait"/>
-        <activity android:name=".LoginActivity" android:screenOrientation="portrait"/>
+        <!-- <activity android:name=".model.ThankyouForRegistration" android:screenOrientation="portrait"/> -->
 
-        <activity android:name=".SignUpActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".AboutActivity" android:screenOrientation="portrait"/>
+        <!-- <activity android:name=".model.toolbar" android:screenOrientation="portrait"/> -->
 
-        <activity android:name=".ContactActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".ForgotPasswordActivity" android:screenOrientation="portrait"/>
+        <!-- <activity android:name=".model.userguide" android:screenOrientation="portrait"/> -->
 
-        <activity android:name=".MyPaymentActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".AnnouncementsActivity" android:screenOrientation="portrait"/>
+        <!-- <activity android:name=".model.Gallery" android:screenOrientation="portrait"/> -->
 
-        <activity android:name=".AllEventsActivity" android:screenOrientation="portrait"/>
-
-        <activity android:name=".SelectedEventActivity" android:screenOrientation="portrait"/>
-
-        <activity android:name=".ProfileActivity" android:screenOrientation="portrait"/>
-
-        <!--<activity android:name=".model.ThankyouForRegistration" android:screenOrientation="portrait"/>-->
-
-        <!--<activity android:name=".model.toolbar" android:screenOrientation="portrait"/>-->
-
-        <!--<activity android:name=".model.userguide" android:screenOrientation="portrait"/>-->
-
-        <!--<activity android:name=".model.Gallery" android:screenOrientation="portrait"/>-->
-
-        <activity android:name=".MyResourcesActivity"/>
-
+        <activity android:name=".MyResourcesActivity" />
+        <activity android:name=".CEOActivity" />
     </application>
 
 </manifest>

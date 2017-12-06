@@ -44,7 +44,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         holder.compnayName.setText(member.getCompanyName());
         holder.countryName.setText(member.getCountry());
 
-        if (position %2 ==0)
+        if (member.getCountry().equals("America"))
         {
             holder.logoTopLeft.setImageResource(R.drawable.hr);
             holder.logoFront.setImageResource(R.drawable.acovedi);

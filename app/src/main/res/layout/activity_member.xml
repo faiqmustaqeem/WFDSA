@@ -74,9 +74,9 @@
 
         <ImageView
             android:layout_width="25dp"
-            android:layout_height="33dp"
+            android:layout_height="28dp"
             android:layout_gravity="end|top"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="12dp"
             android:src="@drawable/icons8filter"
 
             android:id="@+id/filter"

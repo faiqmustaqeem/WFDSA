@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shariqkhan.wfdsa.Adapter.MemberAdapter;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
@@ -23,9 +25,9 @@ public class MemberActivity extends AppCompatActivity {
     public RecyclerView listOfMembers;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
-    public static String filterableString = "";
     ArrayList<ModelMember> arrayList = new ArrayList<>();
     ArrayList<ModelMember> arrayListSave ;
+    public static String filterableString = "";
 
 
 
@@ -84,52 +86,21 @@ public class MemberActivity extends AppCompatActivity {
         });
         imageFilter = (ImageView) toolbar.findViewById(R.id.filter);
 
-        imageFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String[] items = {"America", "Pakistan", "All"};
-                new LovelyChoiceDialog(MemberActivity.this)
-                        .setTopColorRes(R.color.colorPrimary)
-                        .setTitle("Select")
-                        .setIcon(R.drawable.icons8filter)
-                        .setItemsMultiChoice(items, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
-                            @Override
-                            public void onItemsSelected(List<Integer> positions, List<String> items) {
-                                Toast.makeText(MemberActivity.this, TextUtils.join(" ", items), Toast.LENGTH_SHORT).show();
 
-                                filterableString = TextUtils.join("", items);
-                                if (filterableString.equals("America")) {
-                                    arrayList.clear();
-                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+      imageFilter.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              String[] items = {"America", "Pakistan", "All"};
+              new MaterialDialog.Builder(MemberActivity.this)
+                      .title("Select")
+                      .items(items)
+                      .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                          @Override
+                          public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                           filterableString = text.toString();
 
-                                        ModelMember memberToCheck = new ModelMember();
-                                        memberToCheck = arrayListSave.get(counter);
-                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-
-                                    if(memberToCheck.Country.equals(filterableString))
-                                    {
-
-                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
-                                        arrayList.add(memberToCheck);
-                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
-
-                                    }
-                                    }
-                                //    Log.e("Jugar",String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayList);
-                                    listOfMembers.setAdapter(adapter);
-
-                                }else if (filterableString.equals("All"))
-                                {
-
-                                    arrayList = new ArrayList<>(arrayListSave);
-                                    Log.e("SizeAll",String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayListSave);
-                                    listOfMembers.setAdapter(adapter);
-
-                                }else if (filterableString.equals("Pakistan"))
-                                {
-                                    arrayList.clear();
+                              if (filterableString.equals("America")) {
+                                  arrayList.clear();
                                     for (int counter = 0; counter < arrayListSave.size(); counter++) {
 
                                         ModelMember memberToCheck = new ModelMember();
@@ -137,28 +108,142 @@ public class MemberActivity extends AppCompatActivity {
                                         Log.e("MEMBER", String.valueOf(memberToCheck));
 
                                         if(memberToCheck.Country.equals(filterableString))
-                                        {
+                                    {
 
-                                            Log.e("SizeOfPak",String.valueOf(arrayList.size()));
-                                            arrayList.add(memberToCheck);
-                                            Log.e("SizeOfPak",String.valueOf(arrayList.size()));
+                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
+                                        arrayList.add(memberToCheck);
+                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
 
-                                        }
                                     }
-                                    Log.e("Jugar",String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayList);
-                                    listOfMembers.setAdapter(adapter);
 
-                                }
+                                    }
+
+                                  adapter = new MemberAdapter(arrayList);
+                                  listOfMembers.setAdapter(adapter);
+
+                              } else if (filterableString.equals("All"))
+                              {
+
+                                  arrayList = new ArrayList<>(arrayListSave);
+                                  Log.e("SizeAll",String.valueOf(arrayList.size()));
+                                  adapter = new MemberAdapter(arrayListSave);
+                                  listOfMembers.setAdapter(adapter);
+
+                              }else if (filterableString.equals("Pakistan"))
+                              {
+                                  arrayList.clear();
+                                  for (int counter = 0; counter < arrayListSave.size(); counter++) {
+
+                                      ModelMember memberToCheck = new ModelMember();
+                                      memberToCheck = arrayListSave.get(counter);
+                                      Log.e("MEMBER", String.valueOf(memberToCheck));
+
+                                      if(memberToCheck.Country.equals(filterableString))
+                                      {
+
+                                          Log.e("SizeOfPak",String.valueOf(arrayList.size()));
+                                          arrayList.add(memberToCheck);
+                                          Log.e("SizeOfPak",String.valueOf(arrayList.size()));
+
+                                      }
+                                  }
+                                  Log.e("Jugar",String.valueOf(arrayList.size()));
+                                  adapter = new MemberAdapter(arrayList);
+                                  listOfMembers.setAdapter(adapter);
+
+                              }
 
 
-                            }
-                        })
-                        .setConfirmButtonText("Confirm")
-                        .show();
-            }
-        });
 
+                              Toast.makeText(MemberActivity.this, text, Toast.LENGTH_SHORT).show();
+                              return true;
+
+                              }
+                      })
+                      .positiveText("Choose")
+                      .show();
+
+
+          }
+      });
+
+
+//        imageFilter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String[] items = {"America", "Pakistan", "All"};
+//                new LovelyChoiceDialog(MemberActivity.this)
+//                        .setTopColorRes(R.color.colorPrimary)
+//                        .setTopTitle("Select country")
+//
+//                        .setTopTitleColor(Color.WHITE)
+//                        .setItemsMultiChoice(items, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
+//                            @Override
+//                            public void onItemsSelected(List<Integer> positions, List<String> items) {
+//                                Toast.makeText(MemberActivity.this, TextUtils.join(" ", items), Toast.LENGTH_SHORT).show();
+//
+//                                filterableString = TextUtils.join("", items);
+//                                if (filterableString.equals("America")) {
+//                                    arrayList.clear();
+//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+//
+//                                        ModelMember memberToCheck = new ModelMember();
+//                                        memberToCheck = arrayListSave.get(counter);
+//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
+//
+//                                    if(memberToCheck.Country.equals(filterableString))
+//                                    {
+//
+//                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
+//                                        arrayList.add(memberToCheck);
+//                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
+//
+//                                    }
+//                                    }
+//                                //    Log.e("Jugar",String.valueOf(arrayList.size()));
+//                                    adapter = new MemberAdapter(arrayList);
+//                                    listOfMembers.setAdapter(adapter);
+//
+//                                }else if (filterableString.equals("All"))
+//                                {
+//
+//                                    arrayList = new ArrayList<>(arrayListSave);
+//                                    Log.e("SizeAll",String.valueOf(arrayList.size()));
+//                                    adapter = new MemberAdapter(arrayListSave);
+//                                    listOfMembers.setAdapter(adapter);
+//
+//                                }else if (filterableString.equals("Pakistan"))
+//                                {
+//                                    arrayList.clear();
+//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+//
+//                                        ModelMember memberToCheck = new ModelMember();
+//                                        memberToCheck = arrayListSave.get(counter);
+//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
+//
+//                                        if(memberToCheck.Country.equals(filterableString))
+//                                        {
+//
+//                                            Log.e("SizeOfPak",String.valueOf(arrayList.size()));
+//                                            arrayList.add(memberToCheck);
+//                                            Log.e("SizeOfPak",String.valueOf(arrayList.size()));
+//
+//                                        }
+//                                    }
+//                                    Log.e("Jugar",String.valueOf(arrayList.size()));
+//                                    adapter = new MemberAdapter(arrayList);
+//                                    listOfMembers.setAdapter(adapter);
+//
+//                                }
+//
+//
+//                            }
+//                        })
+//                        .setConfirmButtonText("Confirm")
+//                        .show();
+//            }
+//        });
+//
 
     }
 }

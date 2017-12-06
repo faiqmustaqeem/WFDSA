@@ -48,8 +48,10 @@ public class MainActivity extends AppCompatActivity
     ImageView ivImage;
     @BindView(R.id.ivWFDSALogo)
     ImageView ivWFDSALogo;
+
     @BindView(R.id.rvEvents)
     RecyclerView rvEvents;
+
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
     @BindView(R.id.tvViewAllAnnouncements)
@@ -81,10 +83,6 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
-
-
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -181,6 +179,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.tvViewAllEvents:
                 Intent i2 = new Intent(this, AllEventsActivity.class);
                 startActivity(i2);
+                break;
             case R.id.tvViewAllResources:
             case R.id.tvAdvocacy:
             case R.id.tvAssociationService:
@@ -248,7 +247,10 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(aboutIntent);
         } else if (id == R.id.nav_about_wfdsa_leadership) {
 
-        } else if (id == R.id.nae_committees) {
+        } else if (id == R.id.nav_dsa_ceo_members) {
+            Intent intent = new Intent(MainActivity.this, CEOActivity.class);
+            startActivity(intent);
+
 
         } else if (id == R.id.nav_dsa_members) {
             Intent intent = new Intent(MainActivity.this, MemberActivity.class);

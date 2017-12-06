@@ -36,6 +36,7 @@ public class SplashActivity extends AppCompatActivity {
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
+
         if (isUserLoggedIn()) {
             fetchEvents();
             fetchAnnouncements();

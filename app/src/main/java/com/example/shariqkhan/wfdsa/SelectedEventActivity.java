@@ -59,15 +59,18 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("My Events");
+        mTitle.setText("Selected Events");
 
         image = (ImageView) findViewById(R.id.ivBack);
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(SelectedEventActivity.this, MainActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(SelectedEventActivity.this, MainActivity.class);
+//                startActivity(i);
+        /*Removing bug*/
+
+                finish();
             }
         });
 

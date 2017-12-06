@@ -35,6 +35,11 @@
             android:icon="@drawable/ic_member"
             android:title="DSA MEMBERS" />
         <item
+            android:id="@+id/nav_dsa_ceo_members"
+            android:icon="@drawable/ic_member"
+            android:title="DSA CEO MEMBERS" />
+
+        <item
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_contact"
             android:title="CONTACT US" />
