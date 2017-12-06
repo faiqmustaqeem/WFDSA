@@ -15,5 +15,7 @@
     <string name="terms_and_conditions">The World Federation of Direct Selling Associations respects the privacy of every individual who visits our web site. This is how we will handle information we learn about you. The information we receive depends on what you do when you visit our site. WFDSA will not collect or retain any information about you personally (that is your name, address, telephone number or e-mail address) unless you choose to provide it to us.</string>
 
     <string name="google_maps_key">AIzaSyBBA3rcxAM3w_HH-WUHBV77p9M5GtELZaU</string>
+    <string name="order">Order</string>
+    <string name="you_ordered">sasas</string>
 
 </resources>

@@ -42,6 +42,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         holder.memberPh.setText(member.getMemberPhone());
         holder.companyAddress.setText(member.getCompanyAddress());
         holder.compnayName.setText(member.getCompanyName());
+        holder.countryName.setText(member.getCountry());
 
         if (position %2 ==0)
         {
@@ -71,6 +72,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         public TextView memberWeb;
         public View view;
         public ImageView logoFront;
+        public TextView countryName;
         public ImageView logoTopLeft;
 
 
@@ -84,7 +86,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
             memberFax = (TextView) view.findViewById(R.id.Fax);
             memberEmail = (TextView) view.findViewById(R.id.Email);
             memberWeb = (TextView) view.findViewById(R.id.Web);
+            countryName = (TextView) view.findViewById(R.id.countruname);
             logoFront = (ImageView)view.findViewById(R.id.logo);
+
             logoTopLeft= (ImageView)view.findViewById(R.id.flag);
 
 

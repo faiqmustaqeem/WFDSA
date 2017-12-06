@@ -13,7 +13,18 @@ public class ModelMember {
     public String memberFax;
     public String memberWeb;
 
+    public String Country;
+
     public ModelMember() {
+    }
+
+
+    public String getCountry() {
+        return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
     }
 
     public String getCompanyName() {
