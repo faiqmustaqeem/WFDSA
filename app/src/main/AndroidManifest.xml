@@ -33,6 +33,10 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".UserGuideActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MemberActivity"
             android:screenOrientation="portrait" />
@@ -49,6 +53,9 @@
             android:name=".ContactActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".CommiteesActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -59,6 +66,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AllEventsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LeaderShipActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SelectedEventActivity"

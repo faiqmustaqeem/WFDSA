@@ -54,10 +54,13 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
+
     @BindView(R.id.tvViewAllAnnouncements)
     TextView tvViewAllAnnouncements;
+
     @BindView(R.id.tvViewAllEvents)
     TextView tvViewAllEvents;
+
     @BindView(R.id.tvViewAllResources)
     TextView tvViewAllResources;
 
@@ -137,6 +140,18 @@ public class MainActivity extends AppCompatActivity
         Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2017/08/BAS_23341.jpg").into(ivImage);
 
 
+        rvAnnouncements.addOnItemTouchListener(new RecyclerTouchListener(MainActivity.this, rvAnnouncements, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent i = new Intent(MainActivity.this, AnnouncementsActivity.class);
+                startActivity(i);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
         rvEvents.addOnItemTouchListener(new RecyclerTouchListener(MainActivity.this, rvEvents, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -144,6 +159,7 @@ public class MainActivity extends AppCompatActivity
                 Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
                 startActivity(i);
             }
+
 
             @Override
             public void onLongClick(View view, int position) {
@@ -164,6 +180,8 @@ public class MainActivity extends AppCompatActivity
         rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
         rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
         rvAnnouncements.setAdapter(announcementsRVAdapter);
+
+
     }
 
     @OnClick({R.id.ivImage, R.id.tvViewAllAnnouncements, R.id.tvViewAllEvents, R.id.tvViewAllResources, R.id.tvAdvocacy, R.id.tvAssociationService, R.id.tvGlobalRegulatory})
@@ -243,9 +261,15 @@ public class MainActivity extends AppCompatActivity
             Intent contactIntent = new Intent(MainActivity.this, AnnouncementsActivity.class);
             MainActivity.this.startActivity(contactIntent);
         } else if (id == R.id.nav_about_wfdsa) {
+
             Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
             MainActivity.this.startActivity(aboutIntent);
+
         } else if (id == R.id.nav_about_wfdsa_leadership) {
+
+
+            Intent intent = new Intent(MainActivity.this, LeaderShipActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_dsa_ceo_members) {
             Intent intent = new Intent(MainActivity.this, CEOActivity.class);
@@ -261,7 +285,12 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(contactIntent);
 
         } else if (id == R.id.nav_app_user_guide) {
+            Intent intent = new Intent(MainActivity.this, UserGuideActivity.class);
+            startActivity(intent);
 
+        } else if (id == R.id.nae_committees) {
+            Intent intent = new Intent(MainActivity.this, CommiteesActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
