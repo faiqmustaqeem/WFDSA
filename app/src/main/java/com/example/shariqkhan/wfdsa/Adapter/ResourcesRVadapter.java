@@ -52,6 +52,6 @@ public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGr
     public void onBindGroupViewHolder(ResourceGroupViewHolder holder, int flatPosition,
                                       ExpandableGroup group) {
 
-        holder.setGenreTitle(group);
+                             holder.setGenreTitle(group);
     }
 }

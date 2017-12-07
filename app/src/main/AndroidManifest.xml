@@ -6,6 +6,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".Multi_Dex"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

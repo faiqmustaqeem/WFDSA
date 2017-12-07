@@ -3,6 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion "27.0.1"
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.example.shariqkhan.wfdsa"
         minSdkVersion 18
@@ -33,6 +35,7 @@ dependencies {
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.google.android.gms:play-services:11.0.4'
     compile 'com.afollestad.material-dialogs:core:0.9.6.0'
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.yarolegovich:lovely-dialog:1.0.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.thoughtbot:expandablerecyclerview:1.3'

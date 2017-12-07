@@ -5,8 +5,8 @@
     >
 
 
-    <stroke android:width="0.5dp"
-        android:color="#979797">
+    <stroke android:width="0.3dp"
+        android:color="#c1c1c1">
 
 
     </stroke>

@@ -61,8 +61,8 @@ public class MyResourcesActivity extends AppCompatActivity {
             ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         resourcesSubItemsList.add(new ResourcesSubItems("1", "Media Guide"));
-        resourcesSubItemsList.add(new ResourcesSubItems("1", "Global Statistics"));
-        resourcesSubItemsList.add(new ResourcesSubItems("2", "Industry Message Guidebook"));
+        resourcesSubItemsList.add(new ResourcesSubItems("2", "Global Statistics"));
+        resourcesSubItemsList.add(new ResourcesSubItems("3", "Industry Message Guidebook"));
 
         adapter = new ResourcesRVadapter(this, getAllResources());
         rvResources.setLayoutManager(layoutManager);
