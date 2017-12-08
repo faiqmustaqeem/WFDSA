@@ -114,6 +114,12 @@ public class MainActivity extends AppCompatActivity
                                 ActivityCompat.finishAffinity(MainActivity.this);
                                 logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 MainActivity.this.startActivity(logoutIntent);
+
+                                SharedPreferences preferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                                SharedPreferences.Editor edit = preferences.edit();
+                                edit.clear();
+                                edit.commit();
+
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

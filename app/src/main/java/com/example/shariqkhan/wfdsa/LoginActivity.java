@@ -1,7 +1,10 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -17,8 +20,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,8 +78,14 @@ public class LoginActivity extends AppCompatActivity {
     String getPassword;
     android.app.ActionBar actionbar;
 
+    public static String BASE_URL = "http://www.codiansoft.com/wfdsa/api/login";
+
+    public String decider = "1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -75,13 +100,18 @@ public class LoginActivity extends AppCompatActivity {
 
                 getEmail = etMemberEmail.getEditText().getText().toString();
                 getPassword = etMemberPass.getEditText().getText().toString();
-                Log.e("Message", "Dhun dhun dhun");
+                Log.e("Email", getEmail);
+                Log.e("Password", getPassword);
 
                 fetchEvents();
                 fetchAnnouncements();
-                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-                LoginActivity.this.startActivity(loginIntent);
-                LoginActivity.this.finish();
+                Task task = new Task();
+                task.execute();
+
+
+                //                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
+//                LoginActivity.this.startActivity(loginIntent);
+//                LoginActivity.this.finish();
             }
         });
 
@@ -100,12 +130,14 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvMember:
+                decider = "1";
                 llMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
                 llNonMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 clMember.setVisibility(View.VISIBLE);
                 clNonMember.setVisibility(View.GONE);
                 break;
             case R.id.tvNonMember:
+                decider = "2";
                 llMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 llNonMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
                 clNonMember.setVisibility(View.VISIBLE);
@@ -116,6 +148,14 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(signUpIntent);
                 break;
             case R.id.tvNonMemberSignIn:
+                getEmail = etMemberEmail.getEditText().getText().toString();
+                getPassword = etMemberPass.getEditText().getText().toString();
+                Log.e("Message", "Dhun dhun dhun");
+
+                fetchEvents();
+                fetchAnnouncements();
+                Task task = new Task();
+                task.execute();
 
                 break;
             case R.id.tvMemberForgetPassword:
@@ -125,6 +165,131 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private class Task extends AsyncTask<String, Void, String> {
+        String stream = null;
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setTitle("Logging In");
+
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String[] params) {
+
+            String getResponse = getJson();
+            stream = getResponse;
+
+            return stream;
+
+        }
+
+        private String getJson() {
+            HttpClient httpClient = new DefaultHttpClient();
+
+
+            HttpPost post = new HttpPost(BASE_URL);
+            Log.e("Must","Must");
+
+            List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new BasicNameValuePair("email", getEmail));
+            parameters.add(new BasicNameValuePair("password", getPassword));
+            parameters.add(new BasicNameValuePair("signin_type", "2"));
+
+            StringBuilder buffer = new StringBuilder();
+
+            try {
+                // Log.e("Insidegetjson", "insidetry");
+                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+                post.setEntity(encoded);
+                HttpResponse response = httpClient.execute(post);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String Line = "";
+
+                while ((Line = reader.readLine()) != null) {
+                    Log.e("reader", Line);
+                    Log.e("buffer", buffer.toString());
+                    buffer.append(Line);
+
+                }
+                reader.close();
+
+            } catch (Exception o) {
+                Log.e("Error", o.getMessage());
+
+            }
+            return buffer.toString();
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            JSONObject jsonobj;
+            if (s != null) {
+                try {
+                    jsonobj = new JSONObject(s);
+                    Log.e("JSON", s);
+
+
+                    JSONObject result = jsonobj.getJSONObject("result");
+                    String checkResult = result.getString("status");
+
+                    if (checkResult.equals("success")) {
+
+                        Log.e("insidepost", checkResult);
+                        String get_api_secret = result.getString("api_secret");
+
+                        JSONObject user_data = result.getJSONObject("user_data");
+
+                        String getId = user_data.getString("non_member_id");
+                        String email = user_data.getString("email");
+
+                        Log.e("email", email);
+                        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
+                        editor.putString("api_secret", get_api_secret);
+                        editor.putString("deciderId", getId);
+                        editor.putString("email", email);
+                        editor.apply();
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }else
+                        {
+                            Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+
+
+                } catch (JSONException e) {
+                    Log.e("ErrorMessage", e.getMessage());
+                    progressDialog.dismiss();
+                }
+
+
+            }
+
+            progressDialog.dismiss();
+        }
+    }
+
+
+
 
 /*    public void hideOrShowLoginForms() {
         if (clMember.getVisibility() == View.VISIBLE) {

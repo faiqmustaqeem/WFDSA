@@ -1,6 +1,7 @@
 package com.example.shariqkhan.wfdsa;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,25 +38,14 @@ public class SplashActivity extends AppCompatActivity {
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
 
-        if (isUserLoggedIn()) {
-            fetchEvents();
-            fetchAnnouncements();
-        }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isUserLoggedIn()) {
-                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-                    SplashActivity.this.startActivity(mainIntent);
-                    SplashActivity.this.finish();
-                } else {
-                    Intent loginIntent = new Intent(SplashActivity.this, LoginActivity.class);
-                    SplashActivity.this.startActivity(loginIntent);
-                    SplashActivity.this.finish();
-                }
-            }
-        }, SPLASH_DISPLAY_LENGTH);
+
+
+
+
+
+
+
     }
 
     public static void fetchAnnouncements() {
@@ -76,7 +66,45 @@ public class SplashActivity extends AppCompatActivity {
         eventsList.add(new EventsModel("3", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm"));
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Log.e("start","start");
+
+
+        fetchEvents();
+        fetchAnnouncements();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isUserLoggedIn()) {
+                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                    SplashActivity.this.startActivity(mainIntent);
+                    SplashActivity.this.finish();
+                } else {
+                    Intent loginIntent = new Intent(SplashActivity.this, LoginActivity.class);
+                    SplashActivity.this.startActivity(loginIntent);
+                    SplashActivity.this.finish();
+                }
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+
+    }
+
     private boolean isUserLoggedIn() {
-        return false;
+        SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        String restoredPh = prefs.getString("api_secret", null);
+        String restoredPassword = prefs.getString("deciderId", null);
+        if (restoredPh != null || restoredPassword != null) {
+            //       Log.e("start", restoredPh);
+//            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+            return true;
+
+        }
+
+        return  false;
     }
 }
