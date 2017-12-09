@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="8dp"
-        android:gravity="center_vertical"
+
+        android:gravity="center|start"
         tools:text="Resource Category"
         android:padding="12dp"
         android:textStyle="bold"/>

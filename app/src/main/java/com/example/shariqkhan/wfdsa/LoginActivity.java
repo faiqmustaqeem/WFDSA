@@ -272,12 +272,17 @@ public class LoginActivity extends AppCompatActivity {
                     }else
                         {
                             Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
+                            etMemberEmail.getEditText().setText("");
+                            etMemberPass.getEditText().setText("");
+
                             progressDialog.dismiss();
                         }
 
 
                 } catch (JSONException e) {
                     Log.e("ErrorMessage", e.getMessage());
+                    etMemberEmail.getEditText().setText("");
+                    etMemberPass.getEditText().setText("");
                     progressDialog.dismiss();
                 }
 
