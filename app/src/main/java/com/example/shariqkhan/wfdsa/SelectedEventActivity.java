@@ -45,6 +45,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
     Animation shareSlideUp, shareSlideDown;
 
+    TextView tvRegister;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +54,18 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ButterKnife.bind(this);
 
         initUI();
-
+        tvRegister = (TextView) findViewById(R.id.tvRegister);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText("Selected Events");
@@ -74,6 +83,15 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
+
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectedEventActivity.this, RegisterEvent.class);
+                startActivity(intent);
+
+            }
+        });
 
         shareSlideDown.setAnimationListener(new Animation.AnimationListener() {
             @Override

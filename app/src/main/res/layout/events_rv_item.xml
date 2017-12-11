@@ -96,7 +96,7 @@
 
                     <TextView
                         android:gravity="center"
-                        android:drawableLeft="@drawable/ic_location"
+                        android:drawableLeft="@drawable/ic_loc"
                         android:id="@+id/tvCityCountry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

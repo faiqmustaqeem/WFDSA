@@ -163,7 +163,7 @@
                             android:id="@+id/tvAgendaDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
+
                             android:layout_marginTop="0dp"
                             android:text="DSA of Russia Educational Event, Moscow, Russian Federation, Wednesday , @ 8 : 00 AM" />
 
@@ -208,12 +208,14 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"/>
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:text="01 OCT 2018"
-                    android:textSize="12sp"
-                    android:gravity="center"
+                    android:drawableLeft="@drawable/ic_date"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
                     android:textColor="@color/colorPrimary"/>
 
                 <LinearLayout
@@ -225,6 +227,8 @@
                     <TextView
                         android:id="@+id/tvDayTime"
                         android:layout_width="wrap_content"
+                        android:drawableLeft="@drawable/ic_clock"
+                        android:gravity="center_vertical"
                         android:layout_height="wrap_content"
                         android:text="Wednesday ,@8:00AM" />
 
@@ -234,7 +238,10 @@
                         android:layout_weight="1"></FrameLayout>
 
                     <TextView
+                        android:drawableLeft="@drawable/ic_loc"
                         android:id="@+id/tvCityCountry"
+                        android:gravity="center_vertical"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Moscow, Russian Federation" />
