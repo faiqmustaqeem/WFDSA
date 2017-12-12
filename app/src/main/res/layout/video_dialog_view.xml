@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:id="@+id/container"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">-->
+
+
+<!--<RelativeLayout--><!--android:id="@+id/containsWidgets"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:paddingBottom="20dp">-->
+
+<!--<TextView--><!--android:id="@+id/textOfDialog"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_centerHorizontal="true"--><!--android:layout_marginTop="10dp"-->
+
+<!--android:text="HOW TO APPLY FOR MEMBER REGISTRATION"--><!--android:textColor="#000"-->
+
+<!--android:textSize="15sp"--><!--android:textStyle="bold" />-->
+
+<!--<VideoView--><!--android:id="@+id/videoView"--><!--android:layout_width="match_parent"--><!--android:layout_height="300dp"--><!--android:layout_below="@id/textOfDialog"--><!--android:layout_marginTop="20dp">-->
+
+
+<!--</VideoView>-->
+
+
+<!--</RelativeLayout>-->
+
+<!--</RelativeLayout>-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+android:paddingBottom="10dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="HOW TO APPLY FOR MEMBER REGISTRATION"
+        android:textColor="#000"
+
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#fff"
+        android:layout_below="@+id/textview"
+        android:layout_marginTop="20dp">
+
+        <com.github.rtoshiro.view.video.FullscreenVideoLayout
+            android:id="@+id/videoview"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+</RelativeLayout>

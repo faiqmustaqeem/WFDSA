@@ -7,6 +7,9 @@ package com.example.shariqkhan.wfdsa.Model;
 public class EventsModel {
     String id, eventTitle, eventDescription, venueCountry, venueCity, day, month, year, time;
 
+    public EventsModel() {
+    }
+
     public EventsModel(String id, String eventTitle, String eventDescription, String venueCountry, String venueCity, String day, String month, String year, String time) {
         this.id = id;
         this.eventTitle = eventTitle;

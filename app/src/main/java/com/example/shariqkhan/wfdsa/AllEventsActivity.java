@@ -56,7 +56,10 @@ public class AllEventsActivity extends AppCompatActivity {
         rvEvents.addOnItemTouchListener(new RecyclerTouchListener(AllEventsActivity.this, rvEvents, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+
                 EventsModel eventsModel = GlobalClass.eventsList.get(position);
+
+                Toast.makeText(AllEventsActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
                 startActivity(i);
             }

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/earth">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        app:navigationIcon="@drawable/ic_keyboard_arrow_left_black_24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="REGISTER EVENT"
+            android:textColor="#fff" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/mainScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tool_bar">
+
+
+        <RelativeLayout
+            android:id="@+id/mainContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:id="@+id/event_det_linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/eventname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EVENT NAME"
+                    android:textAllCaps="false"
+
+                    />
+
+                <TextView
+                    android:id="@+id/eventlocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EVENT LOCATION"
+                    android:textAllCaps="false"
+
+                    />
+
+                <TextView
+                    android:id="@+id/regfee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REGISTRATION FEES : $500.00"
+                    android:textAllCaps="false"
+
+                    />
+
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/card_layout"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/container"
+                android:background="@drawable/card"
+
+                >
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/input_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/event_det_linear">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <EditText
+                        android:id="@+id/etFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="NAME(APPEARS ON CARD)"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilCardNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tilFirstName"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+
+
+                    >
+
+                    <EditText
+                        android:id="@+id/etCardNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tilCardNumber"
+                        android:layout_alignStart="@+id/tilCardNumber"
+                        android:hint="CARD NUMBER"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </android.support.design.widget.TextInputLayout>
+
+                <RelativeLayout
+                    android:id="@+id/cvcExpiry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tilCardNumber"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/exp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="CARD EXPIRY" />
+
+                    <Spinner
+                        android:id="@+id/spinner1"
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/exp"
+                        android:layout_marginTop="8dp" />
+
+                    <Spinner
+
+
+                        android:id="@+id/spinner2"
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:layout_alignBaseline="@+id/spinner1"
+                        android:layout_alignBottom="@+id/spinner1"
+                        android:layout_alignParentEnd="true" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/cvcLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cvcExpiry"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/simpleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CVC CODE" />
+
+                    <TextView
+                        android:id="@+id/hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Security Code(3 on back, 4 on front)"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/cvcnoedit"
+                        android:layout_width="150dp"
+
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/simpleText"
+                        android:hint="CVC NUMBER"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@+id/hint"
+                        android:layout_marginEnd="10dp"
+
+                        android:layout_marginTop="12dp">
+
+                        <Button
+                            android:id="@+id/nums4"
+                            android:layout_width="50dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:background="@color/colorPrimary"
+                            android:text="123"
+                            android:textColor="#fff"
+                            android:textSize="10sp"
+
+                            />
+
+                        <Button
+                            android:id="@+id/nums3"
+                            android:layout_width="50dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="8dp"
+                            android:background="@color/colorPrimary"
+                            android:text="1234"
+                            android:textColor="#fff"
+                            android:textSize="10sp"
+
+                            />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/addressContCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cvcLayout">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tilFirstName"
+
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+
+
+                        >
+
+                        <EditText
+                            android:id="@+id/tilAddressEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/tilCardNumber"
+                            android:layout_alignStart="@+id/tilCardNumber"
+                            android:hint="YOUR ADDRESS"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+
+                        android:id="@+id/tilContact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tilAddress"
+
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+
+
+                        >
+
+                        <EditText
+                            android:id="@+id/tilContactEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/tilCardNumber"
+                            android:layout_alignStart="@+id/tilCardNumber"
+                            android:hint="NUMBER"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/COUNTRY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tilContact"
+
+                        android:text="COUNTRY" />
+
+                    <Spinner
+
+                        android:id="@+id/spinner3"
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/COUNTRY" />
+
+                    <android.support.design.widget.TextInputLayout
+
+                        android:id="@+id/tilEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/spinner3"
+
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+
+
+                        >
+
+                        <EditText
+                            android:id="@+id/tilEmailEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/tilCardNumber"
+                            android:layout_alignStart="@+id/tilCardNumber"
+                            android:hint="EMAIL"
+                            android:inputType="textEmailAddress"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/tilEmail"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/colorPrimary"
+                        android:text="Register"
+                        android:id="@+id/register"
+                        android:textAllCaps="false"
+                        android:textColor="#fff" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
