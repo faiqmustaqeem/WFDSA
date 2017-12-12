@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth">
+    >
 
     <TextView
         android:id="@+id/tvAttendeesQty"
@@ -67,7 +67,7 @@
             android:clickable="true"
             android:gravity="center"
             android:padding="12dp"
-            android:text="Register\nNow"
+            android:text="Register Now"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:textStyle="bold" />

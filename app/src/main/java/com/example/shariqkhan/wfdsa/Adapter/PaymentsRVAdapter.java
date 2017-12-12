@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.shariqkhan.wfdsa.Dialog.PaymentDialog;
@@ -52,17 +53,32 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         PaymentModel dataModel = paymentsList.get(position);
+
         holder.tvTitle.setText(dataModel.getTitle());
-        holder.tvDueDate.setText("Due Date "+dataModel.getDueDate());
-        holder.tvPayNow.setText("PAY NOW\n$"+dataModel.getAmount());
+        holder.tvDueDate.setText("Due Date " + dataModel.getDueDate());
+        holder.tvPayNow.setText("PAY NOW\n$" + dataModel.getAmount());
+
+        if (dataModel.id.equals("paid")) {
+            holder.tvDueDate.setText("");
+            holder.tvPayNow.setText("PAID");
+        }
+//
+//
+//        holder.tvTitle.setText(dataModel.getTitle());
+//        holder.tvDueDate.setText("Due Date "+dataModel.getDueDate());
+//        holder.tvPayNow.setText("PAY NOW\n$"+dataModel.getAmount());
 
         holder.tvPayNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog d = new PaymentDialog(context);
-                d.show();
+              if ( holder.tvPayNow.getText().equals("PAID")){
+                    Toast.makeText(context, "YOU ALREADY PAID FOR THIS!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Dialog d = new PaymentDialog(context);
+                    d.show();
+                }
             }
         });
     }

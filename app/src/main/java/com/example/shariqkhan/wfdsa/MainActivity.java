@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view, int position) {
 
-                Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, AnnouncementsActivity.class);
                 startActivity(i);
             }
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view, int position) {
                 EventsModel eventsModel = GlobalClass.eventsList.get(position);
-                Toast.makeText(MainActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
                 startActivity(i);
             }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-android:background="@drawable/earth"
+
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
@@ -62,13 +62,13 @@ android:background="@drawable/earth"
                         android:id="@+id/rvEvents"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
+                        android:nestedScrollingEnabled="false"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:nestedScrollingEnabled="false">
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </android.support.v7.widget.RecyclerView>
 
@@ -88,7 +88,7 @@ android:background="@drawable/earth"
                             android:id="@+id/tvViewAllEvents"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="?attr/selectableItemBackground"
+                            android:background="@color/colorPrimary"
                             android:clickable="true"
                             android:padding="8dp"
                             android:text="View All"
@@ -101,11 +101,9 @@ android:background="@drawable/earth"
                 android:id="@+id/cardView1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2">
@@ -140,6 +138,7 @@ android:background="@drawable/earth"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView2">
+
                         <android.support.constraint.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -150,14 +149,15 @@ android:background="@drawable/earth"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
-                                android:gravity="center|start"
-                                android:drawableLeft="@drawable/xls"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginRight="8dp"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="16dp"
-                                android:background="?attr/selectableItemBackground"
+
                                 android:clickable="true"
+                                android:drawableLeft="@drawable/pdf"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
                                 android:padding="8dp"
                                 android:text="Advocacy"
                                 android:textColor="@android:color/black"
@@ -183,8 +183,6 @@ android:background="@drawable/earth"
                                 android:id="@+id/tvAssociationService"
                                 android:layout_width="0dp"
 
-                                android:gravity="center|start"
-                                android:drawableLeft="@drawable/pdf"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
                                 android:layout_marginLeft="8dp"
@@ -193,6 +191,9 @@ android:background="@drawable/earth"
                                 android:layout_marginTop="8dp"
                                 android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
+                                android:drawableLeft="@drawable/word"
+                                android:drawablePadding="7dp"
+                                android:gravity="center|start"
                                 android:padding="8dp"
                                 android:text="Association Service"
                                 android:textColor="@android:color/black"
@@ -221,15 +222,15 @@ android:background="@drawable/earth"
                                 android:layout_marginEnd="8dp"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginRight="8dp"
-
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="8dp"
                                 android:background="?attr/selectableItemBackground"
                                 android:clickable="true"
-                                android:padding="8dp"
+                                android:drawableLeft="@drawable/excel"
+                                android:drawablePadding="7dp"
 
                                 android:gravity="center|start"
-                                android:drawableLeft="@drawable/word"
+                                android:padding="8dp"
                                 android:text="Global Regulatory"
                                 android:textColor="@android:color/black"
                                 app:layout_constraintHorizontal_bias="0.0"
@@ -256,7 +257,7 @@ android:background="@drawable/earth"
                             android:id="@+id/tvViewAllResources"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="?attr/selectableItemBackground"
+                            android:background="@color/colorPrimary"
                             android:clickable="true"
                             android:padding="8dp"
                             android:text="View All"
@@ -278,22 +279,21 @@ android:background="@drawable/earth"
                 app:layout_constraintTop_toBottomOf="@+id/cardView1">
 
                 <android.support.constraint.ConstraintLayout
+                    android:id="@+id/cc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/cc"
                     android:background="@drawable/rectangle">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rvAnnouncements"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                       >
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </android.support.v7.widget.RecyclerView>
 
@@ -313,11 +313,13 @@ android:background="@drawable/earth"
                             android:id="@+id/tvViewAllAnnouncements"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="?attr/selectableItemBackground"
+                            android:background="@color/colorPrimary"
                             android:clickable="true"
                             android:padding="8dp"
                             android:text="View All"
-                            android:textColor="@android:color/white" />
+                            android:textColor="@android:color/white"
+                            tools:layout_editor_absoluteX="0dp"
+                            tools:layout_editor_absoluteY="0dp" />
                     </LinearLayout>
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>

@@ -34,7 +34,7 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_payment);
-        setCanceledOnTouchOutside(false);
+        setCanceledOnTouchOutside(true);
 
         Window window = getWindow();
         window.setGravity(Gravity.CENTER);

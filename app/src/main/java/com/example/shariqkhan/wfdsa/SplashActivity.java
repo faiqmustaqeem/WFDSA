@@ -50,11 +50,12 @@ public class SplashActivity extends AppCompatActivity {
 
     public static void fetchAnnouncements() {
         announcementsList = new ArrayList<AnnouncementsModel>();
-        announcementsList.add(new AnnouncementsModel("1", "Announcement text text text text text text text text text text text text text text text text text text text", "Announcement Title", "8th Sep 2017", "http://wfdsa.org/wp-content/uploads/2017/06/France.jpg"));
-        announcementsList.add(new AnnouncementsModel("2", "Announcement text text text text text text text text text text text text text text text text text text text", "Announcement Title", "8th Sep 2017", ""));
-        announcementsList.add(new AnnouncementsModel("3", "Announcement text text text text text text text text text text text text text text text text text text text", "Announcement Title", "8th Sep 2017", ""));
-        announcementsList.add(new AnnouncementsModel("3", "Announcement text text text text text text text text text text text text text text text text text text text", "Announcement Title", "8th Sep 2017", ""));
-        announcementsList.add(new AnnouncementsModel("3", "Announcement text text text text text text text text text text text text text text text text text text text", "Announcement Title", "8th Sep 2017", ""));
+        announcementsList.add(new AnnouncementsModel("1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                "Announcement Title", "8th Sep 2017", "http://wfdsa.org/wp-content/uploads/2017/06/France.jpg"));
+        announcementsList.add(new AnnouncementsModel("2", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
     }
 
     public static void fetchEvents() {

@@ -55,7 +55,7 @@ public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyVi
         final TryModel model = arrayList.get(position);
 
         holder.textView.setText("HOW TO APPLY FOR MEMBER REGISTRATION "+model.getId());
-        holder.image.setImageResource(R.drawable.shehzadrecovered);
+        //holder.image.setImageResource(R.drawable.shehzadrecovered);
 
         media = new MediaController(context);
 
@@ -66,10 +66,10 @@ public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyVi
                 final Dialog dialog = new Dialog(context);
                 dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-                Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 dialog.setContentView(R.layout.video_dialog_view);
-                Toast.makeText(context, model.getId(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, model.getId(), Toast.LENGTH_SHORT).show();
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 

@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:orientation="vertical"
-    android:background="@android:drawable/screen_background_light_transparent">
+    android:background="@android:drawable/screen_background_light_transparent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -23,6 +23,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -82,11 +84,11 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:drawableLeft="@drawable/ic_clock"
                         android:id="@+id/tvDayTime"
-                        android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_clock"
+                        android:gravity="center"
                         android:text="Sunday, @9:00pm" />
 
                     <FrameLayout
@@ -95,11 +97,11 @@
                         android:layout_weight="1"></FrameLayout>
 
                     <TextView
-                        android:gravity="center"
-                        android:drawableLeft="@drawable/ic_loc"
                         android:id="@+id/tvCityCountry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_loc"
+                        android:gravity="center"
                         android:text="Paris, France" />
                 </LinearLayout>
 

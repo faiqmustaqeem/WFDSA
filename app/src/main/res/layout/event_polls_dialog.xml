@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth">
+    >
 
     <TextView
         android:id="@+id/tvAttendeesQty"
@@ -58,7 +58,7 @@
             <CheckBox
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="sdgfa wervas vasf"
+                android:text="Dummy text"
                 android:layout_marginTop="18dp"
                 app:layout_constraintTop_toBottomOf="@+id/tvPollTitle"
                 android:layout_marginLeft="8dp"
@@ -67,7 +67,7 @@
             <CheckBox
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="mft gyjdb ndhfnr"
+                android:text="Dummy text"
                 android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="18dp"
@@ -76,7 +76,7 @@
             <CheckBox
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="fgbnt tthrthbtr tryr tsxdth xdrt"
+                android:text="Dummy text"
                 android:layout_marginLeft="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="18dp"

@@ -7,18 +7,45 @@
     >
 
 
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/activity_toolbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary"
+
+        app:titleTextColor="#fff">
+
+        <TextView
+            android:id="@+id/tollbarText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:text="My Payments"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="28dp"
+            android:layout_gravity="end|top"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/icons8filter"
+
+            android:id="@+id/filter"
+
+            />
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvPayments"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tool_bar"
+        android:layout_below="@+id/toolbar"
   >
     </android.support.v7.widget.RecyclerView>
 

@@ -8,6 +8,8 @@
     <RelativeLayout
         android:id="@+id/bioRelativeOne"
         android:layout_width="match_parent"
+        android:background="@drawable/linearoutline"
+        android:layout_margin="8dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mainll"
         android:padding="10dp">
@@ -17,7 +19,8 @@
             android:id="@+id/relativeOutline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/linearoutline">
+
+            >
 
             <ImageView
                 android:id="@+id/flag"
@@ -40,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relativeOutline"
-            android:background="@drawable/lines"
+
             android:padding="8dp">
 
             <TextView
@@ -280,6 +283,7 @@
             </LinearLayout>
 
         </RelativeLayout>
+
     </RelativeLayout>
 
 

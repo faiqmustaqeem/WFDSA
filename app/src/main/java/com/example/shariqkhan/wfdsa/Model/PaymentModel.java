@@ -5,13 +5,17 @@ package com.example.shariqkhan.wfdsa.Model;
  */
 
 public class PaymentModel {
-    String id, title, dueDate, amount;
+   public String id, title, dueDate, amount;
 
     public PaymentModel(String id, String dueDate, String title, String amount) {
         this.id = id;
         this.title = title;
         this.dueDate = dueDate;
         this.amount = amount;
+    }
+
+    public PaymentModel() {
+
     }
 
     public String getId() {

@@ -24,7 +24,7 @@
             android:title="ABOUT WFDSA" />
         <item
             android:id="@+id/nav_about_wfdsa_leadership"
-            android:icon="@drawable/ic_about"
+            android:icon="@drawable/leader"
             android:title="WFDSA LEADERSHIP" />
         <item
             android:id="@+id/nae_committees"

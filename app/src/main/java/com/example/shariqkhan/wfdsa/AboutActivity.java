@@ -41,7 +41,7 @@ public class AboutActivity extends AppCompatActivity {
                 finish();
             }
         });
-        Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivLogo);
+       // Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivLogo);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -62,5 +62,6 @@ public class UserGuideActivity extends AppCompatActivity {
         adapter = new UserGuideAdapter(arrayList, this);
         listOfMembers.setAdapter(adapter);
 
+
     }
 }

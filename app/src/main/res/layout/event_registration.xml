@@ -17,6 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_gravity="center_horizontal"
             android:text="REGISTER EVENT"
             android:textColor="#fff" />
@@ -83,10 +84,41 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/container"
-                android:background="@drawable/card"
+
 
                 >
 
+                <ImageButton
+                    android:id="@+id/visapay"
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/visa"
+                    android:scaleType="centerCrop" />
+
+                <ImageButton
+                    android:id="@+id/mastercardpay"
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:layout_toRightOf="@+id/visapay"
+                    android:background="@drawable/mastercard"
+                    android:scaleType="centerCrop" />
+
+                <ImageButton
+                    android:id="@+id/discovericon"
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/visapay"
+                    android:background="@drawable/discovericon"
+                    android:scaleType="centerCrop" />
+
+                <ImageButton
+                    android:id="@+id/amc"
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/visapay"
+                    android:layout_toRightOf="@+id/discovericon"
+                    android:background="@drawable/amc"
+                    android:scaleType="centerCrop" />
 
             </RelativeLayout>
 
@@ -150,8 +182,8 @@
                         android:id="@+id/exp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
-                        android:text="CARD EXPIRY" />
+                        android:text="CARD EXPIRY"
+                        android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinner1"
@@ -184,7 +216,8 @@
                         android:id="@+id/simpleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CVC CODE" />
+                        android:text="CVC CODE"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/hint"
@@ -303,11 +336,12 @@
 
                     <TextView
                         android:id="@+id/COUNTRY"
+                        android:layout_marginStart="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tilContact"
-
-                        android:text="COUNTRY" />
+                        android:text="COUNTRY"
+                        android:textStyle="bold" />
 
                     <Spinner
 
@@ -343,6 +377,7 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <Button
+                        android:id="@+id/register"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@+id/tilEmail"
@@ -351,7 +386,6 @@
                         android:layout_marginTop="8dp"
                         android:background="@color/colorPrimary"
                         android:text="Register"
-                        android:id="@+id/register"
                         android:textAllCaps="false"
                         android:textColor="#fff" />
                 </RelativeLayout>

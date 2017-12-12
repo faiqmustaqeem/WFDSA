@@ -62,11 +62,11 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         EventsModel dataModel = eventsModelArrayList.get(position);
         holder.tvTitle.setText(dataModel.getEventTitle());
-        holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
+       // holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
         holder.tvCityCountry.setText(dataModel.getVenueCity() + ", " + dataModel.getVenueCountry());
         holder.tvDay.setText(dataModel.getDay());
         holder.tvMonth.setText(dataModel.getMonth());
-        holder.tvYear.setText(dataModel.getYear());
+       // holder.tvYear.setText(dataModel.getYear());
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

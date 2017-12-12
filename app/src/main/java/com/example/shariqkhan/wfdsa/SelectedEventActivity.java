@@ -136,6 +136,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLocation:
+                Toast.makeText(this, "You Are Checked In !!", Toast.LENGTH_SHORT).show();
+                break;
+
             case R.id.tvGetDirections:
                 try {
                     Uri uri = Uri.parse("geo:" + 38.903210 + "," + -77.038123);

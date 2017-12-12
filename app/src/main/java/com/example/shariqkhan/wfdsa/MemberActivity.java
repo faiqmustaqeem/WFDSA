@@ -92,7 +92,7 @@ public class MemberActivity extends AppCompatActivity {
           public void onClick(View v) {
               String[] items = {"America", "Pakistan", "All"};
               new MaterialDialog.Builder(MemberActivity.this)
-                      .title("Select")
+                      .title("Select Region")
                       .items(items)
                       .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                           @Override

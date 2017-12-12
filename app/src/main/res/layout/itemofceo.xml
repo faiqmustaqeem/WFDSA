@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_margin="8dp"
+    android:background="@drawable/linearoutline"
     android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/bioRelativeOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mainll"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:padding="10dp">
 
 
@@ -16,7 +19,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/linearoutline">
+         >
 
             <ImageView
                 android:id="@+id/logo"
@@ -36,6 +39,7 @@
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:text="Mr Business Man"
+                android:textStyle="bold"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorPrimary"
 
@@ -43,6 +47,7 @@
 
             <TextView
                 android:id="@+id/Post"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
@@ -59,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relativeOutline"
-            android:background="@drawable/lines"
+
             android:padding="11dp"
 
             >
@@ -81,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/experties"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -97,6 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:padding="5dp"
+                    android:textStyle="bold"
                     android:text="Country"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     android:textColor="@color/colorPrimary" />
