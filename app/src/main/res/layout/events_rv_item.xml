@@ -100,7 +100,7 @@
                         android:id="@+id/tvCityCountry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_loc"
+                        android:drawableLeft="@drawable/ic_location"
                         android:gravity="center"
                         android:text="Paris, France" />
                 </LinearLayout>

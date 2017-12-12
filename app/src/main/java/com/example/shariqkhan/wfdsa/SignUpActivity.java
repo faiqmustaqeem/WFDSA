@@ -97,17 +97,43 @@ public class SignUpActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (tilFirstName.getEditText().getText().toString().equals("") &&
+                        !tilLastName.getEditText().getText().toString().equals("")
+                        && tilContactNum.getEditText().getText().toString().equals("") &&
+                        tilEmail.getEditText().getText().toString().equals("") &&
+                        tilPassword.getEditText().getText().toString().equals("")
+                        && tilConfirmPassword.getEditText().getText().toString().equals("")
+                        ) {
+                    Toast.makeText(SignUpActivity.this, "Fill in the fields", Toast.LENGTH_SHORT).show();
+                } else {
+
+
 
                 firstName = tilFirstName.getEditText().getText().toString();
+                if (firstName.equals(""))
+                    Toast.makeText(SignUpActivity.this, "First name empty!", Toast.LENGTH_SHORT).show();
                 lastName = tilLastName.getEditText().getText().toString();
+                if (lastName.equals(""))
+                    Toast.makeText(SignUpActivity.this, "Last name empty!", Toast.LENGTH_SHORT).show();
                 contactNum = tilContactNum.getEditText().getText().toString();
+                if (contactNum.equals(""))
+                    Toast.makeText(SignUpActivity.this, "Contact number empty!", Toast.LENGTH_SHORT).show();
                 email = tilEmail.getEditText().getText().toString();
+                if (email.equals(""))
+                    Toast.makeText(SignUpActivity.this, "Email empty!", Toast.LENGTH_SHORT).show();
                 password = tilPassword.getEditText().getText().toString();
                 confirmPassword = tilConfirmPassword.getEditText().getText().toString();
 
-                Task task = new Task();
-                task.execute();
 
+                if (!password.equals(confirmPassword))
+                    Toast.makeText(SignUpActivity.this, "Invalid password confirmation!", Toast.LENGTH_SHORT).show();
+
+                if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))) {
+                    Task task = new Task();
+                    task.execute();
+
+                }
+            }
 
             }
         });
@@ -208,6 +234,7 @@ public class SignUpActivity extends AppCompatActivity {
             HttpPost post = new HttpPost(BASE_URL);
             Log.e("Must", "Must");
 
+
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("first_name", firstName));
             parameters.add(new BasicNameValuePair("last_name", lastName));
@@ -290,11 +317,8 @@ public class SignUpActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-                        Toast.makeText(SignUpActivity.this, "Email already exist or invalid credentials!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, "Email already exist or invalid password confirmation!!", Toast.LENGTH_LONG).show();
 
-                        tilFirstName.getEditText().setText("");
-                        tilLastName.getEditText().setText("");
-                        tilContactNum.getEditText().setText("");
                         tilEmail.getEditText().setText("");
                         tilPassword.getEditText().setText("");
                         tilConfirmPassword.getEditText().setText("");
