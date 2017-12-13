@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.ProfileActivity;
 import com.example.shariqkhan.wfdsa.R;
 
@@ -22,11 +23,13 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
     public Activity c;
     EditText etPassword;
     TextView tvSubmit, tvCancel;
+    String password;
 
-    public ProfileEditPermissionDialog(Activity a) {
+    public ProfileEditPermissionDialog(Activity a, String password) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
+        this.password = password;
     }
 
     @Override
@@ -35,11 +38,15 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_profile_edit_permission);
         etPassword = (EditText) findViewById(R.id.etPassword);
+     //   etPassword.setText(password);
+
+        etPassword.setEnabled(true);
         tvSubmit = (TextView) findViewById(R.id.tvSubmit);
         tvCancel = (TextView) findViewById(R.id.tvCancel);
         tvCancel.setOnClickListener(this);
         tvSubmit.setOnClickListener(this);
         tvSubmit.setClickable(false);
+
 
         etPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -54,14 +61,16 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!etPassword.getText().toString().equals("")){
+                if (!etPassword.getText().toString().equals("")) {
                     tvSubmit.setTextColor(c.getResources().getColor(R.color.colorAccent));
                     tvSubmit.setClickable(true);
-                }
-                else {
+                } else {
                     tvSubmit.setTextColor(c.getResources().getColor(android.R.color.darker_gray));
                     tvSubmit.setClickable(false);
                 }
+
+
+
             }
         });
     }

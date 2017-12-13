@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth">
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tool_bar"
@@ -180,6 +180,7 @@
 
                     <TextView
                         android:id="@+id/exp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CARD EXPIRY"
@@ -217,6 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CVC CODE"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
 
                     <TextView
@@ -341,6 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tilContact"
                         android:text="COUNTRY"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
 
                     <Spinner

@@ -59,7 +59,7 @@ public class AllEventsActivity extends AppCompatActivity {
 
                 EventsModel eventsModel = GlobalClass.eventsList.get(position);
 
-                Toast.makeText(AllEventsActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(AllEventsActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
                 startActivity(i);
             }

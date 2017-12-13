@@ -12,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,10 +35,12 @@ import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,6 +77,26 @@ public class MainActivity extends AppCompatActivity
 
     EventsRVAdapter eventsRVAdapter;
     AnnouncementsRVAdapter announcementsRVAdapter;
+    CircleImageView ivUserPic;
+    TextView tvUserName;
+    TextView textView1;
+    SharedPreferences prefs;
+
+    static String getFirstName;
+    static String getLastName;
+    static String password;
+    static String getCountry;
+    static String getEmail;
+    static String phoneNo;
+    public static final int INTENT_CONSTANT_GALLERY = 1;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == INTENT_CONSTANT_GALLERY) {
+
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +112,47 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
 
+//
+        prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        getFirstName = prefs.getString("first_name", "");
+        getLastName = prefs.getString("last_name", "");
+        password = prefs.getString("password", "");
+        phoneNo = prefs.getString("contact_no", "");
+        getCountry = prefs.getString("country", "");
+        getEmail = prefs.getString("email", "");
+
+        Log.e("first_name", getFirstName);
+        Log.e("last_name", getLastName);
+        Log.e("email", getEmail);
+        Log.e("contact_no", phoneNo);
+        Log.e("password", password);
+
+
+//        ivUserPic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent galleryIntent = new Intent();
+//                galleryIntent.setType("image/*");
+//                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(galleryIntent,INTENT_CONSTANT_GALLERY);
+//            }
+//        });
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View layout = LayoutInflater.from(this).inflate(R.layout.nav_header_main, null);
+        navigationView.addHeaderView(layout);
+
+        ivUserPic = (CircleImageView) layout.findViewById(R.id.ivUserPic);
+        tvUserName = (TextView) layout.findViewById(R.id.tvUserName);
+        textView1 = (TextView) layout.findViewById(R.id.textView1);
+
+
+        tvUserName.setText(getFirstName + " " + getLastName);
+        textView1.setText(getEmail);
 
         ivSignOut = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSignOut);
         ivSettings = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSettings);
@@ -150,7 +213,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view, int position) {
 
-             //   Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, AnnouncementsActivity.class);
                 startActivity(i);
             }
@@ -164,7 +227,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view, int position) {
                 EventsModel eventsModel = GlobalClass.eventsList.get(position);
-               // Toast.makeText(MainActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
                 startActivity(i);
             }

@@ -19,6 +19,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
             android:layout_height="60dp">
 
             <ImageView
@@ -44,7 +45,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="Profile"
-                android:textColor="@android:color/black"
+                android:textColor="#fff"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -64,7 +65,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="EDIT"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="#fff"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -164,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-                        android:enabled="false"
+
                         android:inputType="textCapWords"
                         android:padding="8dp"
                         android:text="Chester"
@@ -192,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-                        android:enabled="false"
+
                         android:gravity="right"
                         android:inputType="textCapWords"
                         android:padding="8dp"
@@ -235,7 +236,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-                        android:enabled="false"
+
                         android:inputType="textEmailAddress"
                         android:padding="8dp"
                         android:text="cb@linkinpark.com"
@@ -281,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-                        android:enabled="false"
+
                         android:hint="Mobile Number"
                         android:inputType="phone"
                         android:padding="8dp"

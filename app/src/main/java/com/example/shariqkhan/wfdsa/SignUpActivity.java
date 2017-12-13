@@ -108,32 +108,31 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
 
 
+                    firstName = tilFirstName.getEditText().getText().toString();
+                    if (firstName.equals(""))
+                        Toast.makeText(SignUpActivity.this, "First name empty!", Toast.LENGTH_SHORT).show();
+                    lastName = tilLastName.getEditText().getText().toString();
+                    if (lastName.equals(""))
+                        Toast.makeText(SignUpActivity.this, "Last name empty!", Toast.LENGTH_SHORT).show();
+                    contactNum = tilContactNum.getEditText().getText().toString();
+                    if (contactNum.equals(""))
+                        Toast.makeText(SignUpActivity.this, "Contact number empty!", Toast.LENGTH_SHORT).show();
+                    email = tilEmail.getEditText().getText().toString();
+                    if (email.equals(""))
+                        Toast.makeText(SignUpActivity.this, "Email empty!", Toast.LENGTH_SHORT).show();
+                    password = tilPassword.getEditText().getText().toString();
+                    confirmPassword = tilConfirmPassword.getEditText().getText().toString();
 
-                firstName = tilFirstName.getEditText().getText().toString();
-                if (firstName.equals(""))
-                    Toast.makeText(SignUpActivity.this, "First name empty!", Toast.LENGTH_SHORT).show();
-                lastName = tilLastName.getEditText().getText().toString();
-                if (lastName.equals(""))
-                    Toast.makeText(SignUpActivity.this, "Last name empty!", Toast.LENGTH_SHORT).show();
-                contactNum = tilContactNum.getEditText().getText().toString();
-                if (contactNum.equals(""))
-                    Toast.makeText(SignUpActivity.this, "Contact number empty!", Toast.LENGTH_SHORT).show();
-                email = tilEmail.getEditText().getText().toString();
-                if (email.equals(""))
-                    Toast.makeText(SignUpActivity.this, "Email empty!", Toast.LENGTH_SHORT).show();
-                password = tilPassword.getEditText().getText().toString();
-                confirmPassword = tilConfirmPassword.getEditText().getText().toString();
 
+                    if (!password.equals(confirmPassword))
+                        Toast.makeText(SignUpActivity.this, "Invalid password confirmation!", Toast.LENGTH_SHORT).show();
 
-                if (!password.equals(confirmPassword))
-                    Toast.makeText(SignUpActivity.this, "Invalid password confirmation!", Toast.LENGTH_SHORT).show();
+                    if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))) {
+                        Task task = new Task();
+                        task.execute();
 
-                if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))) {
-                    Task task = new Task();
-                    task.execute();
-
+                    }
                 }
-            }
 
             }
         });
@@ -304,12 +303,22 @@ public class SignUpActivity extends AppCompatActivity {
                         String email = user_data.getString("email");
                         String getpass = user_data.getString("password");
 
+                        String country = user_data.getString("country");
+                        String first_name = user_data.getString("first_name");
+                        String last_name = user_data.getString("last_name");
+                        String contact_no = user_data.getString("contact_no");
+
                         Log.e("email", email);
                         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
                         editor.putString("api_secret", get_api_secret);
                         editor.putString("deciderId", getId);
                         editor.putString("email", email);
+                        editor.putString("country", country);
+                        editor.putString("first_name", first_name);
+                        editor.putString("last_name", last_name);
+                        editor.putString("password", getpass);
+                        editor.putString("contact_no", contact_no);
                         editor.apply();
 
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);

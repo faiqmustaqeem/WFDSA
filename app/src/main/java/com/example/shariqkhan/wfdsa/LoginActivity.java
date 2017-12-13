@@ -199,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
             HttpPost post = new HttpPost(BASE_URL);
-            Log.e("Must","Must");
+            Log.e("Must", "Must");
 
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("email", getEmail));
@@ -256,27 +256,36 @@ public class LoginActivity extends AppCompatActivity {
 
                         String getId = user_data.getString("non_member_id");
                         String email = user_data.getString("email");
-
+                        String country = user_data.getString("country");
+                        String first_name = user_data.getString("first_name");
+                        String last_name = user_data.getString("last_name");
+                        String password = user_data.getString("password");
+                        String phNo = user_data.getString("contact_no");
                         Log.e("email", email);
                         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
                         editor.putString("api_secret", get_api_secret);
                         editor.putString("deciderId", getId);
                         editor.putString("email", email);
+                        editor.putString("country", country);
+                        editor.putString("first_name", first_name);
+                        editor.putString("last_name", last_name);
+                        editor.putString("password", password);
+                        editor.putString("contact_no", phNo);
+
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
 
-                    }else
-                        {
-                            Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
-                            etMemberEmail.getEditText().setText("");
-                            etMemberPass.getEditText().setText("");
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
+                        etMemberEmail.getEditText().setText("");
+                        etMemberPass.getEditText().setText("");
 
-                            progressDialog.dismiss();
-                        }
+                        progressDialog.dismiss();
+                    }
 
 
                 } catch (JSONException e) {
