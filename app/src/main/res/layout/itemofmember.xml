@@ -35,8 +35,15 @@
                 android:layout_height="130dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/czech" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@+id/logo"
+    android:background="#c1c1c1">
 
+</View>
         </RelativeLayout>
+
 
         <RelativeLayout
             android:id="@+id/relativeOutline2"

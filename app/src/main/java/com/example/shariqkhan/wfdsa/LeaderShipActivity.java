@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class LeaderShipActivity extends AppCompatActivity {
     public ListView listOfMembers;
 
     Toolbar toolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,16 +47,20 @@ public class LeaderShipActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String get = parent.getItemAtPosition(position).toString();
-                if (get.equals(Array[0])) {
-                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-                } else if (get.equals(Array[1])) {
-                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-                } else if (get.equals(Array[2])) {
-                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-                } else if (get.equals(Array[3])) {
-                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                if (get.equals(Array[0])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[1])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[2])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[3])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//
+//                }
 
-                }
+                Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
+                startActivity(intent);
+
             }
         });
 

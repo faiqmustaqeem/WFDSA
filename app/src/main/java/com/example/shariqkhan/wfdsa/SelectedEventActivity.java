@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,9 +8,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,9 +44,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     @BindView(R.id.ivShare)
     ImageView ivShare;
     @BindView(R.id.fabPolls)
+
     FloatingActionButton fabPolls;
     GoogleMap myGoogleMap;
     ImageView image;
+    ImageView location;
+    Button yes;
+    Button no;
 
     Animation shareSlideUp, shareSlideDown;
 
@@ -80,6 +89,52 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         /*Removing bug*/
 
                 finish();
+            }
+        });
+
+        location = (ImageView) findViewById(R.id.ivLocation);
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                dialog.getWindow().setLayout(lp.width, lp.height);
+                dialog.setContentView(R.layout.checked_in_dialog);
+
+                // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
+                TextView view1 = dialog.findViewById(R.id.Acceptance);
+                TextView view2 = dialog.findViewById(R.id.Rejection);
+                view2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                view1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                dialog.show();
+            }
+        });
+        final ImageView likesView = (ImageView) findViewById(R.id.ivLike);
+        final TextView tvLikeQty = (TextView) findViewById(R.id.tvLikesQty);
+
+        likesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                likesView.setVisibility(View.INVISIBLE);
+                tvLikeQty.setText("422");
             }
         });
 
@@ -132,12 +187,17 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(dsaLocation, 14.0f));
     }
 
-    @OnClick({R.id.tvGetDirections, R.id.ivShare, R.id.ivDiscussion, R.id.ivGallery, R.id.ivAttendees, R.id.ivLocation, R.id.fabPolls})
+    @OnClick({R.id.tvGetDirections, R.id.ivShare, R.id.ivDiscussion, R.id.ivGallery, R.id.ivAttendees, R.id.fabPolls})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ivLocation:
-                Toast.makeText(this, "You Are Checked In !!", Toast.LENGTH_SHORT).show();
-                break;
+//            case R.id.ivLocation:
+//
+//
+//
+//
+//
+//                Toast.makeText(this, "You Are Checked In !!", Toast.LENGTH_SHORT).show();
+//                break;
 
             case R.id.tvGetDirections:
                 try {
@@ -155,11 +215,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             case R.id.ivShare:
                 if (llShare.getVisibility() == View.GONE) {
                     llShare.setVisibility(View.VISIBLE);
+                    tvRegister.setEnabled(false);
                     llShare.startAnimation(shareSlideUp);
 
                 } else {
                     llShare.startAnimation(shareSlideDown);
-
+                    tvRegister.setEnabled(true);
                 }
                 break;
             case R.id.ivDiscussion:

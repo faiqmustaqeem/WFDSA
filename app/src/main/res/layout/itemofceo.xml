@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@drawable/linearoutline"
-    android:layout_height="wrap_content">
+    android:background="@drawable/linearoutline">
 
     <RelativeLayout
         android:id="@+id/bioRelativeOne"
@@ -18,8 +18,7 @@
             android:id="@+id/relativeOutline"
 
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-         >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/logo"
@@ -37,11 +36,11 @@
                 android:layout_below="@+id/logo"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
+                android:padding="3dp"
                 android:text="Mr Business Man"
-                android:textStyle="bold"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
 
                 />
 
@@ -58,6 +57,15 @@
                 android:textStyle="italic"
 
                 />
+
+            <View
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/Post"
+                android:background="#c1c1c1">
+
+            </View>
         </RelativeLayout>
 
         <RelativeLayout
@@ -70,11 +78,12 @@
             >
 
             <TextView
+
                 android:id="@+id/experties"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/logo"
-                android:padding="7dp"
+
+                android:padding="5dp"
                 android:text="Financial Consultant"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorPrimary"
@@ -82,19 +91,21 @@
 
                 />
 
+            <TextView
+               android:layout_below="@+id/experties"
+                android:id="@+id/company_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Oirflame cosmetics Master Samuelsgatan 56,3rd floor SE-101 39 stockholm"
+                android:textColor="@color/colorPrimary" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/experties"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/flag"
-                    android:layout_width="120dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ar" />
 
                 <TextView
                     android:id="@+id/country"
@@ -102,10 +113,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:padding="5dp"
-                    android:textStyle="bold"
+
                     android:text="Country"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/flag"
+                    android:layout_width="70dp"
+                    android:scaleType="fitXY"
+                    android:layout_height="40dp"
+
+                    android:src="@drawable/ar" />
+
 
             </LinearLayout>
 

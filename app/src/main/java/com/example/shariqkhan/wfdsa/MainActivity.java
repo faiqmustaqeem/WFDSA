@@ -343,12 +343,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, LeaderShipActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_dsa_ceo_members) {
-            Intent intent = new Intent(MainActivity.this, CEOActivity.class);
-            startActivity(intent);
-
-
-        } else if (id == R.id.nav_dsa_members) {
+        }  else if (id == R.id.nav_dsa_members) {
             Intent intent = new Intent(MainActivity.this, MemberActivity.class);
             startActivity(intent);
 

@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 public class CommiteesActivity extends AppCompatActivity {
 
     public ListView listOfMembers;
-
     Toolbar toolbar;
 
     @Override
@@ -53,18 +53,21 @@ public class CommiteesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String get = parent.getItemAtPosition(position).toString();
-                if (get.equals(Array[0])) {
-                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
-                } else if (get.equals(Array[1])) {
-                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
-                } else if (get.equals(Array[2])) {
-                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
-                } else if (get.equals(Array[3])) {
-                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
+//                if (get.equals(Array[0])) {
+//                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[1])) {
+//                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[2])) {
+//                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[3])) {
+//                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
+//
+//                } else if (get.equals(Array[4])) {
+//                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
+//                }
+                Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
+                startActivity(intent);
 
-                } else if (get.equals(Array[4])) {
-                    Toast.makeText(CommiteesActivity.this, get, Toast.LENGTH_SHORT).show();
-                }
             }
         });
 

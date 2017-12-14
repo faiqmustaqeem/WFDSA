@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,24 +84,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        etEmail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
 
+                return false;
+            }
+        });
     }
 
     private void makeFieldsEditable() {
         etFirstName.setEnabled(true);
         etLastName.setEnabled(true);
-        etEmail.setEnabled(true);
+        etEmail.setEnabled(false);
         etMobileNumber.setEnabled(true);
     }
 
     private void initUI() {
-        d = new ProfileEditPermissionDialog(this,MainActivity.password);
+        d = new ProfileEditPermissionDialog(this, MainActivity.password);
         ivBack.setOnClickListener(this);
         tvSignOut.setOnClickListener(this);
         tvEditOrUpdate.setOnClickListener(this);
 
 
-       // Picasso.with(this).load("https://qph.ec.quoracdn.net/main-thumb-64803074-50-dxlthhqswgcemtdghaduorrgglmdgifa.jpeg").into(profile_image);
+        // Picasso.with(this).load("https://qph.ec.quoracdn.net/main-thumb-64803074-50-dxlthhqswgcemtdghaduorrgglmdgifa.jpeg").into(profile_image);
 
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override

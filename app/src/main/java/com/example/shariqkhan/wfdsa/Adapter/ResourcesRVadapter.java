@@ -21,6 +21,7 @@ import java.util.List;
 
 public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGroupViewHolder, ResourceItemViewHolder> {
     Context context;
+
     public ResourcesRVadapter(Context context, List<? extends ExpandableGroup> groups) {
         super(groups);
         this.context = context;
@@ -46,12 +47,21 @@ public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGr
 
         final ResourcesSubItems subItem = ((ResourcesGroup) group).getItems().get(childIndex);
         holder.setTitle(subItem.getTitle());
+        String id = subItem.getId();
+        if  (id.equals("1")) {
+            holder.image.setImageResource(R.drawable.word);
+        } else if (id.equals("2")) {
+            holder.image.setImageResource(R.drawable.excel);
+        } else if (id.equals("3")) {
+            holder.image.setImageResource(R.drawable.pdf);
+        }
+
     }
 
     @Override
     public void onBindGroupViewHolder(ResourceGroupViewHolder holder, int flatPosition,
                                       ExpandableGroup group) {
 
-                             holder.setGenreTitle(group);
+        holder.setGenreTitle(group);
     }
 }
