@@ -347,6 +347,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_about_wfdsa_leadership) {
 
 
+
+
             Intent intent = new Intent(MainActivity.this, LeaderShipActivity.class);
             startActivity(intent);
 

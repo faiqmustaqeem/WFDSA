@@ -102,6 +102,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
 
+                
+
                 ivDiscussion.setImageResource(R.drawable.ic_discussion);
                 ivAttendess.setImageResource(R.drawable.ic_attendees);
                 ivGallery.setImageResource(R.drawable.ic_gallery);
