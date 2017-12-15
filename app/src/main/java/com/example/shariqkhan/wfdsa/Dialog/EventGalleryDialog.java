@@ -3,13 +3,16 @@ package com.example.shariqkhan.wfdsa.Dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 
 import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
+import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
 import com.example.shariqkhan.wfdsa.R;
 
@@ -30,7 +33,9 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
     public Dialog d;
     ArrayList<EventGalleryModel> imagesList = new ArrayList<EventGalleryModel>();
     GridView gridView;
+    FloatingActionButton floatingActionButton;
     EventGalleryGVadapter gridAdapter;
+    ImageView imageView;
 
 
     public EventGalleryDialog(Activity a) {
@@ -70,9 +75,22 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
 
     private void initUI() {
         gridView = (GridView) findViewById(R.id.gridView);
+        imageView = findViewById(R.id.close);
 
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fabAddImage);
 
+        if (MainActivity.DECIDER.equals("member")) {
+            floatingActionButton.setVisibility(View.VISIBLE);
+        } else {
+            floatingActionButton.setVisibility(View.INVISIBLE);
+        }
 
+    imageView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            dismiss();
+        }
+    });
     }
 
     @Override

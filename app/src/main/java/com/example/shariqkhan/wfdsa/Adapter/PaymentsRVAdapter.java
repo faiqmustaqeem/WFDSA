@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,22 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
             holder.tvDueDate.setText("");
             holder.tvPayNow.setText("PAID");
         }
+
+        holder.tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(context);
+                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                dialog.getWindow().setLayout(lp.width, lp.height);
+                dialog.setContentView(R.layout.invoice_dialog);
+                dialog.show();
+            }
+        });
 //
 //
 //        holder.tvTitle.setText(dataModel.getTitle());
@@ -73,9 +91,9 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
         holder.tvPayNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              if ( holder.tvPayNow.getText().equals("PAID")){
+                if (holder.tvPayNow.getText().equals("PAID")) {
                     Toast.makeText(context, "YOU ALREADY PAID FOR THIS!", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Dialog d = new PaymentDialog(context);
                     d.show();
                 }

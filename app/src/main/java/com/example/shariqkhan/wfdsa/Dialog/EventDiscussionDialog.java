@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -33,6 +34,7 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
     public Activity act;
     public Dialog d;
     ArrayList<DiscussionModel> discussionList = new ArrayList<DiscussionModel>();
+    ImageView imageView;
 
     @BindView(R.id.etComment)
     EditText etComment;
@@ -81,6 +83,13 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
 
         rvComments.setAdapter(discussionRVAdapter);
 
+        imageView = findViewById(R.id.close);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
     }
 
     private boolean validComment() {

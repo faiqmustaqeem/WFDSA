@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.example.shariqkhan.wfdsa.R;
 
@@ -37,8 +39,13 @@ public class CEOAdapter extends RecyclerView.Adapter<CEOAdapter.MyHolder> {
         ModelMember member = arrayList.get(position);
 
         holder.country.setText(member.getCountry());
-       // holder.name.setText(member.getMemberName());
+        // holder.name.setText(member.getMemberName());
         holder.experties.setText("Specialist Consultant");
+        if (MainActivity.DECIDER.equals("member")) {
+            holder.relative.setVisibility(View.VISIBLE);
+        } else {
+            holder.relative.setVisibility(View.GONE);
+        }
 
 
 //        holder.holder.Post.setText("Member");logoFront.setImageResource(R.drawable.hr);
@@ -50,11 +57,13 @@ public class CEOAdapter extends RecyclerView.Adapter<CEOAdapter.MyHolder> {
     public int getItemCount() {
         return arrayList.size();
     }
+
     static class MyHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView experties;
         public TextView Post;
         public TextView country;
+        public RelativeLayout relative;
 
         public View view;
         public ImageView logoFront;
@@ -66,15 +75,14 @@ public class CEOAdapter extends RecyclerView.Adapter<CEOAdapter.MyHolder> {
             super(itemView);
             view = itemView;
             name = (TextView) view.findViewById(R.id.name);
-            experties= (TextView) view.findViewById(R.id.experties);
+            experties = (TextView) view.findViewById(R.id.experties);
             Post = (TextView) view.findViewById(R.id.Post);
             country = (TextView) view.findViewById(R.id.country);
+            relative = (RelativeLayout) view.findViewById(R.id.showOrHide);
 
+            logoFront = (ImageView) view.findViewById(R.id.logo);
 
-            logoFront = (ImageView)view.findViewById(R.id.logo);
-
-            logoTopLeft= (ImageView)view.findViewById(R.id.flag);
-
+            logoTopLeft = (ImageView) view.findViewById(R.id.flag);
 
 
         }

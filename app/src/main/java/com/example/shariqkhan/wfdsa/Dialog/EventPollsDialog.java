@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -26,6 +27,7 @@ import butterknife.OnClick;
 public class EventPollsDialog extends Dialog implements View.OnClickListener {
     public Activity act;
     public Dialog d;
+    ImageView imageView;
 
     @BindView(R.id.tvSubmit)
     TextView tvSubmit;
@@ -52,7 +54,14 @@ public class EventPollsDialog extends Dialog implements View.OnClickListener {
     }
 
     private void initUI() {
+        imageView = findViewById(R.id.close);
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
     }
 
     @OnClick({R.id.tvSubmit})

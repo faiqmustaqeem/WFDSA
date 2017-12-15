@@ -59,10 +59,10 @@
                 />
 
             <View
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/Post"
+                android:layout_marginTop="8dp"
                 android:background="#c1c1c1">
 
             </View>
@@ -92,15 +92,16 @@
                 />
 
             <TextView
-               android:layout_below="@+id/experties"
                 android:id="@+id/company_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/experties"
                 android:text="Oirflame cosmetics Master Samuelsgatan 56,3rd floor SE-101 39 stockholm"
                 android:textColor="@color/colorPrimary" />
 
 
             <LinearLayout
+                android:id="@+id/countryLinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/experties"
@@ -118,16 +119,85 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
+
                 <ImageView
                     android:id="@+id/flag"
                     android:layout_width="70dp"
-                    android:scaleType="fitXY"
                     android:layout_height="40dp"
+                    android:scaleType="fitXY"
 
                     android:src="@drawable/ar" />
 
 
             </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/showOrHide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_below="@+id/countryLinear"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/phoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/phone"
+                    android:text="03322477874- (021)8229555" />
+
+                <TextView
+                    android:id="@+id/fax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phoneNumber"
+                    android:layout_marginTop="5dp"
+                    android:text="Fax:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/faxNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phoneNumber"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/fax"
+                    android:text="(021)822-9555" />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/faxNumber"
+                    android:layout_marginTop="5dp"
+                    android:text="Email:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emailproper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/faxNumber"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/email"
+                    android:text="shariqmack@gmail.com" />
+
+
+
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 

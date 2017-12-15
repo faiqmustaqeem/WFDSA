@@ -59,9 +59,26 @@ public class AllEventsActivity extends AppCompatActivity {
 
                 EventsModel eventsModel = GlobalClass.eventsList.get(position);
 
+
+                if (!MainActivity.DECIDER.equals("member"))
+                {
+                    if (eventsModel.getPersonal().equals("personal"))
+                    {
+                        Toast.makeText(AllEventsActivity.this, "Members Access Only!", Toast.LENGTH_SHORT).show();
+
+                    }else
+                    {
+                        Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
+                        startActivity(i);
+                    }
+                }else
+                    {
+                        Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
+                        startActivity(i);
+                    }
+
            //     Toast.makeText(AllEventsActivity.this, eventsModel.getId(), Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
-                startActivity(i);
+
             }
 
             @Override

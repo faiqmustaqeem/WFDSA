@@ -63,7 +63,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -76,10 +76,22 @@
                     android:text="WFDSA CEO COUNCIL MEETING (INVITATION ONLY)"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/lock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_lock"
+                    android:visibility="gone"
+                    />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTitle"
                     android:layout_marginTop="4dp"
                     android:orientation="horizontal">
 
@@ -91,21 +103,16 @@
                         android:gravity="center"
                         android:text="Sunday, @9:00pm" />
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"></FrameLayout>
-
                     <TextView
                         android:id="@+id/tvCityCountry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_location"
+                        android:drawableLeft="@drawable/ic_loc"
                         android:gravity="center"
                         android:text="Paris, France" />
                 </LinearLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

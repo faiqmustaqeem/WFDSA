@@ -3,6 +3,7 @@ package com.example.shariqkhan.wfdsa;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -44,8 +45,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     @BindView(R.id.ivShare)
     ImageView ivShare;
     @BindView(R.id.fabPolls)
-
     FloatingActionButton fabPolls;
+    @BindView(R.id.ivGallery)
+    ImageView ivGallery;
+    @BindView(R.id.ivAttendees)
+    ImageView ivAttendess;
+
     GoogleMap myGoogleMap;
     ImageView image;
     ImageView location;
@@ -96,6 +101,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+                ivAttendess.setImageResource(R.drawable.ic_attendees);
+                ivGallery.setImageResource(R.drawable.ic_gallery);
+                location.setImageResource(R.drawable.ic_checked_bluee);
+                ivShare.setImageResource(R.drawable.ic_share);
+                //  location.setIma
                 final Dialog dialog = new Dialog(SelectedEventActivity.this);
                 dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -200,6 +212,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                break;
 
             case R.id.tvGetDirections:
+
                 try {
                     Uri uri = Uri.parse("geo:" + 38.903210 + "," + -77.038123);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -212,7 +225,16 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
             case R.id.ivShare:
+                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+                ivAttendess.setImageResource(R.drawable.ic_attendees);
+                ivGallery.setImageResource(R.drawable.ic_gallery);
+                location.setImageResource(R.drawable.ic_checked);
+
+                ivShare.setImageResource(R.drawable.ic_share_share);
+
+
                 if (llShare.getVisibility() == View.GONE) {
                     llShare.setVisibility(View.VISIBLE);
                     tvRegister.setEnabled(false);
@@ -223,18 +245,48 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     tvRegister.setEnabled(true);
                 }
                 break;
+
             case R.id.ivDiscussion:
+                location.setImageResource(R.drawable.ic_checked);
+                Resources  res = getResources();
+
+                ivDiscussion.setImageDrawable(res.getDrawable(R.drawable.ic_discussion_blue));
+
+                //ivDiscussion.setImageResource(R.drawable.ic_discussion_blue);
+                ivAttendess.setImageResource(R.drawable.ic_attendees);
+                ivGallery.setImageResource(R.drawable.ic_gallery);
+
+                ivShare.setImageResource(R.drawable.ic_share);
+
+
                 EventDiscussionDialog d = new EventDiscussionDialog(this);
                 d.show();
                 break;
+
             case R.id.ivGallery:
+                location.setImageResource(R.drawable.ic_checked);
+                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+                ivAttendess.setImageResource(R.drawable.ic_attendees);
+                ivGallery.setImageResource(R.drawable.ic_gallery_blue);
+
+                ivShare.setImageResource(R.drawable.ic_share);
+
                 EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(this);
                 eventGalleryDialog.show();
                 break;
+
             case R.id.ivAttendees:
+                location.setImageResource(R.drawable.ic_checked);
+                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+                ivAttendess.setImageResource(R.drawable.ic_attendees_blue);
+                ivGallery.setImageResource(R.drawable.ic_gallery);
+
+                ivShare.setImageResource(R.drawable.ic_share);
+
                 EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(this);
                 attendeesDialog.show();
                 break;
+
             case R.id.fabPolls:
                 EventPollsDialog pollsDialog = new EventPollsDialog(this);
                 pollsDialog.show();

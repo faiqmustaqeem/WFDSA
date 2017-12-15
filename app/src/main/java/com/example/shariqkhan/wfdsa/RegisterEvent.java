@@ -133,6 +133,7 @@ public class RegisterEvent extends AppCompatActivity {
         }
         Locale[] locale = Locale.getAvailableLocales();
         ArrayList<String> countries = new ArrayList<String>();
+        countries.add("");
         String country;
         for (Locale loc : locale) {
             country = loc.getDisplayCountry();

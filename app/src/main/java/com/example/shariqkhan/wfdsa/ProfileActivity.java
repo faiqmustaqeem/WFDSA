@@ -77,9 +77,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         d.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if (canEdit) {
+                if (tvEditOrUpdate.getText().toString().equals("EDIT")) {
                     makeFieldsEditable();
                     tvEditOrUpdate.setText("SAVE");
+
                 }
             }
         });
@@ -178,10 +179,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         }).show();
                 break;
             case R.id.tvEditOrUpdate:
-                if (canEdit) {
-                    updateProfile();
-                } else {
+                if (tvEditOrUpdate.getText().toString().equals("EDIT")) {
                     d.show();
+
+
+                } else if (tvEditOrUpdate.getText().toString().equals("SAVE"))  {
+                    updateProfile();
                 }
                 break;
 

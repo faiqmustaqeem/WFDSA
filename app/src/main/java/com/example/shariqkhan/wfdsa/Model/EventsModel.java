@@ -5,12 +5,23 @@ package com.example.shariqkhan.wfdsa.Model;
  */
 
 public class EventsModel {
-    String id, eventTitle, eventDescription, venueCountry, venueCity, day, month, year, time;
+    String id;
+    String eventTitle;
+    String eventDescription;
+    String venueCountry;
+    String venueCity;
+    String day;
+    String month;
+    String year;
+    String time;
+
+
+    String personal;
 
     public EventsModel() {
     }
 
-    public EventsModel(String id, String eventTitle, String eventDescription, String venueCountry, String venueCity, String day, String month, String year, String time) {
+    public EventsModel(String id, String eventTitle, String eventDescription, String venueCountry, String venueCity, String day, String month, String year, String time, String personal) {
         this.id = id;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
@@ -18,8 +29,18 @@ public class EventsModel {
         this.venueCity = venueCity;
         this.day = day;
         this.month = month;
-        this.year = day;
+        this.year = year;
         this.time = time;
+        this.personal = personal;
+
+    }
+
+    public String getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(String personal) {
+        this.personal = personal;
     }
 
     public String getId() {

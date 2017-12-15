@@ -165,6 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void initCountriesSpinner() {
         Locale[] locale = Locale.getAvailableLocales();
         ArrayList<String> countries = new ArrayList<String>();
+        countries.add("");
         String country;
         for (Locale loc : locale) {
             country = loc.getDisplayCountry();
@@ -208,7 +209,7 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(SignUpActivity.this);
-            progressDialog.setTitle("Logging In");
+            progressDialog.setTitle("Signing Up");
 
             progressDialog.setMessage("Please Wait");
             progressDialog.setCanceledOnTouchOutside(false);
@@ -319,6 +320,7 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putString("last_name", last_name);
                         editor.putString("password", getpass);
                         editor.putString("contact_no", contact_no);
+                        editor.putString("type","nonmember");
                         editor.apply();
 
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);

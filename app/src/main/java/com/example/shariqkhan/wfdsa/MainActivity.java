@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
     static String getEmail;
     static String phoneNo;
     public static final int INTENT_CONSTANT_GALLERY = 1;
+    public static String DECIDER = "";
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity
         phoneNo = prefs.getString("contact_no", "");
         getCountry = prefs.getString("country", "");
         getEmail = prefs.getString("email", "");
+        DECIDER = prefs.getString("type", "");
 
         Log.e("first_name", getFirstName);
         Log.e("last_name", getLastName);
@@ -197,8 +199,13 @@ public class MainActivity extends AppCompatActivity
         ivSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(i);
+                if (MainActivity.DECIDER.equals("member")){
+                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(i);
+                }else{
+                    Toast.makeText(MainActivity.this, "Only members can edit profiles!", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -343,7 +350,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, LeaderShipActivity.class);
             startActivity(intent);
 
-        }  else if (id == R.id.nav_dsa_members) {
+        } else if (id == R.id.nav_dsa_members) {
             Intent intent = new Intent(MainActivity.this, MemberActivity.class);
             startActivity(intent);
 

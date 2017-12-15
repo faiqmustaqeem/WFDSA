@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.AnnouncementsActivity;
+import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.R;
 
@@ -44,11 +46,18 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
         @BindView(R.id.tvYear)
         TextView tvYear;
 
+        ImageView lock;
+
         View itemView;
+
         public MyViewHolder(View view) {
             super(view);
+
+
             itemView = view;
             ButterKnife.bind(this, view);
+            lock = (ImageView) itemView.findViewById(R.id.lock);
+
         }
     }
 
@@ -62,11 +71,23 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         EventsModel dataModel = eventsModelArrayList.get(position);
         holder.tvTitle.setText(dataModel.getEventTitle());
-       // holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
+        // holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
         holder.tvCityCountry.setText(dataModel.getVenueCity() + ", " + dataModel.getVenueCountry());
         holder.tvDay.setText(dataModel.getDay());
         holder.tvMonth.setText(dataModel.getMonth());
-       // holder.tvYear.setText(dataModel.getYear());
+
+        if (!MainActivity.DECIDER.equals("member"))
+        {
+           if (dataModel.getPersonal().equals("personal"))
+            {
+             holder.lock.setVisibility(View.VISIBLE);
+            }
+        }else
+            {
+                holder.lock.setVisibility(View.GONE);
+            }
+
+        // holder.tvYear.setText(dataModel.getYear());
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

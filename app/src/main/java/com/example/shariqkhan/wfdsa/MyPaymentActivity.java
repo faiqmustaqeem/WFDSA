@@ -76,7 +76,7 @@ public class MyPaymentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String[] items = {"paid", "unpaid", "All"};
                 new MaterialDialog.Builder(MyPaymentActivity.this)
-                        .title("Select Type")
+                        .title("Invoice Type")
                         .items(items)
                         .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override

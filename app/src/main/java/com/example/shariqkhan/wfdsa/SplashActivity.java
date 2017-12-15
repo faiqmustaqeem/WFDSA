@@ -60,11 +60,11 @@ public class SplashActivity extends AppCompatActivity {
 
     public static void fetchEvents() {
         eventsList = new ArrayList<EventsModel>();
-        eventsList.add(new EventsModel("1", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm"));
-        eventsList.add(new EventsModel("2", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm"));
-        eventsList.add(new EventsModel("3", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm"));
-        eventsList.add(new EventsModel("4", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm"));
-        eventsList.add(new EventsModel("5", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm"));
+        eventsList.add(new EventsModel("1", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "personal"));
+        eventsList.add(new EventsModel("2", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
+        eventsList.add(new EventsModel("3", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
+        eventsList.add(new EventsModel("4", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
+        eventsList.add(new EventsModel("5", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "personal"));
     }
 
     @Override
