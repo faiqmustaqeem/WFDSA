@@ -3,23 +3,26 @@ package com.example.shariqkhan.wfdsa;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Dialog.ProfileEditPermissionDialog;
-import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +51,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     ProfileEditPermissionDialog d;
     public static boolean canEdit = false;
+    static String newFirstName;
+    static String newLastName;
+    static String newEmail;
+    public static Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ButterKnife.bind(this);
 
         initUI();
+        newFirstName = MainActivity.getFirstName;
+        newLastName = MainActivity.getLastName;
+        newEmail = MainActivity.getEmail;
+
 
         etEmail.setText(MainActivity.getEmail);
         etLastName.setText(MainActivity.getLastName);
@@ -88,10 +99,61 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         etEmail.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-
+                Toast.makeText(ProfileActivity.this, "You cannot edit your email!", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                newFirstName = charSequence.toString();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        etFirstName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                newLastName = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                newEmail = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
     }
 
     private void makeFieldsEditable() {
@@ -134,10 +196,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
+                uri = result.getUri();
 
-                Log.e("Uri", String.valueOf(resultUri));
-                profile_image.setImageURI(resultUri);
+                Log.e("Uri", String.valueOf(uri));
+                profile_image.setImageURI(uri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
@@ -183,7 +245,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     d.show();
 
 
-                } else if (tvEditOrUpdate.getText().toString().equals("SAVE"))  {
+                } else if (tvEditOrUpdate.getText().toString().equals("SAVE")) {
                     updateProfile();
                 }
                 break;
@@ -194,4 +256,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void updateProfile() {
         finish();
     }
+
+    public boolean isValidEmail(String emailStr) {
+        final Pattern VALID_EMAIL_ADDRESS_REGEX =
+                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
 }
+

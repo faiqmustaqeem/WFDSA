@@ -32,7 +32,7 @@ public class LeaderShipActivity extends AppCompatActivity {
 
     public static String URL = "http://codiansoft.com/wfdsa/Api/roles";
     String roleArray[];
-    String Array [] = {"Ceo Council", "Operational Group","Board of Delegates", "Association Advisory Council"};
+    String Array[] = {"Ceo Council", "Operational Group", "Board of Delegates", "Association Advisory Council"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,7 +125,7 @@ public class LeaderShipActivity extends AppCompatActivity {
 
                     }
                 }
-
+                progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
@@ -135,8 +135,8 @@ public class LeaderShipActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
+                progressDialog.dismiss();
             }
-
 
 
         }

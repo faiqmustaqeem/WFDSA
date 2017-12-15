@@ -153,8 +153,10 @@ public class MainActivity extends AppCompatActivity
         textView1 = (TextView) layout.findViewById(R.id.textView1);
 
 
-        tvUserName.setText(getFirstName + " " + getLastName);
+        tvUserName.setText(getFirstName + " " +getLastName);
         textView1.setText(getEmail);
+        if (ProfileActivity.uri != null)
+        ivUserPic.setImageURI(ProfileActivity.uri);
 
         ivSignOut = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSignOut);
         ivSettings = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSettings);
