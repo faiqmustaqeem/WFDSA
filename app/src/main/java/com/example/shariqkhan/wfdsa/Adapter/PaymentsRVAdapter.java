@@ -62,7 +62,7 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
         holder.tvDueDate.setText("Due Date " + dataModel.getDueDate());
         holder.tvPayNow.setText("PAY NOW\n$" + dataModel.getAmount());
 
-        if (dataModel.id.equals("paid")) {
+        if (dataModel.type.equals("Paid")) {
             holder.tvDueDate.setText("");
             holder.tvPayNow.setText("PAID");
         }

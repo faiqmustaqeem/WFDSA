@@ -2,6 +2,7 @@ package com.example.shariqkhan.wfdsa.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<AnnouncementsRV
         holder.tvDate.setText(dataModel.getDate());
         holder.tvAnnouncementDescription.setText(dataModel.getDescription());
         try{
+            Log.e("imageUrl", dataModel.getImage());
             Picasso.with(context).load(dataModel.getImage()).into(holder.ivImage);
         } catch (IllegalArgumentException ie){
             holder.ivImage.setVisibility(View.GONE);

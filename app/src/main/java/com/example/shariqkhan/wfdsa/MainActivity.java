@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         Log.e("email", getEmail);
         Log.e("contact_no", phoneNo);
         Log.e("password", password);
+        Log.e("type", DECIDER);
 
 
 //        ivUserPic.setOnClickListener(new View.OnClickListener() {
@@ -153,10 +154,10 @@ public class MainActivity extends AppCompatActivity
         textView1 = (TextView) layout.findViewById(R.id.textView1);
 
 
-        tvUserName.setText(getFirstName + " " +getLastName);
+        tvUserName.setText(getFirstName + " " + getLastName);
         textView1.setText(getEmail);
         if (ProfileActivity.uri != null)
-        ivUserPic.setImageURI(ProfileActivity.uri);
+            ivUserPic.setImageURI(ProfileActivity.uri);
 
         ivSignOut = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSignOut);
         ivSettings = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSettings);
@@ -201,10 +202,10 @@ public class MainActivity extends AppCompatActivity
         ivSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.DECIDER.equals("member")){
+                if (MainActivity.DECIDER.equals("member")) {
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "Only members can edit profiles!", Toast.LENGTH_LONG).show();
                 }
 
@@ -347,8 +348,6 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(aboutIntent);
 
         } else if (id == R.id.nav_about_wfdsa_leadership) {
-
-
 
 
             Intent intent = new Intent(MainActivity.this, LeaderShipActivity.class);

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.shariqkhan.wfdsa.Model.TryModel;
+import com.example.shariqkhan.wfdsa.Model.UserGuideModel;
 import com.example.shariqkhan.wfdsa.R;
 import com.github.rtoshiro.view.video.FullscreenVideoLayout;
 
@@ -30,12 +31,12 @@ import java.util.ArrayList;
 
 public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyViewHolder> {
 
-    public ArrayList<TryModel> arrayList = new ArrayList<>();
+    public ArrayList<UserGuideModel> arrayList = new ArrayList<>();
     Context context;
     MediaController media;
     int counterOfBind=0;
 
-    public UserGuideAdapter(ArrayList<TryModel> arrayList, Context context) {
+    public UserGuideAdapter(ArrayList<UserGuideModel> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -52,9 +53,9 @@ public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyVi
 
         Log.e("onBind", String.valueOf(counterOfBind));
         counterOfBind++;
-        final TryModel model = arrayList.get(position);
+         final UserGuideModel model = arrayList.get(position);
 
-        holder.textView.setText("HOW TO APPLY FOR MEMBER REGISTRATION "+model.getId());
+        holder.textView.setText(model.getVideotitle());
         //holder.image.setImageResource(R.drawable.shehzadrecovered);
 
         media = new MediaController(context);
@@ -80,8 +81,9 @@ public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyVi
                 Uri uri = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.videoviewtestingvideo);
                 try {
                     vid.setVideoURI(uri);
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("Invalid", e.getMessage());
                 }
 
                 dialog.setCanceledOnTouchOutside(true);

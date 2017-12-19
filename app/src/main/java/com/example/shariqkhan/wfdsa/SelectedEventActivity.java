@@ -5,11 +5,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,35 +33,30 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SelectedEventActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
-    @BindView(R.id.ivDiscussion)
-    ImageView ivDiscussion;
+
     @BindView(R.id.llBottomNav)
     LinearLayout llBottomNav;
     @BindView(R.id.llShare)
     LinearLayout llShare;
-    @BindView(R.id.ivShare)
-    ImageView ivShare;
     @BindView(R.id.fabPolls)
     FloatingActionButton fabPolls;
-    @BindView(R.id.ivGallery)
-    ImageView ivGallery;
-    @BindView(R.id.ivAttendees)
-    ImageView ivAttendess;
 
     GoogleMap myGoogleMap;
     ImageView image;
     ImageView location;
     Button yes;
     Button no;
+    ImageView close;
 
     Animation shareSlideUp, shareSlideDown;
-
+    private BottomNavigationViewEx bottomNavigationViewEx;
     TextView tvRegister;
 
     @Override
@@ -74,6 +72,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        close = (ImageView) findViewById(R.id.close);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SelectedEventActivity.this, "Event Added Seccuessfully!", Toast.LENGTH_SHORT).show();
+            }
+        });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +92,95 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
         image = (ImageView) findViewById(R.id.ivBack);
 
+        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_bar);
+        bottomNavigationViewEx.enableAnimation(false);
+        bottomNavigationViewEx.enableItemShiftingMode(false);
+        bottomNavigationViewEx.enableShiftingMode(false);
+        bottomNavigationViewEx.setTextVisibility(false);
+
+
+        //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
+
+
+        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId())
+                {
+                    case R.id.share:
+
+                        if (llShare.getVisibility() == View.GONE) {
+                            llShare.setVisibility(View.VISIBLE);
+                            tvRegister.setEnabled(false);
+                            llShare.startAnimation(shareSlideUp);
+
+                        } else {
+                            llShare.startAnimation(shareSlideDown);
+                            tvRegister.setEnabled(true);
+                        }
+                     break;
+
+                    case R.id.check:
+
+                        final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                        dialog.getWindow().setLayout(lp.width, lp.height);
+                        dialog.setContentView(R.layout.checked_in_dialog);
+
+                        // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
+                        TextView view1 = dialog.findViewById(R.id.Acceptance);
+                        TextView view2 = dialog.findViewById(R.id.Rejection);
+                        view2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        view1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                        dialog.show();
+
+                        break;
+
+                    case R.id.discussion:
+
+                        EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
+                        d.show();
+                        break;
+
+                    case R.id.gallery:
+
+                        EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this);
+                        eventGalleryDialog.show();
+                        break;
+
+                    case R.id.people:
+                        EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
+                        attendeesDialog.show();
+                        break;
+
+
+
+
+                }
+
+                return false;
+            }
+        });
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,50 +192,51 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        location = (ImageView) findViewById(R.id.ivLocation);
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                
-
-                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-                ivAttendess.setImageResource(R.drawable.ic_attendees);
-                ivGallery.setImageResource(R.drawable.ic_gallery);
-                location.setImageResource(R.drawable.ic_checked_bluee);
-                ivShare.setImageResource(R.drawable.ic_share);
-                //  location.setIma
-                final Dialog dialog = new Dialog(SelectedEventActivity.this);
-                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                dialog.getWindow().setLayout(lp.width, lp.height);
-                dialog.setContentView(R.layout.checked_in_dialog);
-
-                // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
-                TextView view1 = dialog.findViewById(R.id.Acceptance);
-                TextView view2 = dialog.findViewById(R.id.Rejection);
-                view2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                view1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-                dialog.show();
-            }
-        });
+//        location = (ImageView) findViewById(R.id.ivLocation);
+//        location.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//
+//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+//                ivAttendess.setImageResource(R.drawable.ic_attendees);
+//                ivGallery.setImageResource(R.drawable.ic_gallery);
+//                location.setImageResource(R.drawable.ic_checked_bluee);
+//                ivShare.setImageResource(R.drawable.ic_share);
+//                //  location.setIma
+//                final Dialog dialog = new Dialog(SelectedEventActivity.this);
+//                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                dialog.getWindow().setLayout(lp.width, lp.height);
+//                dialog.setContentView(R.layout.checked_in_dialog);
+//
+//                // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
+//                TextView view1 = dialog.findViewById(R.id.Acceptance);
+//                TextView view2 = dialog.findViewById(R.id.Rejection);
+//                view2.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                view1.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                        Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//
+//                dialog.show();
+//            }
+//        });
         final ImageView likesView = (ImageView) findViewById(R.id.ivLike);
         final TextView tvLikeQty = (TextView) findViewById(R.id.tvLikesQty);
 
@@ -185,8 +281,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         shareSlideDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.share_slide_down);
 
         llBottomNav.bringToFront();
-        ivDiscussion.setOnClickListener(this);
-        ivShare.setOnClickListener(this);
+
+//        ivDiscussion.setOnClickListener(this);
+//        ivShare.setOnClickListener(this);
     }
 
     @Override
@@ -201,7 +298,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(dsaLocation, 14.0f));
     }
 
-    @OnClick({R.id.tvGetDirections, R.id.ivShare, R.id.ivDiscussion, R.id.ivGallery, R.id.ivAttendees, R.id.fabPolls})
+    @OnClick({R.id.tvGetDirections, R.id.fabPolls})
     public void onClick(View view) {
         switch (view.getId()) {
 //            case R.id.ivLocation:
@@ -227,67 +324,67 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
                 break;
+//
+//            case R.id.ivShare:
+//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+//                ivAttendess.setImageResource(R.drawable.ic_attendees);
+//                ivGallery.setImageResource(R.drawable.ic_gallery);
+//                location.setImageResource(R.drawable.ic_checked);
+//
+//                ivShare.setImageResource(R.drawable.ic_share_share);
+//
+//
+//                if (llShare.getVisibility() == View.GONE) {
+//                    llShare.setVisibility(View.VISIBLE);
+//                    tvRegister.setEnabled(false);
+//                    llShare.startAnimation(shareSlideUp);
+//
+//                } else {
+//                    llShare.startAnimation(shareSlideDown);
+//                    tvRegister.setEnabled(true);
+//                }
+//                break;
 
-            case R.id.ivShare:
-                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-                ivAttendess.setImageResource(R.drawable.ic_attendees);
-                ivGallery.setImageResource(R.drawable.ic_gallery);
-                location.setImageResource(R.drawable.ic_checked);
-
-                ivShare.setImageResource(R.drawable.ic_share_share);
-
-
-                if (llShare.getVisibility() == View.GONE) {
-                    llShare.setVisibility(View.VISIBLE);
-                    tvRegister.setEnabled(false);
-                    llShare.startAnimation(shareSlideUp);
-
-                } else {
-                    llShare.startAnimation(shareSlideDown);
-                    tvRegister.setEnabled(true);
-                }
-                break;
-
-            case R.id.ivDiscussion:
-                location.setImageResource(R.drawable.ic_checked);
-                Resources  res = getResources();
-
-                ivDiscussion.setImageDrawable(res.getDrawable(R.drawable.ic_discussion_blue));
-
-                //ivDiscussion.setImageResource(R.drawable.ic_discussion_blue);
-                ivAttendess.setImageResource(R.drawable.ic_attendees);
-                ivGallery.setImageResource(R.drawable.ic_gallery);
-
-                ivShare.setImageResource(R.drawable.ic_share);
-
-
-                EventDiscussionDialog d = new EventDiscussionDialog(this);
-                d.show();
-                break;
-
-            case R.id.ivGallery:
-                location.setImageResource(R.drawable.ic_checked);
-                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-                ivAttendess.setImageResource(R.drawable.ic_attendees);
-                ivGallery.setImageResource(R.drawable.ic_gallery_blue);
-
-                ivShare.setImageResource(R.drawable.ic_share);
-
-                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(this);
-                eventGalleryDialog.show();
-                break;
-
-            case R.id.ivAttendees:
-                location.setImageResource(R.drawable.ic_checked);
-                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-                ivAttendess.setImageResource(R.drawable.ic_attendees_blue);
-                ivGallery.setImageResource(R.drawable.ic_gallery);
-
-                ivShare.setImageResource(R.drawable.ic_share);
-
-                EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(this);
-                attendeesDialog.show();
-                break;
+//            case R.id.ivDiscussion:
+//                location.setImageResource(R.drawable.ic_checked);
+//                Resources  res = getResources();
+//
+//                ivDiscussion.setImageDrawable(res.getDrawable(R.drawable.ic_discussion_blue));
+//
+//                //ivDiscussion.setImageResource(R.drawable.ic_discussion_blue);
+//                ivAttendess.setImageResource(R.drawable.ic_attendees);
+//                ivGallery.setImageResource(R.drawable.ic_gallery);
+//
+//                ivShare.setImageResource(R.drawable.ic_share);
+//
+//
+//                EventDiscussionDialog d = new EventDiscussionDialog(this);
+//                d.show();
+//                break;
+//
+//            case R.id.ivGallery:
+//                location.setImageResource(R.drawable.ic_checked);
+//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+//                ivAttendess.setImageResource(R.drawable.ic_attendees);
+//                ivGallery.setImageResource(R.drawable.ic_gallery_blue);
+//
+//                ivShare.setImageResource(R.drawable.ic_share);
+//
+//                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(this);
+//                eventGalleryDialog.show();
+//                break;
+//
+//            case R.id.ivAttendees:
+//                location.setImageResource(R.drawable.ic_checked);
+//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
+//                ivAttendess.setImageResource(R.drawable.ic_attendees_blue);
+//                ivGallery.setImageResource(R.drawable.ic_gallery);
+//
+//                ivShare.setImageResource(R.drawable.ic_share);
+//
+//                EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(this);
+//                attendeesDialog.show();
+//                break;
 
             case R.id.fabPolls:
                 EventPollsDialog pollsDialog = new EventPollsDialog(this);

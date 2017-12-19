@@ -14,6 +14,7 @@ public class EventsModel {
     String month;
     String year;
     String time;
+    String imageUrl;
 
 
     String personal;
@@ -33,6 +34,14 @@ public class EventsModel {
         this.time = time;
         this.personal = personal;
 
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getPersonal() {
@@ -77,5 +86,41 @@ public class EventsModel {
 
     public String getTime() {
         return time;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
+
+    public void setVenueCountry(String venueCountry) {
+        this.venueCountry = venueCountry;
+    }
+
+    public void setVenueCity(String venueCity) {
+        this.venueCity = venueCity;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

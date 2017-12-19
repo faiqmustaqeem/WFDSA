@@ -72,13 +72,13 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
         EventsModel dataModel = eventsModelArrayList.get(position);
         holder.tvTitle.setText(dataModel.getEventTitle());
         // holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
-        holder.tvCityCountry.setText(dataModel.getVenueCity() + ", " + dataModel.getVenueCountry());
+        holder.tvCityCountry.setText(dataModel.getVenueCity());
         holder.tvDay.setText(dataModel.getDay());
         holder.tvMonth.setText(dataModel.getMonth());
 
         if (!MainActivity.DECIDER.equals("member"))
         {
-           if (dataModel.getPersonal().equals("personal"))
+           if (dataModel.getPersonal().equals("member"))
             {
              holder.lock.setVisibility(View.VISIBLE);
             }

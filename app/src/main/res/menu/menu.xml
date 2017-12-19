@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/share"
+        android:enabled="true"
+
+        android:icon="@drawable/xshare"
+        android:title="">
+
+    </item>
+    <item
+        android:id="@+id/people"
+        android:enabled="true"
+        android:icon="@drawable/xpeople"
+        android:title=""
+        >
+
+    </item>
+    <item
+        android:id="@+id/discussion"
+        android:enabled="true"
+        android:icon="@drawable/xcomments"
+        android:title=""
+        >
+
+    </item>
+
+    <item
+        android:id="@+id/gallery"
+        android:enabled="true"
+        android:icon="@drawable/xpicture"
+        android:title="">
+
+    </item>
+    <item
+        android:id="@+id/check"
+        android:enabled="true"
+        android:icon="@drawable/xcheck"
+        android:title="">
+
+    </item>
+</menu>
