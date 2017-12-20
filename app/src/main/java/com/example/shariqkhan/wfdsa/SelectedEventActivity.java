@@ -1,16 +1,22 @@
 package com.example.shariqkhan.wfdsa;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,16 +30,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shariqkhan.wfdsa.Adapter.PaymentsRVAdapter;
 import com.example.shariqkhan.wfdsa.Dialog.EventAttendeesDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventDiscussionDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventGalleryDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventPollsDialog;
+import com.example.shariqkhan.wfdsa.Helper.getHttpData;
+import com.example.shariqkhan.wfdsa.Model.PaymentModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,14 +70,27 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     Button no;
     ImageView close;
 
+    TextView textView17;
+    TextView address;
+    TextView tvCityCountry;
+    String latlng;
+    String start;
+    String end;
+    String id;
+
+
     Animation shareSlideUp, shareSlideDown;
     private BottomNavigationViewEx bottomNavigationViewEx;
     TextView tvRegister;
+    public String URL = "http://codiansoft.com/wfdsa/apis/Event/EventDetail?";
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_event);
+        id = getIntent().getStringExtra("eventid");
+
         ButterKnife.bind(this);
 
         initUI();
@@ -98,6 +126,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         bottomNavigationViewEx.enableShiftingMode(false);
         bottomNavigationViewEx.setTextVisibility(false);
 
+        textView17 = (TextView) findViewById(R.id.textView17);
+        address = (TextView) findViewById(R.id.address);
+        tvCityCountry = (TextView) findViewById(R.id.tvCityCountry);
+
+        Task task = new Task();
+        task.execute();
+
 
         //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
 
@@ -106,8 +141,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId())
-                {
+                switch (item.getItemId()) {
                     case R.id.share:
 
                         if (llShare.getVisibility() == View.GONE) {
@@ -119,7 +153,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                             llShare.startAnimation(shareSlideDown);
                             tvRegister.setEnabled(true);
                         }
-                     break;
+                        break;
 
                     case R.id.check:
 
@@ -171,8 +205,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
                         attendeesDialog.show();
                         break;
-
-
 
 
                 }
@@ -243,7 +275,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         likesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                likesView.setVisibility(View.INVISIBLE);
+                likesView.setVisibility(View.GONE);
                 tvLikeQty.setText("422");
             }
         });
@@ -324,72 +356,76 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
                 break;
-//
-//            case R.id.ivShare:
-//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-//                ivAttendess.setImageResource(R.drawable.ic_attendees);
-//                ivGallery.setImageResource(R.drawable.ic_gallery);
-//                location.setImageResource(R.drawable.ic_checked);
-//
-//                ivShare.setImageResource(R.drawable.ic_share_share);
-//
-//
-//                if (llShare.getVisibility() == View.GONE) {
-//                    llShare.setVisibility(View.VISIBLE);
-//                    tvRegister.setEnabled(false);
-//                    llShare.startAnimation(shareSlideUp);
-//
-//                } else {
-//                    llShare.startAnimation(shareSlideDown);
-//                    tvRegister.setEnabled(true);
-//                }
-//                break;
-
-//            case R.id.ivDiscussion:
-//                location.setImageResource(R.drawable.ic_checked);
-//                Resources  res = getResources();
-//
-//                ivDiscussion.setImageDrawable(res.getDrawable(R.drawable.ic_discussion_blue));
-//
-//                //ivDiscussion.setImageResource(R.drawable.ic_discussion_blue);
-//                ivAttendess.setImageResource(R.drawable.ic_attendees);
-//                ivGallery.setImageResource(R.drawable.ic_gallery);
-//
-//                ivShare.setImageResource(R.drawable.ic_share);
-//
-//
-//                EventDiscussionDialog d = new EventDiscussionDialog(this);
-//                d.show();
-//                break;
-//
-//            case R.id.ivGallery:
-//                location.setImageResource(R.drawable.ic_checked);
-//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-//                ivAttendess.setImageResource(R.drawable.ic_attendees);
-//                ivGallery.setImageResource(R.drawable.ic_gallery_blue);
-//
-//                ivShare.setImageResource(R.drawable.ic_share);
-//
-//                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(this);
-//                eventGalleryDialog.show();
-//                break;
-//
-//            case R.id.ivAttendees:
-//                location.setImageResource(R.drawable.ic_checked);
-//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-//                ivAttendess.setImageResource(R.drawable.ic_attendees_blue);
-//                ivGallery.setImageResource(R.drawable.ic_gallery);
-//
-//                ivShare.setImageResource(R.drawable.ic_share);
-//
-//                EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(this);
-//                attendeesDialog.show();
-//                break;
 
             case R.id.fabPolls:
                 EventPollsDialog pollsDialog = new EventPollsDialog(this);
                 pollsDialog.show();
                 break;
+        }
+    }
+
+    private class Task extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            String url = URL + "event_id=" + id;
+
+            Log.e("url", url);
+
+            String response = getHttpData.getData(url);
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    JSONArray rolesArray = resultObj.getJSONArray("data");
+                    JSONObject obj = rolesArray.getJSONObject(0);
+                    //    roleArray = new String[rolesArray.length()];
+//                    tvCityCountry.setText(obj.getString("location"));
+//                    address.setText(obj.getString("venue"));
+
+
+                    //  fetchMyPayments();
+
+
+                }
+                progressDialog.dismiss();
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(SelectedEventActivity.this);
+            progressDialog.setTitle("Loading ");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
         }
     }
 }

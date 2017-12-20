@@ -34,7 +34,7 @@
                 android:id="@+id/ivWFDSALogo"
                 android:layout_width="200dp"
                 android:layout_height="100dp"
-                android:scaleType="fitXY"
+
                 android:layout_marginTop="8dp"
                 android:src="@drawable/logowfdsa"
                 app:layout_constraintLeft_toLeftOf="parent"

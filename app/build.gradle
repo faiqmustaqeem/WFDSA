@@ -42,6 +42,7 @@ dependencies {
     compile 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    compile 'com.facebook.android:facebook-android-sdk:4.28.0'
     compile 'com.yarolegovich:lovely-dialog:1.0.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jaredrummler:material-spinner:1.2.3'

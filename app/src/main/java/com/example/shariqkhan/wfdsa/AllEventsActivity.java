@@ -129,10 +129,12 @@ public class AllEventsActivity extends AppCompatActivity {
 
                     } else {
                         Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
+                        i.putExtra("eventid", eventsModel.getId());
                         startActivity(i);
                     }
                 } else {
                     Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
+                    i.putExtra("eventid", eventsModel.getId());
                     startActivity(i);
                 }
 

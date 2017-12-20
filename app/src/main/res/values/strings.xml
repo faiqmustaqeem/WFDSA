@@ -18,4 +18,9 @@
     <string name="order">Order</string>
     <string name="you_ordered">sasas</string>
 
+    <string name="facebook_app_id">1207533079382899</string>
+    <string name="facebook_login_protocol_scheme">fb1207533079382899</string>
+
+
+
 </resources>

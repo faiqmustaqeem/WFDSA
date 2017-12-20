@@ -3,6 +3,7 @@ package com.example.shariqkhan.wfdsa.Adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.shariqkhan.wfdsa.Dialog.InvoiceDialog;
 import com.example.shariqkhan.wfdsa.Dialog.PaymentDialog;
 import com.example.shariqkhan.wfdsa.Model.PaymentModel;
+import com.example.shariqkhan.wfdsa.MyPaymentActivity;
 import com.example.shariqkhan.wfdsa.R;
 
 import java.util.ArrayList;
@@ -26,10 +29,10 @@ import butterknife.ButterKnife;
  */
 
 public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.MyViewHolder> {
-    Context context;
+    MyPaymentActivity context;
     ArrayList<PaymentModel> paymentsList;
 
-    public PaymentsRVAdapter(Context context, ArrayList<PaymentModel> paymentsList) {
+    public PaymentsRVAdapter(MyPaymentActivity context, ArrayList<PaymentModel> paymentsList) {
         this.context = context;
         this.paymentsList = paymentsList;
     }
@@ -57,6 +60,8 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         PaymentModel dataModel = paymentsList.get(position);
+        final String sendInvoice = dataModel.getInvoice_id();
+        Log.e("invoice_id", sendInvoice);
 
         holder.tvTitle.setText(dataModel.getTitle());
         holder.tvDueDate.setText("Due Date " + dataModel.getDueDate());
@@ -70,16 +75,19 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
         holder.tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(context);
-                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                dialog.getWindow().setLayout(lp.width, lp.height);
-                dialog.setContentView(R.layout.invoice_dialog);
+                InvoiceDialog dialog = new InvoiceDialog(context, sendInvoice);
                 dialog.show();
+//                final Dialog dialog = new Dialog(context);
+//                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                dialog.getWindow().setLayout(lp.width, lp.height);
+//                dialog.setContentView(R.layout.invoice_dialog);
+//                dialog.show();
             }
         });
 //

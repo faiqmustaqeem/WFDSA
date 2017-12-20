@@ -32,6 +32,8 @@ import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
 //
         prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity
                                 ActivityCompat.finishAffinity(MainActivity.this);
                                 logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 MainActivity.this.startActivity(logoutIntent);
+                                LoginManager.getInstance().logOut();
 
                                 SharedPreferences preferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
                                 SharedPreferences.Editor edit = preferences.edit();

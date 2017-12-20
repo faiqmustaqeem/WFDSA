@@ -5,11 +5,15 @@ package com.example.shariqkhan.wfdsa;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +28,14 @@ import android.widget.Toast;
 
 
 import com.example.shariqkhan.wfdsa.Dialog.TermsAndConditionsDialog;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -37,7 +49,10 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -71,11 +86,22 @@ public class SignUpActivity extends AppCompatActivity {
     String contactNum;
     String email;
     String password;
+    ProgressDialog dialog;
     String confirmPassword;
+
+    LoginButton tvNonMemberFBSignIn;
+
+    CallbackManager callbackManager;
 
     String getItem;
     public String BASE_URL = "http://www.codiansoft.com/wfdsa/api/register";
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +111,79 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
 
+        printKeyhash();
+        callbackManager = CallbackManager.Factory.create();
+
         tilFirstName = (TextInputLayout) findViewById(R.id.tilFirstName);
         tilLastName = (TextInputLayout) findViewById(R.id.tilLastName);
         tilContactNum = (TextInputLayout) findViewById(R.id.tilContactNum);
         tilEmail = (TextInputLayout) findViewById(R.id.tilEmail);
         tilPassword = (TextInputLayout) findViewById(R.id.tilPassword);
         tilConfirmPassword = (TextInputLayout) findViewById(R.id.tilConfrimPass);
+
+        tvNonMemberFBSignIn = (LoginButton) findViewById(R.id.tvNonMemberFBSignIn);
+        tvNonMemberFBSignIn.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday"));
+        tvNonMemberFBSignIn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                dialog = new ProgressDialog(SignUpActivity.this);
+                dialog.setTitle("Retreiving");
+                dialog.show();
+
+                String accessToken = loginResult.getAccessToken().getToken();
+
+
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        dialog.dismiss();
+                        Log.e("Response", object.toString());
+
+                            SharedPreferences.Editor prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                            prefs.putString("api_secret", "not_null");
+                            prefs.putString("deciderId", "nonmember");
+                            prefs.putString("type", "nonmember");
+                            prefs.apply();
+
+
+                           // Toast.makeText(SignUpActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
+                          Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                            //  txt1.setText(object.getString("email"));
+
+                    }
+                });
+
+                Bundle bundle = new Bundle();
+                bundle.putString("fields", "id,email");
+                request.setParameters(bundle);
+                request.executeAsync();
+
+            }
+
+            @Override
+            public void onCancel() {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("Error", error.getMessage());
+                dialog.dismiss();
+
+            }
+        });
+
+        if (AccessToken.getCurrentAccessToken() != null)
+        {
+            //txt1.setText(AccessToken.getCurrentAccessToken().getUserId());
+            Log.e("Inside here", "Accesss");
+        }
+
+
+
 
         tvSignUp = (TextView) findViewById(R.id.tvSignUp);
 
@@ -320,7 +413,7 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putString("last_name", last_name);
                         editor.putString("password", getpass);
                         editor.putString("contact_no", contact_no);
-                        editor.putString("type","nonmember");
+                        editor.putString("type", "nonmember");
                         editor.apply();
 
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
@@ -357,5 +450,23 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    private void printKeyhash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.example.shariqkhan.wfdsa", PackageManager.GET_SIGNATURES);
+            for (Signature sign : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(sign.toByteArray());
+                Log.e("Hash-key", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+
+            }
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
