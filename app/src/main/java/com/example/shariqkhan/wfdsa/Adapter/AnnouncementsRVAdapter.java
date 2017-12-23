@@ -63,10 +63,10 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<AnnouncementsRV
         holder.tvTitle.setText(dataModel.getTitle());
         holder.tvDate.setText(dataModel.getDate());
         holder.tvAnnouncementDescription.setText(dataModel.getDescription());
-        try{
+        try {
             Log.e("imageUrl", dataModel.getImage());
             Picasso.with(context).load(dataModel.getImage()).into(holder.ivImage);
-        } catch (IllegalArgumentException ie){
+        } catch (IllegalArgumentException ie) {
             holder.ivImage.setVisibility(View.GONE);
         }
     }

@@ -73,8 +73,10 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
         holder.tvTitle.setText(dataModel.getEventTitle());
         // holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
         holder.tvCityCountry.setText(dataModel.getVenueCity());
-        holder.tvDay.setText(dataModel.getDay());
-        holder.tvMonth.setText(dataModel.getMonth());
+        if (holder.tvCityCountry.getText().equals(""))
+            holder.tvCityCountry.setText("Paris");
+      //  holder.tvDay.setText(dataModel.getDay());
+        //holder.tvMonth.setText(dataModel.getMonth());
 
         if (!MainActivity.DECIDER.equals("member"))
         {

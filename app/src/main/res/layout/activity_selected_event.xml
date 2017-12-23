@@ -11,119 +11,10 @@
     <include
         android:id="@+id/tool_bar"
         layout="@layout/activity_toolbar"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabPolls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_polls"
-        android:tint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
-        app:layout_constraintRight_toRightOf="@+id/scrollView2"
-        tools:layout_editor_absoluteX="0dp" />
-
-
-    <LinearLayout
-        android:id="@+id/llRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/llBottomNav"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <TextView
-            android:id="@+id/tvRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="12dp"
-            android:text="Register Now"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/llBottomNav"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:layout_marginBottom="0dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:weightSum="5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        -
-
-        <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
-            android:id="@+id/bottom_nav_bar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:background="#fff"
-            app:menu="@menu/menu"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="24dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/llBottomNav"
-        app:layout_constraintLeft_toLeftOf="parent">
-
-        <ImageView
-            android:id="@+id/ivTwitter"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_twitter" />
-
-        <ImageView
-            android:id="@+id/ivLinkedIn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_linkedin" />
-
-        <ImageView
-            android:id="@+id/ivFacebook"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_facebook" />
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/addeventwhite"
-
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="17dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="8dp" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -176,7 +67,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_like"
                 android:tint="@color/lightGray"
-                android:visibility="visible"
+
                 app:layout_constraintBottom_toBottomOf="@+id/tvLikesQty"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -232,7 +123,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:padding="4dp"
-                    android:text="Get Directions"
+                    android:text="Get Drections"
                     android:textColor="@android:color/white"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -308,87 +199,85 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rectangle"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="81dp">
 
+                    <TextView
+                        android:id="@+id/timing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="Timing/Venue"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textStyle="bold" />
 
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tvCityCountry"
+                        android:layout_below="@+id/timing"
+                        android:layout_gravity="end"
+                        android:layout_marginLeft="20dp"
+                        android:layout_toEndOf="@+id/heelo"
+                        android:drawableLeft="@drawable/ic_loc"
+                        android:text="My home/15 - sfo centeral south california"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/heelo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:drawableLeft="@drawable/ic_date"
+                        android:gravity="center_vertical"
+                        android:text="01 OCT 2018"
+
+                        android:textSize="14sp"
+                        android:layout_above="@+id/linearLayout5"
+                        android:layout_alignParentStart="true" />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/rectangle"
-                        android:orientation="vertical"
-                        android:padding="8dp"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="81dp">
+                        android:layout_below="@+id/address"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/linearLayout5">
 
                         <TextView
-                            android:id="@+id/timevenue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Timing/Venue"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/textView17"
+                            android:id="@+id/tvDayTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/timevenue"
-                            android:layout_gravity="start"
-                            android:drawableLeft="@drawable/ic_date"
+                            android:drawableLeft="@drawable/ic_clock"
                             android:gravity="center_vertical"
-                            android:text="01 OCT 2018"
+                            android:text="Wednesday ,@8:00AM"
 
-                            android:textSize="14sp" />
+                            />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                        </FrameLayout>
 
                         <TextView
-                            android:id="@+id/address"
+                            android:id="@+id/tvCityCountry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_below="@+id/timevenue"
-                            android:layout_marginLeft="15dp"
 
                             android:drawableLeft="@drawable/ic_city"
                             android:gravity="center_vertical"
+                            android:text="Moscow, Russian Federation" />
+                    </LinearLayout>
 
-                            android:text="SomeWhere On the Earth"
-                            android:textSize="14sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/address"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/tvDayTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableLeft="@drawable/ic_clock"
-                                android:gravity="center_vertical"
-                                android:text="Wednesday ,@8:00AM" />
-
-                            <FrameLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1">
-
-                            </FrameLayout>
-
-                            <TextView
-                                android:id="@+id/tvCityCountry"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-
-                                android:drawableLeft="@drawable/ic_loc"
-                                android:gravity="center_vertical"
-                                android:text="Moscow, Russian Federation" />
-                        </LinearLayout>
-
-                    </RelativeLayout>
                 </RelativeLayout>
-
             </android.support.v7.widget.CardView>
 
 
@@ -400,11 +289,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="-30dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView1"
-                app:layout_constraintHorizontal_bias="0.0">
+                app:layout_constraintTop_toBottomOf="@+id/cardView1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -443,5 +331,167 @@
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabPolls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_polls"
+        android:tint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintRight_toRightOf="@+id/scrollView2"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+    <LinearLayout
+        android:id="@+id/llRegister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/llBottomNav"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="Register Now"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llBottomNav"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="0dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:id="@+id/ivShare"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/xshare"
+            android:tint="@color/lightGray" />
+
+        <ImageView
+            android:id="@+id/ivAttendees"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/xpeople"
+            android:tint="@color/lightGray" />
+
+        <ImageView
+            android:id="@+id/ivDiscussion"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+          android:src="@drawable/xcomments"
+            android:tint="@color/lightGray"
+           />
+
+        <ImageView
+            android:id="@+id/ivGallery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@drawable/xpicture"
+            android:tint="@color/lightGray" />
+
+        <ImageView
+            android:id="@+id/ivLocation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+
+            android:src="@drawable/xcheck"
+            android:tint="@color/lightGray" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.903">
+
+        <ImageView
+            android:id="@+id/ivTwitter"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_twitter" />
+
+        <ImageView
+            android:id="@+id/ivLinkedIn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_linkedin" />
+
+        <ImageView
+            android:id="@+id/ivFacebook"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_facebook" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        map:srcCompat="@drawable/add"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tool_bar"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tool_bar"
+        app:layout_constraintTop_toTopOf="@+id/tool_bar"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

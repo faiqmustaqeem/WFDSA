@@ -100,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    callbackManager.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -139,19 +139,23 @@ public class SignUpActivity extends AppCompatActivity {
                         dialog.dismiss();
                         Log.e("Response", object.toString());
 
-                            SharedPreferences.Editor prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-                            prefs.putString("api_secret", "not_null");
-                            prefs.putString("deciderId", "nonmember");
-                            prefs.putString("type", "nonmember");
-                            prefs.apply();
+                        SharedPreferences.Editor prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                        prefs.putString("stype", "fb");
+                        prefs.putString("api_secret", "not_null");
+                        prefs.putString("deciderId", "nonmember");
+                        prefs.putString("type", "nonmember");
+                        prefs.putString("first_name", "Facebook");
+                        prefs.putString("last_name", "User");
+
+                        prefs.apply();
 
 
-                           // Toast.makeText(SignUpActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
-                          Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                        // Toast.makeText(SignUpActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
 
-                            //  txt1.setText(object.getString("email"));
+                        //  txt1.setText(object.getString("email"));
 
                     }
                 });
@@ -176,13 +180,10 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        if (AccessToken.getCurrentAccessToken() != null)
-        {
+        if (AccessToken.getCurrentAccessToken() != null) {
             //txt1.setText(AccessToken.getCurrentAccessToken().getUserId());
             Log.e("Inside here", "Accesss");
         }
-
-
 
 
         tvSignUp = (TextView) findViewById(R.id.tvSignUp);
@@ -414,6 +415,7 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putString("password", getpass);
                         editor.putString("contact_no", contact_no);
                         editor.putString("type", "nonmember");
+                        editor.putString("stype", "nonmember");
                         editor.apply();
 
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);

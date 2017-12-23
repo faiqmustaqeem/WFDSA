@@ -210,6 +210,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
                 break;
             case R.id.tvSignOut:

@@ -63,6 +63,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
             public void onClick(View view) {
                 Intent i = new Intent(ContactActivity.this,MainActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 

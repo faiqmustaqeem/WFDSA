@@ -136,7 +136,8 @@ public class MyPaymentActivity extends AppCompatActivity {
                                 }
 
 
-                                Toast.makeText(MyPaymentActivity.this, text, Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(MyPaymentActivity.this, text, Toast.LENGTH_SHORT).show();
+
                                 return true;
 
                             }
@@ -244,11 +245,7 @@ public class MyPaymentActivity extends AppCompatActivity {
                     rvPayments.setAdapter(paymentsRVAdapter);
 
 
-
-
                     //  fetchMyPayments();
-
-
 
 
                 }

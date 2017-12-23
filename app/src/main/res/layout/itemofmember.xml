@@ -91,6 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:padding="6dp"
+                    android:layout_marginLeft="3dp"
                     android:text="Name:"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:textStyle="bold" />
@@ -103,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2.4"
                     android:focusable="false"
-                    android:text="My name is Khan"
+                    android:text="John Smith"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
@@ -199,6 +200,7 @@
                     android:layout_weight="0.6"
                     android:padding="7dp"
                     android:text="Email:"
+                    android:textColor="@color/colorPrimary"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:textStyle="bold" />
 
@@ -266,6 +268,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
+                    android:layout_marginLeft="2dp"
                     android:padding="5dp"
                     android:text="Country:"
                     android:textColor="@color/colorPrimary"

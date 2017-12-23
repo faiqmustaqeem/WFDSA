@@ -48,8 +48,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.MyViewHo
         TextView tvprice;
 
 
-        @BindView(R.id.total)
-        TextView tvTotal;
+
 
 
 
@@ -68,7 +67,10 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         InvoiceModel dataModel = announcementsList.get(position);
-        holder.tvTotal.setText(dataModel.getTotal());
+
+      //  holder.tvTotal.setText(dataModel.getTotal());
+
+
         holder.tvprice.setText(dataModel.getPrice());
         holder.tvname.setText(dataModel.getName());
         holder.tvqty.setText(dataModel.getQuantity());

@@ -77,7 +77,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String start;
     String end;
     String id;
-
+ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
     Animation shareSlideUp, shareSlideDown;
     private BottomNavigationViewEx bottomNavigationViewEx;
@@ -91,9 +91,16 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         setContentView(R.layout.activity_selected_event);
         id = getIntent().getStringExtra("eventid");
 
+
         ButterKnife.bind(this);
 
         initUI();
+        ivshare = (ImageView) findViewById(R.id.ivShare);
+        ivattendees = (ImageView) findViewById(R.id.ivAttendees);
+        ivdiscussion = (ImageView)findViewById(R.id.ivDiscussion);
+        ivgallery= (ImageView)findViewById(R.id.ivGallery);
+        ivcheck = (ImageView)findViewById(R.id.ivLocation);
+
         tvRegister = (TextView) findViewById(R.id.tvRegister);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -120,31 +127,23 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
         image = (ImageView) findViewById(R.id.ivBack);
 
-        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_bar);
-        bottomNavigationViewEx.enableAnimation(false);
-        bottomNavigationViewEx.enableItemShiftingMode(false);
-        bottomNavigationViewEx.enableShiftingMode(false);
-        bottomNavigationViewEx.setTextVisibility(false);
+//        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_bar);
+//        bottomNavigationViewEx.enableAnimation(false);
+//        bottomNavigationViewEx.enableItemShiftingMode(false);
+//        bottomNavigationViewEx.enableShiftingMode(false);
+//        bottomNavigationViewEx.setTextVisibility(false);
 
-        textView17 = (TextView) findViewById(R.id.textView17);
+       // textView17 = (TextView) findViewById(R.id.textView17);
         address = (TextView) findViewById(R.id.address);
         tvCityCountry = (TextView) findViewById(R.id.tvCityCountry);
 
         Task task = new Task();
         task.execute();
 
-
-        //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
-
-
-        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        ivshare.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.share:
-
-                        if (llShare.getVisibility() == View.GONE) {
+            public void onClick(View view) {
+                if (llShare.getVisibility() == View.GONE) {
                             llShare.setVisibility(View.VISIBLE);
                             tvRegister.setEnabled(false);
                             llShare.startAnimation(shareSlideUp);
@@ -153,11 +152,21 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                             llShare.startAnimation(shareSlideDown);
                             tvRegister.setEnabled(true);
                         }
-                        break;
 
-                    case R.id.check:
+            }
+        });
 
-                        final Dialog dialog = new Dialog(SelectedEventActivity.this);
+        ivattendees.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
+                        attendeesDialog.show();
+            }
+        });
+        ivcheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(SelectedEventActivity.this);
                         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
                         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -186,32 +195,100 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
 
                         dialog.show();
-
-                        break;
-
-                    case R.id.discussion:
-
-                        EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
-                        d.show();
-                        break;
-
-                    case R.id.gallery:
-
-                        EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this);
-                        eventGalleryDialog.show();
-                        break;
-
-                    case R.id.people:
-                        EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
-                        attendeesDialog.show();
-                        break;
-
-
-                }
-
-                return false;
             }
         });
+        ivgallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this);
+                        eventGalleryDialog.show();
+            }
+        });
+        ivdiscussion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
+                        d.show();
+            }
+        });
+        //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
+
+//
+//        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//
+//                switch (item.getItemId()) {
+//                    case R.id.share:
+//
+//                        if (llShare.getVisibility() == View.GONE) {
+//                            llShare.setVisibility(View.VISIBLE);
+//                            tvRegister.setEnabled(false);
+//                            llShare.startAnimation(shareSlideUp);
+//
+//                        } else {
+//                            llShare.startAnimation(shareSlideDown);
+//                            tvRegister.setEnabled(true);
+//                        }
+//                        break;
+//
+//                    case R.id.check:
+//
+//                        final Dialog dialog = new Dialog(SelectedEventActivity.this);
+//                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                        dialog.getWindow().setLayout(lp.width, lp.height);
+//                        dialog.setContentView(R.layout.checked_in_dialog);
+//
+//                        // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
+//                        TextView view1 = dialog.findViewById(R.id.Acceptance);
+//                        TextView view2 = dialog.findViewById(R.id.Rejection);
+//                        view2.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        view1.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog.dismiss();
+//                                Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//
+//
+//                        dialog.show();
+//
+//                        break;
+//
+//                    case R.id.discussion:
+//
+//                        EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
+//                        d.show();
+//                        break;
+//
+//                    case R.id.gallery:
+//
+//                        EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this);
+//                        eventGalleryDialog.show();
+//                        break;
+//
+//                    case R.id.people:
+//                        EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
+//                        attendeesDialog.show();
+//                        break;
+//
+//
+//                }
+//
+//                return false;
+//            }
+//        });
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override

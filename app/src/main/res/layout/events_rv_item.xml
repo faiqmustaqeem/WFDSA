@@ -48,14 +48,14 @@
                         android:id="@+id/tvMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="OCT"
+                        android:text="10-"
                         android:textColor="@android:color/white" />
 
                     <TextView
                         android:id="@+id/tvYear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
+                        android:layout_marginLeft="2dp"
                         android:text="2017"
                         android:textColor="@android:color/white" />
 

@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity
     static String phoneNo;
     public static final int INTENT_CONSTANT_GALLERY = 1;
     public static String DECIDER = "";
+   public static String stype;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         getCountry = prefs.getString("country", "");
         getEmail = prefs.getString("email", "");
         DECIDER = prefs.getString("type", "");
+        stype = prefs.getString("stype", "");
 
         Log.e("first_name", getFirstName);
         Log.e("last_name", getLastName);
@@ -156,8 +158,15 @@ public class MainActivity extends AppCompatActivity
         textView1 = (TextView) layout.findViewById(R.id.textView1);
 
 
-        tvUserName.setText(getFirstName + " " + getLastName);
-        textView1.setText(getEmail);
+        if (stype.equals("fb")){
+            tvUserName.setText("Facebook user");
+            textView1.setVisibility(View.GONE);
+        }else{
+            tvUserName.setText(getFirstName + " " + getLastName);
+            textView1.setText(getEmail);
+
+        }
+
         if (ProfileActivity.uri != null)
             ivUserPic.setImageURI(ProfileActivity.uri);
 
