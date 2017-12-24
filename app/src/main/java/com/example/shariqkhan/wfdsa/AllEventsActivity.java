@@ -261,6 +261,15 @@ public class AllEventsActivity extends AppCompatActivity {
                             model.setId(job.getString("event_id"));
                             model.setEventTitle(job.getString("title"));
                             model.setVenueCity(job.getString("place"));
+                            String sub = job.getString("start_date");
+
+                            String filter = sub.substring(8, 2);
+
+                            model.setDay(filter);
+
+                            model.setMonth(job.getString("event_date").substring(5, 2));
+                            model.setYear(job.getString("event_date").substring(0, 4));
+                            model.setTime(job.getString("event_date").substring(11, 8));
                             //   model.setImageUrl(job.getString("upload_image"));
                             model.setPersonal(job.getString("permission"));
 

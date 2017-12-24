@@ -72,6 +72,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
     TextView textView17;
 
+    public static boolean checkedIn = false;
 
     TextView address;
     TextView tvCityCountry;
@@ -169,35 +170,42 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
         ivcheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(SelectedEventActivity.this);
-                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                if (!checkedIn){
+                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-                        dialog.getWindow().setLayout(lp.width, lp.height);
-                        dialog.setContentView(R.layout.checked_in_dialog);
+                    dialog.getWindow().setLayout(lp.width, lp.height);
+                    dialog.setContentView(R.layout.checked_in_dialog);
 
-                        // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
-                        TextView view1 = dialog.findViewById(R.id.Acceptance);
-                        TextView view2 = dialog.findViewById(R.id.Rejection);
-                        view2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
-                        view1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                                Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
+                    TextView view1 = dialog.findViewById(R.id.Acceptance);
+                    TextView view2 = dialog.findViewById(R.id.Rejection);
+                    view2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    view1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
+                            checkedIn = true;
+                        }
+                    });
 
 
-                        dialog.show();
+                    dialog.show();
+                }else
+                    {
+                        Toast.makeText(SelectedEventActivity.this, "You are already checked in!", Toast.LENGTH_SHORT).show();
+                    }
+
             }
         });
         ivgallery.setOnClickListener(new View.OnClickListener() {

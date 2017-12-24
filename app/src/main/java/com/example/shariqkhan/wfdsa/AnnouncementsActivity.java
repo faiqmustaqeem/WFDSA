@@ -79,6 +79,18 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+
+        }
+        return true;
+    }
+
+
     private class Task extends AsyncTask<Object, Object, String> {
 
         @Override
@@ -122,7 +134,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
 
                     }
-                announcementsRVAdapter.notifyDataSetChanged();
+                    announcementsRVAdapter.notifyDataSetChanged();
 
                 }
                 progressDialog.dismiss();
@@ -152,15 +164,4 @@ public class AnnouncementsActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                break;
-
-        }
-        return true;
-    }
 }

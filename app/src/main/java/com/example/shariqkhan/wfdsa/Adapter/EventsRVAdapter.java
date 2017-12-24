@@ -58,6 +58,7 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
             ButterKnife.bind(this, view);
             lock = (ImageView) itemView.findViewById(R.id.lock);
 
+
         }
     }
 
@@ -71,23 +72,20 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         EventsModel dataModel = eventsModelArrayList.get(position);
         holder.tvTitle.setText(dataModel.getEventTitle());
-        // holder.tvDayTime.setText(dataModel.getDay() + ", @" + dataModel.getTime());
+        holder.tvDayTime.setText(dataModel.getTime());
         holder.tvCityCountry.setText(dataModel.getVenueCity());
         if (holder.tvCityCountry.getText().equals(""))
             holder.tvCityCountry.setText("Paris");
-      //  holder.tvDay.setText(dataModel.getDay());
-        //holder.tvMonth.setText(dataModel.getMonth());
-
-        if (!MainActivity.DECIDER.equals("member"))
-        {
-           if (dataModel.getPersonal().equals("member"))
-            {
-             holder.lock.setVisibility(View.VISIBLE);
+        holder.tvDay.setText(dataModel.getDay());
+        holder.tvMonth.setText(dataModel.getMonth());
+        holder.tvYear.setText(dataModel.getYear());
+        if (!MainActivity.DECIDER.equals("member")) {
+            if (dataModel.getPersonal().equals("member")) {
+                holder.lock.setVisibility(View.VISIBLE);
             }
-        }else
-            {
-                holder.lock.setVisibility(View.GONE);
-            }
+        } else {
+            holder.lock.setVisibility(View.GONE);
+        }
 
         // holder.tvYear.setText(dataModel.getYear());
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
