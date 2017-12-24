@@ -445,7 +445,6 @@ public class SignUpActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
 
-
             }
 
             progressDialog.dismiss();

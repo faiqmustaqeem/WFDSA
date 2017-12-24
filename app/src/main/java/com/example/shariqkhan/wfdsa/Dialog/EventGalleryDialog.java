@@ -2,8 +2,14 @@ package com.example.shariqkhan.wfdsa.Dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,9 +18,17 @@ import android.widget.ImageView;
 
 
 import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
+import com.example.shariqkhan.wfdsa.Adapter.InvoiceAdapter;
+import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
+import com.example.shariqkhan.wfdsa.Model.InvoiceModel;
 import com.example.shariqkhan.wfdsa.R;
+import com.google.android.gms.gcm.Task;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,12 +50,17 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
     FloatingActionButton floatingActionButton;
     EventGalleryGVadapter gridAdapter;
     ImageView imageView;
+    ProgressDialog progressDialog;
+    String id;
 
 
-    public EventGalleryDialog(Activity a) {
+    String URL = "http://codiansoft.com/wfdsa/apis/Event/Gallery?";
+
+    public EventGalleryDialog(Activity a, String id) {
         super(a);
         // TODO Auto-generated constructor stub
         this.act = a;
+        this.id = id;
     }
 
     @Override
@@ -55,8 +74,90 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
         initUI();
-        fetchEventImages();
+    //    fetchEventImages();
+
+
+        Task task = new Task();
+        task.execute();
+
+
     }
+
+    private class Task extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            String url = URL + "event_id=" + id;
+
+            Log.e("url", url);
+
+            String response = getHttpData.getData(url);
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+
+                if (getstatus.equals("success")) {
+                    JSONArray jsonArray = resultObj.getJSONArray("data");
+
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
+                        imagesList.add(model);
+
+                    }
+
+                    gridAdapter = new EventGalleryGVadapter(act, R.layout.event_gallery_item, imagesList);
+                    gridView.setAdapter(gridAdapter);
+//                    discussionRVAdapter = new InvoiceAdapter(act, discussionList);
+//                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
+//                    rvComments.setLayoutManager(mAnnouncementLayoutManager);
+//                    rvComments.setItemAnimator(new DefaultItemAnimator());
+//                    rvComments.setAdapter(discussionRVAdapter);
+
+                }
+                progressDialog.dismiss();
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(act);
+            progressDialog.setTitle("Loading ");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+        }
+    }
+
 
     private void fetchEventImages() {
         imagesList.add(new EventGalleryModel("1", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
@@ -85,12 +186,12 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
             floatingActionButton.setVisibility(View.INVISIBLE);
         }
 
-    imageView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            dismiss();
-        }
-    });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
     }
 
     @Override

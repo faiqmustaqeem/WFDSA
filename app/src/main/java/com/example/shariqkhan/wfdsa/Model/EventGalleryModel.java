@@ -12,6 +12,10 @@ public class EventGalleryModel {
         this.imageURL = imageURL;
     }
 
+    public EventGalleryModel() {
+
+    }
+
     public String getId() {
         return id;
     }

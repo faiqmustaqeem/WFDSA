@@ -71,11 +71,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     ImageView close;
 
     TextView textView17;
+
+
     TextView address;
     TextView tvCityCountry;
     String latlng;
     String start;
     String end;
+
     String id;
 ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
@@ -200,7 +203,7 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
         ivgallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this);
+                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this, id);
                         eventGalleryDialog.show();
             }
         });
