@@ -186,6 +186,10 @@ public class MainActivity extends AppCompatActivity
         Task task = new Task();
         task.execute();
 
+        Task2 task2 = new Task2();
+        task2.execute();
+
+
         if (stype.equals("fb")){
             tvUserName.setText("Facebook user");
             textView1.setVisibility(View.GONE);
@@ -531,7 +535,7 @@ public class MainActivity extends AppCompatActivity
 
 
                         JSONArray data = result.getJSONArray("data");
-                        for (int i = 0; i < data.length(); i++) {
+                        for (int i = 0; i < 1; i++) {
                             EventsModel model = new EventsModel();
                             JSONObject job = data.getJSONObject(i);
                             model.setId(job.getString("event_id"));
@@ -539,13 +543,14 @@ public class MainActivity extends AppCompatActivity
                             model.setVenueCity(job.getString("place"));
                             String sub = job.getString("start_date");
 
-                            String filter = sub.substring(8, 2);
+
+                            String filter = sub.substring(8, 10);
 
                             model.setDay(filter);
 
-                            model.setMonth(job.getString("event_date").substring(5, 2));
-                            model.setYear(job.getString("event_date").substring(0, 4));
-                            model.setTime(job.getString("event_date").substring(11, 8));
+                            model.setMonth(job.getString("start_date").substring(5, 7));
+                            model.setYear(job.getString("start_date").substring(0, 4));
+                            model.setTime(job.getString("start_date").substring(11, 19));
                             //   model.setImageUrl(job.getString("upload_image"));
                             model.setPersonal(job.getString("permission"));
 
@@ -653,7 +658,7 @@ public class MainActivity extends AppCompatActivity
                     //   roleArray = new String[rolesArray.length()];
                     // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
+                    for (int i = 0; i < 1; i++) {
                         AnnouncementsModel model = new AnnouncementsModel();
                         JSONObject obj = rolesArray.getJSONObject(i);
                         model.setId(obj.getString("announcement_id"));

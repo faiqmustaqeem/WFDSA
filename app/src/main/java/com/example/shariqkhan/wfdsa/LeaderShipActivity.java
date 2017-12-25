@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by Codiansoft on 12/7/2017.
  */
@@ -33,6 +35,7 @@ public class LeaderShipActivity extends AppCompatActivity {
     public static String URL = "http://codiansoft.com/wfdsa/Api/roles";
     String roleArray[];
     String Array[] = {"Ceo Council", "Operational Group", "Board of Delegates", "Association Advisory Council"};
+    String idArray[];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,27 +62,6 @@ public class LeaderShipActivity extends AppCompatActivity {
         });
 
 
-        listOfMembers.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, Array));
-        listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String get = parent.getItemAtPosition(position).toString();
-//                if (get.equals(Array[0])) {
-//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-//                } else if (get.equals(Array[1])) {
-//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-//                } else if (get.equals(Array[2])) {
-//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-//                } else if (get.equals(Array[3])) {
-//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-//
-//                }
-
-                Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
-                startActivity(intent);
-
-            }
-        });
 
     }
 
@@ -112,7 +94,7 @@ public class LeaderShipActivity extends AppCompatActivity {
                 if (getstatus.equals("success")) {
                     JSONArray rolesArray = resultObj.getJSONArray("roles");
                     roleArray = new String[rolesArray.length()];
-                    String idArray[] = new String[rolesArray.length()];
+                    idArray = new String[rolesArray.length()];
 
                     for (int i = 0; i < rolesArray.length(); i++) {
                         LeaderShipModel model = new LeaderShipModel();
@@ -125,6 +107,32 @@ public class LeaderShipActivity extends AppCompatActivity {
 
                     }
                 }
+                listOfMembers.setAdapter(new ArrayAdapter<String>(LeaderShipActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, roleArray));
+                listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String get = parent.getItemAtPosition(position).toString();
+                        String roleId = idArray[position];
+                        Log.e("role", get);
+                        Log.e("id", roleId);
+//                if (get.equals(Array[0])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[1])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[2])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//                } else if (get.equals(Array[3])) {
+//                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
+//
+//                }
+
+                        Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
+                        intent.putExtra("RoleName", roleId);
+                        startActivity(intent);
+
+                    }
+                });
+
                 progressDialog.dismiss();
 
 //                } else {

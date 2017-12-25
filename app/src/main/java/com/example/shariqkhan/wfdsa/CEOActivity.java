@@ -1,16 +1,27 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.CEOAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.MemberAdapter;
+import com.example.shariqkhan.wfdsa.Helper.getHttpData;
+import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -25,6 +36,11 @@ public class CEOActivity extends AppCompatActivity {
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<ModelMember> arrayList = new ArrayList<>();
+    String sendRole;
+    ProgressDialog dialog;
+
+    String URL = "http://codiansoft.com/wfdsa/apis/member/member_frmRoles?";
+
 
     Toolbar toolbar;
 
@@ -32,6 +48,8 @@ public class CEOActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ceo_activity);
+        sendRole = getIntent().getStringExtra("RoleName");
+        URL = URL + "role_id=" + sendRole;
 
         listOfMembers = (RecyclerView) findViewById(R.id.memberList);
 
@@ -50,23 +68,110 @@ public class CEOActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+//
+//        for (int i = 0; i < 12; i++) {
+//
+//            ModelMember member = new ModelMember();
+//            member.setCompanyName("Codian-Soft-");
+//            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
+//            member.setMemberEmail("codianSoft@org");
+//            member.setMemberName("Shariq Khan");
+//            member.setMemberFax("03342477874");
+//            member.setMemberPhone("03342477874");
+//            member.setMemberWeb("www.codiansoft.com");
+//            member.setCountry("Argentina");
+//            arrayList.add(member);
+//
+//        }
 
-        for (int i = 0; i < 12; i++) {
+        Task2 task = new Task2();
+        task.execute();
+    }
 
-            ModelMember member = new ModelMember();
-            member.setCompanyName("Codian-Soft-");
-            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
-            member.setMemberEmail("codianSoft@org");
-            member.setMemberName("Shariq Khan");
-            member.setMemberFax("03342477874");
-            member.setMemberPhone("03342477874");
-            member.setMemberWeb("www.codiansoft.com");
-            member.setCountry("Argentina");
-            arrayList.add(member);
+    private class Task2 extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            String url = URL;
+
+            Log.e("url", url);
+
+            String response = getHttpData.getData(url);
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    Log.e("SuccessFull", "Inside");
+                    JSONArray rolesArray = resultObj.getJSONArray("data");
+                    //   roleArray = new String[rolesArray.length()];
+                    // String idArray[] = new String[rolesArray.length()];
+
+                    for (int i = 0; i < rolesArray.length(); i++) {
+                        ModelMember model = new ModelMember();
+                        JSONObject obj = rolesArray.getJSONObject(i);
+
+                        model.setMemberPhone(obj.getString("telephone"));
+                        model.setMemberEmail(obj.getString("email"));
+                        model.setMemberFax(obj.getString("fax"));
+                        model.setCountry(obj.getString("country"));
+                        model.setFirstname(obj.getString("first_name"));
+                        model.setLastname(obj.getString("last_name"));
+                        model.setTitle(obj.getString("title"));
+                        model.setDesignation(obj.getString("designation"));
+                        model.setUpload_image(obj.getString("upload_image"));
+                        model.setCompanyAddress(obj.getString("address"));
+                        model.setCompanyName(obj.getString("company"));
+
+                        arrayList.add(model);
+
+                    }
+                    adapter = new CEOAdapter(arrayList, CEOActivity.this);
+                    listOfMembers.setAdapter(adapter);
+
+                }
+                dialog.dismiss();
+
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                dialog.dismiss();
+                e.printStackTrace();
+
+            }
+
 
         }
 
-        adapter = new CEOAdapter(arrayList);
-        listOfMembers.setAdapter(adapter);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(CEOActivity.this);
+            dialog.setTitle("Fetching Information");
+            dialog.setMessage("Please Wait");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+
+        }
     }
+
 }

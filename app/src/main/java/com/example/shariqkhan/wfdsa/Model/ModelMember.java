@@ -12,6 +12,71 @@ public class ModelMember {
     public String memberPhone;
     public String memberFax;
     public String memberWeb;
+    public String title;
+    public String designation;
+    public String upload_image;
+    public String firstname;
+
+    public String getCompany_logo() {
+        return company_logo;
+    }
+
+    public void setCompany_logo(String company_logo) {
+        this.company_logo = company_logo;
+    }
+
+    public String getFlag_pic() {
+        return flag_pic;
+    }
+
+    public void setFlag_pic(String flag_pic) {
+        this.flag_pic = flag_pic;
+    }
+
+    public String company_logo;
+    public String flag_pic;
+
+    public String lastname;
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getUpload_image() {
+        return upload_image;
+    }
+
+    public void setUpload_image(String upload_image) {
+        this.upload_image = upload_image;
+    }
 
     public String Country;
 

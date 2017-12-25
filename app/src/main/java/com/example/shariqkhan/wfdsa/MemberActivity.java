@@ -1,6 +1,8 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +15,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.shariqkhan.wfdsa.Adapter.CEOAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.MemberAdapter;
+import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +38,8 @@ public class MemberActivity extends AppCompatActivity {
     ArrayList<ModelMember> arrayList = new ArrayList<>();
     ArrayList<ModelMember> arrayListSave;
     public static String filterableString = "";
+    final ArrayList<String> countries = new ArrayList<String>();
+    ProgressDialog dialog;
 
 
     Toolbar toolbar;
@@ -40,6 +50,7 @@ public class MemberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member);
+        countries.add("All");
 
         listOfMembers = (RecyclerView) findViewById(R.id.memberList);
 
@@ -52,43 +63,47 @@ public class MemberActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        Locale[] locale = Locale.getAvailableLocales();
+//        final ArrayList<String> countries = new ArrayList<String>();
+//        countries.add("");
+//        String country;
+//        for (Locale loc : locale) {
+//            country = loc.getDisplayCountry();
+//            if (country.length() > 0 && !countries.contains(country)) {
+//                countries.add(country);
+//            }
+//        }
+//        Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
+//        for (int i = 0; i < 12; i++) {
+//
+//            ModelMember member = new ModelMember();
+//            member.setCompanyName("Codian-Soft-");
+//            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
+//            member.setMemberEmail("codianSoft@org");
+//            member.setMemberName("Shariq Khan");
+//            member.setMemberFax("03342477874");
+//            member.setMemberPhone("03342477874");
+//            member.setMemberWeb("www.codiansoft.com");
+//            if (i % 2 == 0) {
+//                member.setCountry("America");
+//            } else {
+//                member.setCountry("Pakistan");
+//            }
+//            arrayList.add(member);
+//
+//        }
+//        Log.e("Real", String.valueOf(arrayList.size()));
 
-        Locale[] locale = Locale.getAvailableLocales();
-        final ArrayList<String> countries = new ArrayList<String>();
-        countries.add("");
-        String country;
-        for (Locale loc : locale) {
-            country = loc.getDisplayCountry();
-            if (country.length() > 0 && !countries.contains(country)) {
-                countries.add(country);
-            }
-        }
-        Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
-        for (int i = 0; i < 12; i++) {
-
-            ModelMember member = new ModelMember();
-            member.setCompanyName("Codian-Soft-");
-            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
-            member.setMemberEmail("codianSoft@org");
-            member.setMemberName("Shariq Khan");
-            member.setMemberFax("03342477874");
-            member.setMemberPhone("03342477874");
-            member.setMemberWeb("www.codiansoft.com");
-            if (i % 2 == 0) {
-                member.setCountry("America");
-            } else {
-                member.setCountry("Pakistan");
-            }
-            arrayList.add(member);
-
-        }
-        Log.e("Real", String.valueOf(arrayList.size()));
+        Task2 task = new Task2();
+        task.execute();
+      /*
         arrayListSave = new ArrayList<>(arrayList);
         Log.e("Clone", String.valueOf(arrayListSave.size()));
 
         adapter = new MemberAdapter(arrayList);
         listOfMembers.setAdapter(adapter);
-
+*/
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,35 +125,12 @@ public class MemberActivity extends AppCompatActivity {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 filterableString = text.toString();
-//
-//                              if (filterableString.equals("America")) {
-//                                  arrayList.clear();
-//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-//
-//                                        ModelMember memberToCheck = new ModelMember();
-//                                        memberToCheck = arrayListSave.get(counter);
-//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-//
-//                                        if(memberToCheck.Country.equals(filterableString))
-//                                    {
-//
-//                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
-//                                        arrayList.add(memberToCheck);
-//                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
-//
-//                                    }
-//
-//                                    }
-//
-//                                  adapter = new MemberAdapter(arrayList);
-//                                  listOfMembers.setAdapter(adapter);
-//
-//                              } else
+
                                 if (filterableString.equals("All")) {
 
                                     arrayList = new ArrayList<>(arrayListSave);
-                                //    Log.e("SizeAll", String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayListSave);
+                                    //    Log.e("SizeAll", String.valueOf(arrayList.size()));
+                                    adapter = new MemberAdapter(arrayListSave, MemberActivity.this);
                                     listOfMembers.setAdapter(adapter);
 
                                 } else {
@@ -150,20 +142,16 @@ public class MemberActivity extends AppCompatActivity {
                                         Log.e("MEMBER", String.valueOf(memberToCheck));
 
                                         if (memberToCheck.Country.equals(filterableString)) {
-
                                             Log.e("SizeOfPak", String.valueOf(arrayList.size()));
                                             arrayList.add(memberToCheck);
                                             Log.e("SizeOfPak", String.valueOf(arrayList.size()));
-
                                         }
                                     }
                                     Log.e("Jugar", String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayList);
+                                    adapter = new MemberAdapter(arrayList, MemberActivity.this);
                                     listOfMembers.setAdapter(adapter);
 
                                 }
-
-
                                 //Toast.makeText(MemberActivity.this, text, Toast.LENGTH_SHORT).show();
                                 return true;
 
@@ -177,82 +165,97 @@ public class MemberActivity extends AppCompatActivity {
         });
 
 
-//        imageFilter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String[] items = {"America", "Pakistan", "All"};
-//                new LovelyChoiceDialog(MemberActivity.this)
-//                        .setTopColorRes(R.color.colorPrimary)
-//                        .setTopTitle("Select country")
-//
-//                        .setTopTitleColor(Color.WHITE)
-//                        .setItemsMultiChoice(items, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
-//                            @Override
-//                            public void onItemsSelected(List<Integer> positions, List<String> items) {
-//                                Toast.makeText(MemberActivity.this, TextUtils.join(" ", items), Toast.LENGTH_SHORT).show();
-//
-//                                filterableString = TextUtils.join("", items);
-//                                if (filterableString.equals("America")) {
-//                                    arrayList.clear();
-//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-//
-//                                        ModelMember memberToCheck = new ModelMember();
-//                                        memberToCheck = arrayListSave.get(counter);
-//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-//
-//                                    if(memberToCheck.Country.equals(filterableString))
-//                                    {
-//
-//                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
-//                                        arrayList.add(memberToCheck);
-//                                        Log.e("SizeOfAmerica",String.valueOf(arrayList.size()));
-//
-//                                    }
-//                                    }
-//                                //    Log.e("Jugar",String.valueOf(arrayList.size()));
-//                                    adapter = new MemberAdapter(arrayList);
-//                                    listOfMembers.setAdapter(adapter);
-//
-//                                }else if (filterableString.equals("All"))
-//                                {
-//
-//                                    arrayList = new ArrayList<>(arrayListSave);
-//                                    Log.e("SizeAll",String.valueOf(arrayList.size()));
-//                                    adapter = new MemberAdapter(arrayListSave);
-//                                    listOfMembers.setAdapter(adapter);
-//
-//                                }else if (filterableString.equals("Pakistan"))
-//                                {
-//                                    arrayList.clear();
-//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-//
-//                                        ModelMember memberToCheck = new ModelMember();
-//                                        memberToCheck = arrayListSave.get(counter);
-//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-//
-//                                        if(memberToCheck.Country.equals(filterableString))
-//                                        {
-//
-//                                            Log.e("SizeOfPak",String.valueOf(arrayList.size()));
-//                                            arrayList.add(memberToCheck);
-//                                            Log.e("SizeOfPak",String.valueOf(arrayList.size()));
-//
-//                                        }
-//                                    }
-//                                    Log.e("Jugar",String.valueOf(arrayList.size()));
-//                                    adapter = new MemberAdapter(arrayList);
-//                                    listOfMembers.setAdapter(adapter);
-//
-//                                }
-//
-//
-//                            }
-//                        })
-//                        .setConfirmButtonText("Confirm")
-//                        .show();
-//            }
-//        });
-//
+    }
 
+    private class Task2 extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            String url = "http://codiansoft.com/wfdsa/apis/member/DSA_member";
+
+            Log.e("url", url);
+
+            String response = getHttpData.getData(url);
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    Log.e("SuccessFull", "Inside");
+                    JSONArray rolesArray = resultObj.getJSONArray("data");
+                    //   roleArray = new String[rolesArray.length()];
+                    // String idArray[] = new String[rolesArray.length()];
+
+                    for (int i = 0; i < rolesArray.length(); i++) {
+                        ModelMember model = new ModelMember();
+                        JSONObject obj = rolesArray.getJSONObject(i);
+
+                        model.setMemberPhone(obj.getString("phone"));
+                        model.setMemberEmail(obj.getString("email"));
+                        model.setMemberFax(obj.getString("fax"));
+                        countries.add(obj.getString("country"));
+                        model.setCountry(obj.getString("country"));
+                        model.setMemberName(obj.getString("member_name"));
+                        model.setMemberWeb(obj.getString("website"));
+
+
+                        model.setCompany_logo(obj.getString("company_logo"));
+                        model.setFlag_pic(obj.getString("flag_pic"));
+                        model.setCompanyAddress(obj.getString("address"));
+                        model.setCompanyName(obj.getString("company_name"));
+
+                        arrayList.add(model);
+
+                    }
+                    arrayListSave = new ArrayList<>(arrayList);
+                    Log.e("Clone", String.valueOf(arrayListSave.size()));
+
+
+                    adapter = new MemberAdapter(arrayList, MemberActivity.this);
+                    listOfMembers.setAdapter(adapter);
+
+                }
+                dialog.dismiss();
+
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                dialog.dismiss();
+                e.printStackTrace();
+
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(MemberActivity.this);
+            dialog.setTitle("Fetching Information");
+            dialog.setMessage("Please Wait");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+
+        }
     }
 }

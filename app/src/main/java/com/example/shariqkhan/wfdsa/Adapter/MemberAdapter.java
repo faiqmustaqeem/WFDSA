@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.example.shariqkhan.wfdsa.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,9 +22,12 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
 
 
     ArrayList<ModelMember> arrayList = new ArrayList<>();
+    Context context;
 
-    public MemberAdapter(ArrayList<ModelMember> arrayList) {
+
+    public MemberAdapter(ArrayList<ModelMember> arrayList, Context context) {
         this.arrayList = arrayList;
+        this.context = context;
     }
 
     @Override
@@ -44,15 +49,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         holder.compnayName.setText(member.getCompanyName());
         holder.countryName.setText(member.getCountry());
 
-        if (member.getCountry().equals("America"))
-        {
-            holder.logoTopLeft.setImageResource(R.drawable.hr);
-            holder.logoFront.setImageResource(R.drawable.acovedi);
-        }else
-            {
-                holder.logoTopLeft.setImageResource(R.drawable.ar);
-                holder.logoFront.setImageResource(R.drawable.czech);
-            }
+        Picasso.with(context).load(member.getCompany_logo()).into(holder.logoFront);
+        Picasso.with(context).load(member.getFlag_pic()).into(holder.logoTopLeft);
 
 
     }
@@ -87,10 +85,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
             memberEmail = (TextView) view.findViewById(R.id.Email);
             memberWeb = (TextView) view.findViewById(R.id.Web);
             countryName = (TextView) view.findViewById(R.id.countruname);
-            logoFront = (ImageView)view.findViewById(R.id.logo);
+            logoFront = (ImageView) view.findViewById(R.id.logo);
 
-            logoTopLeft= (ImageView)view.findViewById(R.id.flag);
-
+            logoTopLeft = (ImageView) view.findViewById(R.id.flag);
 
 
         }
