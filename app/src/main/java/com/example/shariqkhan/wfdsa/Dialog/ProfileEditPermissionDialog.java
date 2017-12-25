@@ -61,7 +61,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!etPassword.getText().toString().equals("")) {
+                if (!etPassword.getText().toString().equals("") && etPassword.getText().toString().equals(password)) {
                     tvSubmit.setTextColor(c.getResources().getColor(R.color.colorAccent));
                     tvSubmit.setClickable(true);
                 } else {

@@ -1,14 +1,20 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,10 +23,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.shariqkhan.wfdsa.Dialog.ProfileEditPermissionDialog;
+import com.example.shariqkhan.wfdsa.Singleton.MySingleton;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +85,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     static String newLastName;
     static String newEmail;
     public static Uri uri;
+    Bitmap bmp;
+
+    String BASE_URL = "http://codiansoft.com/wfdsa/apis/member/Edit_member";
+    public static String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 return false;
             }
         });
-        etEmail.addTextChangedListener(new TextWatcher() {
+        etFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -120,7 +154,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-        etFirstName.addTextChangedListener(new TextWatcher() {
+        etLastName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -129,22 +163,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 newLastName = charSequence.toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        etEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                newEmail = charSequence.toString();
             }
 
             @Override
@@ -197,6 +215,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 uri = result.getUri();
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    path = convertTOString(bmp);
+                    Log.e("Path", path);
+
+
+                } catch (IOException e) {
+                    Log.e("ExceptionFoundOfImage", e.getMessage());
+
+                    e.printStackTrace();
+                }
+
 
                 Log.e("Uri", String.valueOf(uri));
                 profile_image.setImageURI(uri);
@@ -256,7 +286,58 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateProfile() {
+
+        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject job = jsonObject.getJSONObject("result");
+                    if (job.getString("response").equals("success")) {
+
+                        SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                        edit.putString("first_name", etFirstName.getText().toString());
+                        edit.putString("last_name", etLastName.getText().toString());
+                        edit.putString("contact_no", etMobileNumber.getText().toString());
+                        edit.putString("profile_image", path);
+
+                        edit.apply();
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("Exception", e.getMessage());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("first_name", etFirstName.getText().toString());
+                params.put("last_name", etLastName.getText().toString());
+                params.put("cell", etMobileNumber.getText().toString());
+                params.put("member_id", "1");
+                params.put("image", path);
+                return params;
+            }
+        };
+        MySingleton.getInstance(ProfileActivity.this).addToRequestQueue(request);
+
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        startActivity(intent);
         finish();
+
+
     }
 
     public boolean isValidEmail(String emailStr) {
@@ -264,6 +345,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
+
+    }
+
+    private String convertTOString(Bitmap bmp) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imgBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgBytes, Base64.DEFAULT);
     }
 }
 

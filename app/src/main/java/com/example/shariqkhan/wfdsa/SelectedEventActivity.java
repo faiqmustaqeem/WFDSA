@@ -75,13 +75,20 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public static boolean checkedIn = false;
 
     TextView address;
+    TextView heelo;
+    TextView tvDayTime;
     TextView tvCityCountry;
     String latlng;
     String start;
     String end;
 
+    TextView tvAgenda;
+    TextView tvAgendaDescription;
+    TextView tvEventDescription;
+    TextView tvSpeakersDetails;
+    TextView tvHostsDetails;
     String id;
-ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
+    ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
     Animation shareSlideUp, shareSlideDown;
     private BottomNavigationViewEx bottomNavigationViewEx;
@@ -98,12 +105,24 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
         ButterKnife.bind(this);
 
+        address = (TextView) findViewById(R.id.address);
+        tvAgenda = (TextView) findViewById(R.id.tvAgenda);
+        tvAgendaDescription = (TextView) findViewById(R.id.tvAgendaDescription);
+        tvEventDescription =  (TextView) findViewById(R.id.tvEventDescription);
+        tvSpeakersDetails = (TextView)findViewById(R.id.tvSpeakersDetails);
+        tvHostsDetails = (TextView)findViewById(R.id.tvHostsDetails);
+
+        heelo = (TextView) findViewById(R.id.heelo);
+        tvDayTime = (TextView) findViewById(R.id.tvDayTime);
+        tvCityCountry = (TextView) findViewById(R.id.tvCityCountry);
+
         initUI();
+
         ivshare = (ImageView) findViewById(R.id.ivShare);
         ivattendees = (ImageView) findViewById(R.id.ivAttendees);
-        ivdiscussion = (ImageView)findViewById(R.id.ivDiscussion);
-        ivgallery= (ImageView)findViewById(R.id.ivGallery);
-        ivcheck = (ImageView)findViewById(R.id.ivLocation);
+        ivdiscussion = (ImageView) findViewById(R.id.ivDiscussion);
+        ivgallery = (ImageView) findViewById(R.id.ivGallery);
+        ivcheck = (ImageView) findViewById(R.id.ivLocation);
 
         tvRegister = (TextView) findViewById(R.id.tvRegister);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -137,7 +156,7 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 //        bottomNavigationViewEx.enableShiftingMode(false);
 //        bottomNavigationViewEx.setTextVisibility(false);
 
-       // textView17 = (TextView) findViewById(R.id.textView17);
+        // textView17 = (TextView) findViewById(R.id.textView17);
         address = (TextView) findViewById(R.id.address);
         tvCityCountry = (TextView) findViewById(R.id.tvCityCountry);
 
@@ -148,14 +167,14 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
             @Override
             public void onClick(View view) {
                 if (llShare.getVisibility() == View.GONE) {
-                            llShare.setVisibility(View.VISIBLE);
-                            tvRegister.setEnabled(false);
-                            llShare.startAnimation(shareSlideUp);
+                    llShare.setVisibility(View.VISIBLE);
+                    tvRegister.setEnabled(false);
+                    llShare.startAnimation(shareSlideUp);
 
-                        } else {
-                            llShare.startAnimation(shareSlideDown);
-                            tvRegister.setEnabled(true);
-                        }
+                } else {
+                    llShare.startAnimation(shareSlideDown);
+                    tvRegister.setEnabled(true);
+                }
 
             }
         });
@@ -164,13 +183,13 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
             @Override
             public void onClick(View view) {
                 EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
-                        attendeesDialog.show();
+                attendeesDialog.show();
             }
         });
         ivcheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!checkedIn){
+                if (!checkedIn) {
                     final Dialog dialog = new Dialog(SelectedEventActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -201,10 +220,9 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
 
                     dialog.show();
-                }else
-                    {
-                        Toast.makeText(SelectedEventActivity.this, "You are already checked in!", Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "You are already checked in!", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -212,14 +230,14 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
             @Override
             public void onClick(View view) {
                 EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this, id);
-                        eventGalleryDialog.show();
+                eventGalleryDialog.show();
             }
         });
         ivdiscussion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
-                        d.show();
+                d.show();
             }
         });
         //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
@@ -480,15 +498,21 @@ ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
                 if (getstatus.equals("success")) {
                     JSONArray rolesArray = resultObj.getJSONArray("data");
+
+
                     JSONObject obj = rolesArray.getJSONObject(0);
-                    //    roleArray = new String[rolesArray.length()];
-//                    tvCityCountry.setText(obj.getString("location"));
-//                    address.setText(obj.getString("venue"));
+                    tvAgenda.setText(obj.getString("title"));
+                   // tvAgendaDescription.setText(obj.getString(""));
 
-
-                    //  fetchMyPayments();
-
-
+                    tvSpeakersDetails.setText(obj.getString("speaker"));
+                    tvDayTime.setText(obj.getString("start_time")+"---"+obj.getString("end_time"));
+                    heelo.setText((obj.getString("start_date").substring(0,10))+"---"+obj.getString("end_date").substring(0,10));
+                    address.setText(obj.getString("place"));
+                    tvCityCountry.setText(obj.getString("venue"));
+                    if (tvCityCountry.getText().toString().equals(""))
+                    {
+                        tvCityCountry.setText("Washington,America");
+                    }
                 }
                 progressDialog.dismiss();
 
