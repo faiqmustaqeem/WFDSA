@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -37,18 +38,26 @@ import com.example.shariqkhan.wfdsa.Dialog.EventGalleryDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventPollsDialog;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.Model.PaymentModel;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,19 +91,33 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String start;
     String end;
 
+    ShareDialog dialog;
+    URL url;
+
     TextView tvAgenda;
     TextView tvAgendaDescription;
     TextView tvEventDescription;
     TextView tvSpeakersDetails;
     TextView tvHostsDetails;
-    String id;
+   public static String id;
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
     Animation shareSlideUp, shareSlideDown;
     private BottomNavigationViewEx bottomNavigationViewEx;
+    ImageView ivTwitter, ivLinkedIn, ivFacebook;
+
     TextView tvRegister;
     public String URL = "http://codiansoft.com/wfdsa/apis/Event/EventDetail?";
     private ProgressDialog progressDialog;
+
+    CallbackManager callBackManager;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//    callBackManager.onActivityResult(requestCode, resultCode,data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +131,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         address = (TextView) findViewById(R.id.address);
         tvAgenda = (TextView) findViewById(R.id.tvAgenda);
         tvAgendaDescription = (TextView) findViewById(R.id.tvAgendaDescription);
-        tvEventDescription =  (TextView) findViewById(R.id.tvEventDescription);
-        tvSpeakersDetails = (TextView)findViewById(R.id.tvSpeakersDetails);
-        tvHostsDetails = (TextView)findViewById(R.id.tvHostsDetails);
+        tvEventDescription = (TextView) findViewById(R.id.tvEventDescription);
+        tvSpeakersDetails = (TextView) findViewById(R.id.tvSpeakersDetails);
+        tvHostsDetails = (TextView) findViewById(R.id.tvHostsDetails);
 
         heelo = (TextView) findViewById(R.id.heelo);
         tvDayTime = (TextView) findViewById(R.id.tvDayTime);
@@ -123,6 +146,104 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ivdiscussion = (ImageView) findViewById(R.id.ivDiscussion);
         ivgallery = (ImageView) findViewById(R.id.ivGallery);
         ivcheck = (ImageView) findViewById(R.id.ivLocation);
+
+        ivTwitter = (ImageView) findViewById(R.id.ivTwitter);
+        ivFacebook = (ImageView) findViewById(R.id.ivFacebook);
+        ivLinkedIn = (ImageView) findViewById(R.id.ivLinkedIn);
+
+
+
+        ivTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                try {
+                    url = new URL("https://https://wfdsa.org");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+
+                TweetComposer.Builder build = new TweetComposer.Builder(SelectedEventActivity.this);
+                build.text("Simple first explicit tweet!").
+                        url(url);
+                build.show();
+
+            }
+        });
+
+
+
+        ivFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CallbackManager.Factory.create();
+                Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
+                linkedinIntent.setType("text/plain");
+                linkedinIntent.putExtra(Intent.EXTRA_TEXT, "Hello this is plain text!"+"http");
+
+                boolean linkedinAppFound = false;
+                List<ResolveInfo> matches2 = getPackageManager()
+                        .queryIntentActivities(linkedinIntent, 0);
+
+                for (ResolveInfo info : matches2) {
+                    if (info.activityInfo.packageName.toLowerCase().startsWith(
+                            "com.facebook")) {
+                        linkedinIntent.setPackage(info.activityInfo.packageName);
+                        linkedinAppFound = true;
+                        break;
+                    }
+                }
+
+                if (linkedinAppFound) {
+                    startActivity(linkedinIntent);
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "Facebook app not Insatlled in your mobile", Toast.LENGTH_SHORT).show();
+                }
+
+//                ShareDialog dialog = new ShareDialog(SelectedEventActivity.this);
+//
+//                ShareLinkContent shareLink = new ShareLinkContent.Builder()
+//                        .setQuote("Visit website for details")
+//                        .setContentUrl(Uri.parse("https://https://wfdsa.org"))
+//                        .build();
+//                if (dialog.canShow(ShareLinkContent.class)) {
+//                   // Toast.makeText(SelectedEventActivity.this, "Hello inside facebook", Toast.LENGTH_SHORT).show();
+//                    dialog.show(shareLink);
+//                }
+
+            }
+        });
+
+        ivLinkedIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
+                linkedinIntent.setType("text/plain");
+                linkedinIntent.putExtra(Intent.EXTRA_TEXT, "Hello this is plain text!");
+
+                boolean linkedinAppFound = false;
+                List<ResolveInfo> matches2 = getPackageManager()
+                        .queryIntentActivities(linkedinIntent, 0);
+
+                for (ResolveInfo info : matches2) {
+                    if (info.activityInfo.packageName.toLowerCase().startsWith(
+                            "com.linkedin")) {
+                        linkedinIntent.setPackage(info.activityInfo.packageName);
+                        linkedinAppFound = true;
+                        break;
+                    }
+                }
+
+                if (linkedinAppFound) {
+                    startActivity(linkedinIntent);
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "LinkedIn app not Insatlled in your mobile", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         tvRegister = (TextView) findViewById(R.id.tvRegister);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -502,15 +623,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     JSONObject obj = rolesArray.getJSONObject(0);
                     tvAgenda.setText(obj.getString("title"));
-                   // tvAgendaDescription.setText(obj.getString(""));
+                    // tvAgendaDescription.setText(obj.getString(""));
 
                     tvSpeakersDetails.setText(obj.getString("speaker"));
-                    tvDayTime.setText(obj.getString("start_time")+"---"+obj.getString("end_time"));
-                    heelo.setText((obj.getString("start_date").substring(0,10))+"---"+obj.getString("end_date").substring(0,10));
+                    tvDayTime.setText(obj.getString("start_time") + "---" + obj.getString("end_time"));
+                    heelo.setText((obj.getString("start_date").substring(0, 10)) + "---" + obj.getString("end_date").substring(0, 10));
                     address.setText(obj.getString("place"));
                     tvCityCountry.setText(obj.getString("venue"));
-                    if (tvCityCountry.getText().toString().equals(""))
-                    {
+                    if (tvCityCountry.getText().toString().equals("")) {
                         tvCityCountry.setText("Washington,America");
                     }
                 }

@@ -113,10 +113,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         etFirstName.setText(MainActivity.getFirstName);
         etMobileNumber.setText(MainActivity.phoneNo);
 
-        etEmail.setEnabled(false);
-        etMobileNumber.setEnabled(false);
-        etFirstName.setEnabled(false);
-        etLastName.setEnabled(false);
 
 
         d.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -173,6 +169,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
+
+
 
     private void makeFieldsEditable() {
         etFirstName.setEnabled(true);
@@ -278,67 +276,205 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 } else if (tvEditOrUpdate.getText().toString().equals("SAVE")) {
-                    updateProfile();
+                    Task task = new Task();
+                    task.execute();
                 }
                 break;
 
         }
     }
 
-    private void updateProfile() {
 
-        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
+
+         class Task extends AsyncTask<String, Void, String> {
+            String stream = null;
+            ProgressDialog progressDialog;
+
             @Override
-            public void onResponse(String response) {
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog = new ProgressDialog(ProfileActivity.this);
+                progressDialog.setTitle("Changing profile information");
+
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
+            }
+
+            @Override
+            protected String doInBackground(String[] params) {
+
+                String getResponse = getJson();
+                stream = getResponse;
+
+                return stream;
+
+            }
+
+            private String getJson() {
+                HttpClient httpClient = new DefaultHttpClient();
+
+
+                HttpPost post = new HttpPost(BASE_URL);
+                Log.e("Must", "Must");
+
+                List<NameValuePair> parameters = new ArrayList<>();
+
+//                params.put("last_name", etLastName.getText().toString());
+//                params.put("cell", etMobileNumber.getText().toString());
+//                params.put("id", MainActivity.getId);
+//                params.put("image", path)
+                parameters.add(new BasicNameValuePair("first_name", etFirstName.getText().toString()));
+                parameters.add(new BasicNameValuePair("last_name", etFirstName.getText().toString()));
+
+                parameters.add(new BasicNameValuePair("cell", etMobileNumber.getText().toString()));
+                parameters.add(new BasicNameValuePair("id", MainActivity.getId));
+                parameters.add(new BasicNameValuePair("image", path));
+
+                StringBuilder buffer = new StringBuilder();
 
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject job = jsonObject.getJSONObject("result");
-                    if (job.getString("response").equals("success")) {
+                    // Log.e("Insidegetjson", "insidetry");
+                    UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+                    post.setEntity(encoded);
+                    HttpResponse response = httpClient.execute(post);
 
-                        SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-                        edit.putString("first_name", etFirstName.getText().toString());
-                        edit.putString("last_name", etLastName.getText().toString());
-                        edit.putString("contact_no", etMobileNumber.getText().toString());
-                        edit.putString("profile_image", path);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                    String Line = "";
 
-                        edit.apply();
-
+                    while ((Line = reader.readLine()) != null) {
+                        Log.e("reader", Line);
+                        Log.e("buffer", buffer.toString());
+                        buffer.append(Line);
 
                     }
+                    reader.close();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("Exception", e.getMessage());
+                } catch (Exception o) {
+                    Log.e("Error", o.getMessage());
+
+                }
+                return buffer.toString();
+            }
+
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+                JSONObject jsonobj;
+                if (s != null) {
+                    try {
+                        jsonobj = new JSONObject(s);
+                        Log.e("JSON", s);
+
+
+                        JSONObject result = jsonobj.getJSONObject("result");
+                        String checkResult = result.getString("status");
+
+                        if (checkResult.equals("success")) {
+//
+//                            Log.e("insidepost", checkResult);
+//                            String get_api_secret = result.getString("api_secret");
+//
+//                            JSONObject user_data = result.getJSONObject("user_data");
+//
+//                            String getId = user_data.getString("non_member_id");
+//                            String email = user_data.getString("email");
+//                            String country = user_data.getString("country");
+//                            String first_name = user_data.getString("first_name");
+//                            String last_name = user_data.getString("last_name");
+//                            String password = user_data.getString("password");
+//                            String phNo = user_data.getString("contact_no");
+//                            Log.e("email", email);
+                            SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
+                            editor.putString("first_name",etFirstName.getText().toString());
+                            editor.putString("last_name",etLastName.getText().toString());
+                           editor.putString("contact_no", etMobileNumber.getText().toString());
+
+
+                            editor.apply();
+
+                            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+
+
+                            progressDialog.dismiss();
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.e("ErrorMessage", e.getMessage());
+                        progressDialog.dismiss();
+                    }
+
+
                 }
 
-
+                progressDialog.dismiss();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }
 
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("first_name", etFirstName.getText().toString());
-                params.put("last_name", etLastName.getText().toString());
-                params.put("cell", etMobileNumber.getText().toString());
-                params.put("member_id", "1");
-                params.put("image", path);
-                return params;
-            }
-        };
-        MySingleton.getInstance(ProfileActivity.this).addToRequestQueue(request);
+//        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.e("HelloWorld", "HeloWorld");
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    Log.e("HelloWorld", "HeloWorld");
+//                    JSONObject job = jsonObject.getJSONObject("result");
+//                    if (job.getString("response").equals("success")) {
+//
+//                        SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+//                        edit.putString("first_name", etFirstName.getText().toString());
+//                        edit.putString("last_name", etLastName.getText().toString());
+//                        edit.putString("contact_no", etMobileNumber.getText().toString());
+//                        edit.putString("profile_image", path);
+//
+//
+//
+//                        edit.apply();
+//
+//
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Log.e("Exception", e.getMessage());
+//                }
+//
+//                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+//                startActivity(intent);
+//                finish();
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("first_name", etFirstName.getText().toString());
+//                params.put("last_name", etLastName.getText().toString());
+//                params.put("cell", etMobileNumber.getText().toString());
+//                params.put("id", MainActivity.getId);
+//                params.put("image", path);
+//                return params;
+//            }
+//        };
+//        MySingleton.getInstance(ProfileActivity.this).addToRequestQueue(request);
 
-        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
 
 
-    }
+
 
     public boolean isValidEmail(String emailStr) {
         final Pattern VALID_EMAIL_ADDRESS_REGEX =

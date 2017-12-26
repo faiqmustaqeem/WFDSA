@@ -34,6 +34,13 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.facebook.android:facebook-share:[4,5)'
+    compile 'com.twitter.sdk.android:twitter-core:3.1.1'
+    compile 'com.twitter.sdk.android:tweet-ui:3.1.1'
+    compile 'com.firebaseui:firebase-ui-database:1.0.1'
+    compile 'com.twitter.sdk.android:tweet-composer:3.1.1'
+    compile 'com.twitter.sdk.android:twitter-mopub:3.1.1'
+
     compile 'com.google.android.gms:play-services:11.0.4'
     compile 'com.afollestad.material-dialogs:core:0.9.6.0'
     compile 'cn.jzvd:jiaozivideoplayer:6.2.1'

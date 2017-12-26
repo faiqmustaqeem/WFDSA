@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,13 +17,26 @@ import android.widget.TextView;
 
 
 import com.example.shariqkhan.wfdsa.Adapter.DiscussionRVAdapter;
+import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.DiscussionModel;
+import com.example.shariqkhan.wfdsa.Model.MessageModel;
 import com.example.shariqkhan.wfdsa.R;
+import com.example.shariqkhan.wfdsa.SelectedEventActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +48,7 @@ import butterknife.ButterKnife;
 public class EventDiscussionDialog extends Dialog implements View.OnClickListener {
     public Activity act;
     public Dialog d;
-    ArrayList<DiscussionModel> discussionList = new ArrayList<DiscussionModel>();
+    ArrayList<MessageModel> discussionList = new ArrayList<>();
     ImageView imageView;
 
     @BindView(R.id.etComment)
@@ -44,6 +59,7 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
     @BindView(R.id.rvComments)
     RecyclerView rvComments;
     DiscussionRVAdapter discussionRVAdapter;
+    DatabaseReference mRootRef;
 
 
     public EventDiscussionDialog(Activity a) {
@@ -60,6 +76,7 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
         ButterKnife.bind(this);
         setCanceledOnTouchOutside(false);
 
+        mRootRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
         Window window = getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -67,19 +84,14 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
     }
 
     private void initUI() {
+
         discussionRVAdapter = new DiscussionRVAdapter(act, discussionList);
         RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
         rvComments.setLayoutManager(mAnnouncementLayoutManager);
         rvComments.setItemAnimator(new DefaultItemAnimator());
 
+        loadMessages();
         tvSendComment.setOnClickListener(this);
-
-        discussionList.add(new DiscussionModel("1", "Person A", "Entrepreneur", "", "I have been waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-        discussionList.add(new DiscussionModel("2", "Person b", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-        discussionList.add(new DiscussionModel("3", "Person c", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-        discussionList.add(new DiscussionModel("4", "Person d", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-        discussionList.add(new DiscussionModel("5", "Person e", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-        discussionList.add(new DiscussionModel("6", "Person f", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
 
         rvComments.setAdapter(discussionRVAdapter);
 
@@ -114,16 +126,104 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
             case R.id.tvSendComment:
                 if (validComment()) {
                     //get time
+                    Date date = new Date();
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
                     //get date
                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    String time= sdfTime.format(date);
+                    String Date= dateFormat.format(date);
 
-                    discussionList.add(new DiscussionModel("9", "User Name", "DSA Member", etComment.getText().toString(), "com", dateFormat.format(cal.getTime()), sdfTime.format(cal.getTime())));
+
+
+
+                        //   Toast.makeText(this, "Button Clicked!", Toast.LENGTH_SHORT).show();
+                        String gettingText = etComment.getText().toString();
+                        if (!TextUtils.isEmpty(gettingText)) {
+                            //Defining strings takay har bar reference mai likhna na paray
+
+                            String current_user_reference = "Messages/";
+                            String chat_user_reference = "Messages/";
+                            //for push id of user
+
+                            DatabaseReference user_message_push_id = mRootRef
+                                    .push();
+
+                            String push_id = user_message_push_id.getKey();
+
+                            Map messageMap = new HashMap();
+                            messageMap.put("name", MainActivity.getFirstName+" "+MainActivity.getLastName);
+                            messageMap.put("message", gettingText);
+                            messageMap.put("post", "DSA MEMBER");
+                            messageMap.put("date", Date);
+                            messageMap.put("time", time);
+
+
+                            Map messageUserMap = new HashMap();
+
+                            messageUserMap.put("/" + push_id, messageMap);
+
+
+                            mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                                    if (databaseError != null) {
+                                        Log.d("DbError", databaseError.getMessage().toString());
+
+                                    } else {
+                                        discussionList.clear();
+                                        loadMessages();
+                                    }
+                                }
+                            });
+
+                        }
+
                     discussionRVAdapter.notifyDataSetChanged();
                     etComment.setText("");
                 }
                 break;
         }
+    }
+
+    private void loadMessages() {
+
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
+
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    Log.e("Inside", "");
+                    for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                        //arrayList.add(String.valueOf(dsp.geValue()));
+                        MessageModel m = new MessageModel();
+
+                        String name = dsp.child("name").getValue().toString();
+                        String message = dsp.child("message").getValue().toString();
+                        String post= dsp.child("post").getValue().toString();
+                        String date = dsp.child("date").getValue().toString();
+                        String time = dsp.child("time").getValue().toString();
+
+
+                        m.setName(name);
+                        m.setMessage(message);
+                        m.setPost(post);
+                        m.setDate(date);
+                        m.setTime(time);
+                        discussionList.add(m);
+
+                    }
+                }
+                discussionRVAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("Error", databaseError.getMessage());
+            }
+        });
     }
 }

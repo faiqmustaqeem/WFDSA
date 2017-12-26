@@ -23,11 +23,22 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+
+
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"
             >
-
         </meta-data>
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1207533079382899"
+            android:exported="true">
+
+        </provider>
+
+
+
 
         <activity
             android:name=".SplashActivity"
@@ -91,7 +102,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SelectedEventActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+
+        </activity>
         <activity
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
@@ -109,6 +122,10 @@
 
         <activity android:name=".MyResourcesActivity" />
         <activity android:name=".CEOActivity" />
+
+
+
+
     </application>
 
 </manifest>

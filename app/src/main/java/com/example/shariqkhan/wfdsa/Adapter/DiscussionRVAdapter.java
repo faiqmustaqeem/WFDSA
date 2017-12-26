@@ -12,10 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.Model.DiscussionModel;
+import com.example.shariqkhan.wfdsa.Model.MessageModel;
 import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,11 +27,11 @@ import butterknife.ButterKnife;
  */
 
 public class DiscussionRVAdapter extends RecyclerView.Adapter<DiscussionRVAdapter.MyViewHolder> {
-    ArrayList<DiscussionModel> discussionList;
+    ArrayList<MessageModel> discussionList = new ArrayList<>();
     Context context;
     int lastPosition = -1;
 
-    public DiscussionRVAdapter(Context context, ArrayList<DiscussionModel> discussionList) {
+    public DiscussionRVAdapter(Context context, ArrayList<MessageModel> discussionList) {
         this.discussionList = discussionList;
         this.context = context;
     }
@@ -62,15 +64,15 @@ public class DiscussionRVAdapter extends RecyclerView.Adapter<DiscussionRVAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        DiscussionModel dataModel = discussionList.get(position);
-        holder.tvSenderName.setText(dataModel.getSenderName());
+        MessageModel dataModel = discussionList.get(position);
+        holder.tvSenderName.setText(dataModel.getName());
         holder.tvDate.setText(dataModel.getDate());
-        holder.tvDescription.setText(dataModel.getSenderDescription());
-        try {
-            Picasso.with(context).load(dataModel.getImage()).into(holder.ivSenderImage);
-        } catch (IllegalArgumentException ie) {
+        holder.tvDescription.setText(dataModel.getPost());
+        holder.tvTime.setText(dataModel.getTime());
+        holder.tvComment.setText(dataModel.getMessage());
+
             holder.ivSenderImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_profile_pic));
-        }
+
 
         Animation animation = AnimationUtils.loadAnimation(context,
                 (position > lastPosition) ? R.anim.rv_up_from_bottom

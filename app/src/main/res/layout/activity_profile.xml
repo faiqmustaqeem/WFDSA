@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-
+android:enabled="false"
                         android:inputType="textCapWords"
                         android:padding="8dp"
                         android:text="Chester"
@@ -190,6 +190,7 @@
                     <EditText
                         android:id="@+id/etLastName"
                         android:layout_width="120dp"
+                        android:enabled="false"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
@@ -236,7 +237,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-
+android:enabled="false"
                         android:inputType="textEmailAddress"
                         android:padding="8dp"
                         android:text="cb@linkinpark.com"
@@ -283,6 +284,7 @@
                         android:layout_marginRight="8dp"
                         android:background="@android:drawable/screen_background_light_transparent"
 
+                        android:enabled="false"
                         android:hint="Mobile Number"
                         android:inputType="phone"
                         android:padding="8dp"

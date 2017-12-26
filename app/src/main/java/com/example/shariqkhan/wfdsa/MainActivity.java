@@ -38,6 +38,7 @@ import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.Twitter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -106,11 +107,12 @@ public class MainActivity extends AppCompatActivity
     public ArrayList<EventsModel> arrayList = new ArrayList<>();
     public ArrayList<AnnouncementsModel> arrayList2 = new ArrayList<>();
 
-    static String getFirstName;
-    static String getLastName;
+   public static String getFirstName;
+  public  static String getLastName;
     static String password;
     static String getCountry;
     static String getEmail;
+    static String getId;
     static String phoneNo;
     public static final int INTENT_CONSTANT_GALLERY = 1;
     public static String DECIDER = "";
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        Twitter.initialize(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -136,7 +139,11 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+
+
 
 
         initUI();
@@ -151,6 +158,8 @@ public class MainActivity extends AppCompatActivity
         getEmail = prefs.getString("email", "");
         DECIDER = prefs.getString("type", "");
         stype = prefs.getString("stype", "");
+        getId= prefs.getString("deciderId", "");
+
 
         Log.e("first_name", getFirstName);
         Log.e("last_name", getLastName);

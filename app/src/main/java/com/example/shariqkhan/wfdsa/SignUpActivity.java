@@ -425,9 +425,9 @@ public class SignUpActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(SignUpActivity.this, "Email already exist or invalid password confirmation!!", Toast.LENGTH_LONG).show();
 
-                        tilEmail.getEditText().setText("");
                         tilPassword.getEditText().setText("");
                         tilConfirmPassword.getEditText().setText("");
+                        tilEmail.getEditText().setText("");
 
                         progressDialog.dismiss();
 
