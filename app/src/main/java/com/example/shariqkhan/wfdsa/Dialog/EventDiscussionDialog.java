@@ -125,62 +125,61 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
         switch (view.getId()) {
             case R.id.tvSendComment:
                 if (validComment()) {
+                  //  loadMessages();
                     //get time
                     Date date = new Date();
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
                     //get date
                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    String time= sdfTime.format(date);
-                    String Date= dateFormat.format(date);
+                    String time = sdfTime.format(date);
+                    String Date = dateFormat.format(date);
 
 
+                    //   Toast.makeText(this, "Button Clicked!", Toast.LENGTH_SHORT).show();
+                    String gettingText = etComment.getText().toString();
+                    if (!TextUtils.isEmpty(gettingText)) {
+                        //Defining strings takay har bar reference mai likhna na paray
+
+                        String current_user_reference = "Messages/";
+                        String chat_user_reference = "Messages/";
+                        //for push id of user
+
+                        DatabaseReference user_message_push_id = mRootRef
+                                .push();
+
+                        String push_id = user_message_push_id.getKey();
+
+                        Map messageMap = new HashMap();
+                        messageMap.put("name", MainActivity.getFirstName + " " + MainActivity.getLastName);
+                        messageMap.put("message", gettingText);
+                        messageMap.put("post", "DSA MEMBER");
+                        messageMap.put("date", Date);
+                        messageMap.put("time", time);
 
 
-                        //   Toast.makeText(this, "Button Clicked!", Toast.LENGTH_SHORT).show();
-                        String gettingText = etComment.getText().toString();
-                        if (!TextUtils.isEmpty(gettingText)) {
-                            //Defining strings takay har bar reference mai likhna na paray
+                        Map messageUserMap = new HashMap();
 
-                            String current_user_reference = "Messages/";
-                            String chat_user_reference = "Messages/";
-                            //for push id of user
-
-                            DatabaseReference user_message_push_id = mRootRef
-                                    .push();
-
-                            String push_id = user_message_push_id.getKey();
-
-                            Map messageMap = new HashMap();
-                            messageMap.put("name", MainActivity.getFirstName+" "+MainActivity.getLastName);
-                            messageMap.put("message", gettingText);
-                            messageMap.put("post", "DSA MEMBER");
-                            messageMap.put("date", Date);
-                            messageMap.put("time", time);
+                        messageUserMap.put("/" + push_id, messageMap);
 
 
-                            Map messageUserMap = new HashMap();
+                        mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                            messageUserMap.put("/" + push_id, messageMap);
+                                if (databaseError != null) {
+                                    Log.d("DbError", databaseError.getMessage().toString());
 
-
-                            mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-
-                                    if (databaseError != null) {
-                                        Log.d("DbError", databaseError.getMessage().toString());
-
-                                    } else {
-                                        discussionList.clear();
-                                        loadMessages();
-                                    }
+                                } else {
+                                    discussionList.clear();
+                                    loadMessages();
                                 }
-                            });
+                            }
+                        });
 
-                        }
+                    }
 
-                    discussionRVAdapter.notifyDataSetChanged();
+                   // discussionRVAdapter.notifyDataSetChanged();
                     etComment.setText("");
                 }
                 break;
@@ -191,33 +190,33 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
 
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren()) {
-                    Log.e("Inside", "");
-                    for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                        //arrayList.add(String.valueOf(dsp.geValue()));
-                        MessageModel m = new MessageModel();
 
-                        String name = dsp.child("name").getValue().toString();
-                        String message = dsp.child("message").getValue().toString();
-                        String post= dsp.child("post").getValue().toString();
-                        String date = dsp.child("date").getValue().toString();
-                        String time = dsp.child("time").getValue().toString();
+                Log.e("Inside", "");
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    //arrayList.add(String.valueOf(dsp.geValue()));
+                    MessageModel m = new MessageModel();
+
+                    String name = dsp.child("name").getValue().toString();
+                    String message = dsp.child("message").getValue().toString();
+                    String post = dsp.child("post").getValue().toString();
+                    String date = dsp.child("date").getValue().toString();
+                    String time = dsp.child("time").getValue().toString();
 
 
-                        m.setName(name);
-                        m.setMessage(message);
-                        m.setPost(post);
-                        m.setDate(date);
-                        m.setTime(time);
-                        discussionList.add(m);
+                    m.setName(name);
+                    m.setMessage(message);
+                    m.setPost(post);
+                    m.setDate(date);
+                    m.setTime(time);
+                    discussionList.add(m);
 
-                    }
                 }
-                discussionRVAdapter.notifyDataSetChanged();
 
+                discussionRVAdapter.notifyDataSetChanged();
+               // discussionList.clear();
             }
 
             @Override
