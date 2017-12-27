@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shariqkhan.wfdsa.Adapter.PaymentsRVAdapter;
 import com.example.shariqkhan.wfdsa.Dialog.EventAttendeesDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventDiscussionDialog;
@@ -57,6 +58,7 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -75,6 +77,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     GoogleMap myGoogleMap;
     ImageView image;
     ImageView location;
+    String choice;
+    String pollQuestion;
     Button yes;
     Button no;
     ImageView close;
@@ -90,16 +94,18 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String latlng;
     String start;
     String end;
-
+    String choice_array[];
     ShareDialog dialog;
     URL url;
+    String pollResponse;
 
     TextView tvAgenda;
     TextView tvAgendaDescription;
     TextView tvEventDescription;
     TextView tvSpeakersDetails;
     TextView tvHostsDetails;
-   public static String id;
+    public static String id;
+    String idKeepTrack[];
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
     Animation shareSlideUp, shareSlideDown;
@@ -110,6 +116,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public String URL = "http://codiansoft.com/wfdsa/apis/Event/EventDetail?";
     private ProgressDialog progressDialog;
 
+    public static String pollResponseUrl = " http://codiansoft.com/wfdsa/apis/Event/Get_Poll?";
     CallbackManager callBackManager;
 
 
@@ -124,7 +131,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_event);
         id = getIntent().getStringExtra("eventid");
-
+        pollResponseUrl = pollResponseUrl + "event_id=" + id;
 
         ButterKnife.bind(this);
 
@@ -152,7 +159,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ivLinkedIn = (ImageView) findViewById(R.id.ivLinkedIn);
 
 
-
         ivTwitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,14 +180,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         });
 
 
-
         ivFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CallbackManager.Factory.create();
                 Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
                 linkedinIntent.setType("text/plain");
-                linkedinIntent.putExtra(Intent.EXTRA_TEXT, "Hello this is plain text!"+"http");
+                linkedinIntent.putExtra(Intent.EXTRA_TEXT, "Hello this is plain text!" + "http");
 
                 boolean linkedinAppFound = false;
                 List<ResolveInfo> matches2 = getPackageManager()
@@ -256,7 +261,17 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(SelectedEventActivity.this, "Event Added Seccuessfully!", Toast.LENGTH_SHORT).show();
+
+                Calendar cal = Calendar.getInstance();
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", cal.getTimeInMillis());
+                intent.putExtra("allDay", false);
+                intent.putExtra("rrule", "FREQ=YEARLY");
+                intent.putExtra("endTime", cal.getTimeInMillis() + 60* 1000);
+                intent.putExtra("title", "A Test Event from android app");
+                startActivity(intent);
+                //     Toast.makeText(SelectedEventActivity.this, "Event Added Seccuessfully!", Toast.LENGTH_SHORT).show();
             }
         });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -585,9 +600,121 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 break;
 
             case R.id.fabPolls:
-                EventPollsDialog pollsDialog = new EventPollsDialog(this);
+                Task2 task2 = new Task2();
+                task2.execute();
+
+
+//                EventPollsDialog pollsDialog = new EventPollsDialog(this);
+//                pollsDialog.show();
+//                break;
+        }
+    }
+
+
+    private class Task2 extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            String url = "http://codiansoft.com/wfdsa/apis/Event/Get_Poll?" + "event_id=" + id;
+
+            Log.e("url", url);
+
+            String response = getHttpData.getData(url);
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    JSONObject rolesObj = resultObj.getJSONObject("data");
+                    JSONObject Obj0 = rolesObj.getJSONObject("0");
+
+
+                    choice = Obj0.getString("choice_selection");
+                    pollQuestion = Obj0.getString("poll_question");
+
+                    JSONArray choiceArray = rolesObj.getJSONArray("poll_answer");
+                    choice_array = new String[choiceArray.length()];
+                    idKeepTrack = new String[choiceArray.length()];
+
+                    for (int i = 0; i < choiceArray.length(); i++) {
+                        choice_array[i] = choiceArray.getString(i);
+                        idKeepTrack[i] = String.valueOf(i + 1);
+                        Log.e("Choices", choice_array[i]);
+                    }
+
+                }
+
+                progressDialog.dismiss();
+
+                if (choice.equals("Single Choice")) {
+                    new MaterialDialog.Builder(SelectedEventActivity.this)
+                            .title(pollQuestion)
+                            .items(choice_array)
+                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                                @Override
+                                public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                                    pollResponse = charSequence.toString();
+                                    String idKeep = idKeepTrack[i];
+//
+//                                    Task3 task3 = new Task3();
+//                                    task3.execute();
+//
+
+                                    Log.e("id", idKeep);
+                                    Log.e("answer", choice_array[i]);
+
+                                    return true;
+                                }
+
+                            })
+                            .positiveText("Choose")
+                            .show();
+
+
+                }else
+                    {
+
+                EventPollsDialog pollsDialog = new EventPollsDialog(SelectedEventActivity.this,choice_array,idKeepTrack, pollQuestion);
                 pollsDialog.show();
-                break;
+
+                    }
+
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(SelectedEventActivity.this);
+            progressDialog.setTitle("Loading ");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
         }
     }
 

@@ -189,6 +189,7 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
     private void loadMessages() {
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
+        discussionList.clear();
 
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -212,10 +213,13 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
                     m.setDate(date);
                     m.setTime(time);
                     discussionList.add(m);
+                    Log.e("size", String.valueOf(discussionList.size()));
+
 
                 }
 
                 discussionRVAdapter.notifyDataSetChanged();
+                Log.e("After notify!", String.valueOf(discussionList.size()));
                // discussionList.clear();
             }
 

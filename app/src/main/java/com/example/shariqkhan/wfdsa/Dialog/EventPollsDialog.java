@@ -28,12 +28,15 @@ public class EventPollsDialog extends Dialog implements View.OnClickListener {
     public Activity act;
     public Dialog d;
     ImageView imageView;
+    String [] choice_array;
+    String []idKeepTrack;
+
 
     @BindView(R.id.tvSubmit)
     TextView tvSubmit;
 
 
-    public EventPollsDialog(Activity a) {
+    public EventPollsDialog(Activity a, String []choice_array, String []idKeepTrack, String pollQuestion) {
         super(a);
         // TODO Auto-generated constructor stub
         this.act = a;
