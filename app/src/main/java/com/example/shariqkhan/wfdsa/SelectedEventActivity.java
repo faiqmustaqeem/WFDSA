@@ -17,6 +17,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -50,16 +51,30 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,7 +97,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     Button yes;
     Button no;
     ImageView close;
-
+    String findItbyId[];
+    String pollId;
     TextView textView17;
 
     public static boolean checkedIn = false;
@@ -99,6 +115,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     URL url;
     String pollResponse;
 
+    String startEventTime;
+    String endEventTime;
+
+    String idKeep;
     TextView tvAgenda;
     TextView tvAgendaDescription;
     TextView tvEventDescription;
@@ -262,14 +282,75 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
+                SimpleDateFormat df3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//                String st = df3.format(startEventTime);
+//                String en = df3.format(endEventTime);
+                Date date = new Date();
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                Date d1= null;
+                Date d2 = null;
+                long elapsedDays = 0;
+                long elapsedMinutes = 0;
+                long elapsedSeconds = 0;
+                long elapsedHours = 0;
+                long different=0;
+                long difference = 0;
+
+                try {
+                    d1 = df3.parse(startEventTime);
+                    d2 = df3.parse(endEventTime);
+
+                     different = d2.getTime() - d1.getTime();
+difference = different;
+                    Log.e("Difference", String.valueOf(different));
+
+                    long secondsInMilli = 1000;
+                    long minutesInMilli = secondsInMilli * 60;
+                    long hoursInMilli = minutesInMilli * 60;
+                    long daysInMilli = hoursInMilli * 24;
+
+                    Log.e("seconds", String.valueOf(secondsInMilli));
+                    Log.e("seconds", String.valueOf(minutesInMilli));
+                    Log.e("seconds", String.valueOf(hoursInMilli));
+                    Log.e("seconds", String.valueOf(daysInMilli));
+
+
+                    elapsedDays = different / daysInMilli;
+                    different = different % daysInMilli;
+
+                    elapsedHours = different / hoursInMilli;
+                    different = different % hoursInMilli;
+
+                    elapsedMinutes = different / minutesInMilli;
+                    different = different % minutesInMilli;
+
+                    elapsedSeconds = different / secondsInMilli;
+
+
+                    Log.e("elDay", String.valueOf(elapsedDays));
+                    Log.e("elHours", String.valueOf(elapsedHours));
+                    Log.e("elMinutes", String.valueOf(elapsedMinutes));
+                    Log.e("elSeconds", String.valueOf(elapsedSeconds));
+
+                } catch (ParseException e) {
+                    Log.e("ParseException", e.getMessage());
+                }
+
+
                 Calendar cal = Calendar.getInstance();
+
+                Log.e("startTime", startEventTime);
+                Log.e("endTime", endEventTime);
+                Log.e("calendarGetTimeInstance", String.valueOf(cal.getTimeInMillis()));
+
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
-                intent.putExtra("beginTime", cal.getTimeInMillis());
+                intent.putExtra("beginTime", d1);
                 intent.putExtra("allDay", false);
                 intent.putExtra("rrule", "FREQ=YEARLY");
-                intent.putExtra("endTime", cal.getTimeInMillis() + 60* 1000);
-                intent.putExtra("title", "A Test Event from android app");
+                intent.putExtra("endTime", cal.getTimeInMillis()+difference);
+                intent.putExtra("title", "A Test Event 2 from android app");
                 startActivity(intent);
                 //     Toast.makeText(SelectedEventActivity.this, "Event Added Seccuessfully!", Toast.LENGTH_SHORT).show();
             }
@@ -641,18 +722,24 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     JSONObject rolesObj = resultObj.getJSONObject("data");
                     JSONObject Obj0 = rolesObj.getJSONObject("0");
 
-
+                    pollId = Obj0.getString("poll_id");
                     choice = Obj0.getString("choice_selection");
                     pollQuestion = Obj0.getString("poll_question");
 
                     JSONArray choiceArray = rolesObj.getJSONArray("poll_answer");
+                    JSONArray idArray = rolesObj.getJSONArray("id");
+
                     choice_array = new String[choiceArray.length()];
-                    idKeepTrack = new String[choiceArray.length()];
+
+                    idKeepTrack = new String[idArray.length()];
 
                     for (int i = 0; i < choiceArray.length(); i++) {
+
                         choice_array[i] = choiceArray.getString(i);
-                        idKeepTrack[i] = String.valueOf(i + 1);
-                        Log.e("Choices", choice_array[i]);
+                        idKeepTrack[i] = idArray.getString(i);
+//
+//                        choice_array[i] = choiceArray.getString(Integer.parseInt(idKeepTrack[i]));
+//                        Log.e("Choices", choice_array[i]);
                     }
 
                 }
@@ -667,14 +754,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                 @Override
                                 public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
                                     pollResponse = charSequence.toString();
-                                    String idKeep = idKeepTrack[i];
-//
-//                                    Task3 task3 = new Task3();
-//                                    task3.execute();
-//
-
+                                    idKeep = idKeepTrack[i];
                                     Log.e("id", idKeep);
                                     Log.e("answer", choice_array[i]);
+                                    Task3 task3 = new Task3();
+                                    task3.execute();
+//
+
 
                                     return true;
                                 }
@@ -684,13 +770,36 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                             .show();
 
 
-                }else
-                    {
+                } else {
 
-                EventPollsDialog pollsDialog = new EventPollsDialog(SelectedEventActivity.this,choice_array,idKeepTrack, pollQuestion);
-                pollsDialog.show();
 
-                    }
+                    new LovelyChoiceDialog(SelectedEventActivity.this)
+                            .setTopColorRes(R.color.colorPrimary)
+                            .setTitle(pollQuestion)
+                            .setItemsMultiChoice(choice_array, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
+                                @Override
+                                public void onItemsSelected(List<Integer> positions, List<String> items) {
+                                    for (int i = 0; i < items.size(); i++) {
+
+                                        final String findItByText[] = new String[items.size()];
+                                        findItbyId = new String[positions.size()];
+                                        findItByText[i] = items.get(i);
+
+                                    }
+                                    for (int f = 0; f < positions.size(); f++) {
+
+                                        findItbyId[f] = idKeepTrack[f];
+                                        Log.e("findItById", findItbyId[f]);
+                                    }
+                                    Task4 task4 = new Task4();
+                                    task4.execute();
+
+                                }
+                            })
+                            .setConfirmButtonText("Confirm")
+                            .show();
+
+                }
 
 
 //                } else {
@@ -753,6 +862,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     // tvAgendaDescription.setText(obj.getString(""));
 
                     tvSpeakersDetails.setText(obj.getString("speaker"));
+
+                    startEventTime = obj.getString("start_date");
+                    endEventTime = obj.getString("end_date");
+
+                    Log.e("start", startEventTime);
+                    Log.e("end", endEventTime);
                     tvDayTime.setText(obj.getString("start_time") + "---" + obj.getString("end_time"));
                     heelo.setText((obj.getString("start_date").substring(0, 10)) + "---" + obj.getString("end_date").substring(0, 10));
                     address.setText(obj.getString("place"));
@@ -782,6 +897,201 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             super.onPreExecute();
             progressDialog = new ProgressDialog(SelectedEventActivity.this);
             progressDialog.setTitle("Loading ");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+        }
+    }
+
+    private class Task3 extends AsyncTask<String, Void, String> {
+        String stream = null;
+        ProgressDialog progressDialog;
+
+
+        @Override
+        protected String doInBackground(String[] params) {
+
+            String getResponse = getJson();
+            stream = getResponse;
+
+            return stream;
+
+        }
+
+        private String getJson() {
+            HttpClient httpClient = new DefaultHttpClient();
+
+
+            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Add_PollAnswer?");
+            Log.e("Must", "Must");
+
+            List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new BasicNameValuePair("user_id", MainActivity.getId));
+            parameters.add(new BasicNameValuePair("poll_id", pollId));
+            parameters.add(new BasicNameValuePair("poll_answer_id", idKeep));
+            parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
+
+            StringBuilder buffer = new StringBuilder();
+
+            try {
+                // Log.e("Insidegetjson", "insidetry");
+                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+                post.setEntity(encoded);
+                HttpResponse response = httpClient.execute(post);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String Line = "";
+
+                while ((Line = reader.readLine()) != null) {
+                    Log.e("reader", Line);
+                    Log.e("buffer", buffer.toString());
+                    buffer.append(Line);
+
+                }
+                reader.close();
+
+            } catch (Exception o) {
+                Log.e("Error", o.getMessage());
+
+            }
+            return buffer.toString();
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    Toast.makeText(SelectedEventActivity.this, "Your Response Submitted!", Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(SelectedEventActivity.this);
+            progressDialog.setTitle("Submitting Response");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+        }
+    }
+
+    private class Task4 extends AsyncTask<String, Void, String> {
+        String stream = null;
+        ProgressDialog progressDialog;
+
+
+        @Override
+        protected String doInBackground(String[] params) {
+
+            String getResponse = getJson();
+            stream = getResponse;
+
+            return stream;
+
+        }
+
+        private String getJson() {
+            HttpClient httpClient = new DefaultHttpClient();
+
+
+            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Add_PollAnswer?");
+            Log.e("Must", "Must");
+            String pollAnswerId = "";
+            List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new BasicNameValuePair("user_id", MainActivity.getId));
+            parameters.add(new BasicNameValuePair("poll_id", pollId));
+            for (int i = 0; i < findItbyId.length; i++) {
+                pollAnswerId += findItbyId[i] + ",";
+            }
+            parameters.add(new BasicNameValuePair("poll_answer_id", pollAnswerId.substring(0, pollAnswerId.length() - 1)));
+            parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
+
+            StringBuilder buffer = new StringBuilder();
+
+            try {
+                // Log.e("Insidegetjson", "insidetry");
+                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+                post.setEntity(encoded);
+                HttpResponse response = httpClient.execute(post);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String Line = "";
+
+                while ((Line = reader.readLine()) != null) {
+                    Log.e("reader", Line);
+                    Log.e("buffer", buffer.toString());
+                    buffer.append(Line);
+
+                }
+                reader.close();
+
+            } catch (Exception o) {
+                Log.e("Error", o.getMessage());
+
+            }
+            return buffer.toString();
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    Toast.makeText(SelectedEventActivity.this, "Your Response Submitted!", Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(SelectedEventActivity.this);
+            progressDialog.setTitle("Submitting Response");
             progressDialog.setMessage("Please Wait");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();

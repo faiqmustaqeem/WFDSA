@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static String BASE_URL = "http://www.codiansoft.com/wfdsa/api/login";
 
-    public String decider = "1";
+    public static String decider = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,7 +204,7 @@ public class LoginActivity extends AppCompatActivity {
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("email", getEmail));
             parameters.add(new BasicNameValuePair("password", getPassword));
-            parameters.add(new BasicNameValuePair("signin_type", "2"));
+            parameters.add(new BasicNameValuePair("signin_type", LoginActivity.decider));
 
             StringBuilder buffer = new StringBuilder();
 

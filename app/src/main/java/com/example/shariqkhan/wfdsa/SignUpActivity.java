@@ -151,6 +151,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                         // Toast.makeText(SignUpActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.decider = "2";
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -417,6 +418,7 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putString("type", "nonmember");
                         editor.putString("stype", "nonmember");
                         editor.apply();
+                        LoginActivity.decider = "2";
 
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         startActivity(intent);

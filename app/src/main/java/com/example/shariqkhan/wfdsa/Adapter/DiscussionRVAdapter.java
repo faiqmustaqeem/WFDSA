@@ -73,12 +73,12 @@ public class DiscussionRVAdapter extends RecyclerView.Adapter<DiscussionRVAdapte
 
             holder.ivSenderImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_profile_pic));
 
-
-        Animation animation = AnimationUtils.loadAnimation(context,
-                (position > lastPosition) ? R.anim.rv_up_from_bottom
-                        : R.anim.rv_down_from_top);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
+//
+//        Animation animation = AnimationUtils.loadAnimation(context,
+//                (position > lastPosition) ? R.anim.rv_up_from_bottom
+//                        : R.anim.rv_down_from_top);
+//        holder.itemView.startAnimation(animation);
+//        lastPosition = position;
     }
 
     @Override
