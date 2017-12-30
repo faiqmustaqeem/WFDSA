@@ -24,6 +24,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
     EditText etPassword;
     TextView tvSubmit, tvCancel;
     String password;
+    public static boolean editedOption = false;
 
     public ProfileEditPermissionDialog(Activity a, String password) {
         super(a);
@@ -61,7 +62,9 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!etPassword.getText().toString().equals("") && etPassword.getText().toString().equals(password)) {
+                if (!etPassword.getText().toString().equals(""))
+                {
+                editedOption = true;
                     tvSubmit.setTextColor(c.getResources().getColor(R.color.colorAccent));
                     tvSubmit.setClickable(true);
                 } else {

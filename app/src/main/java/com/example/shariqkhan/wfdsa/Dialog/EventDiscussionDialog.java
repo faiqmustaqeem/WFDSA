@@ -22,6 +22,7 @@ import com.example.shariqkhan.wfdsa.Model.DiscussionModel;
 import com.example.shariqkhan.wfdsa.Model.MessageModel;
 import com.example.shariqkhan.wfdsa.R;
 import com.example.shariqkhan.wfdsa.SelectedEventActivity;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,7 +81,23 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
         Window window = getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-        initUI();
+        discussionRVAdapter = new DiscussionRVAdapter(act, discussionList);
+        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
+        rvComments.setLayoutManager(mAnnouncementLayoutManager);
+        rvComments.setItemAnimator(new DefaultItemAnimator());
+
+        loadMessages();
+        tvSendComment.setOnClickListener(this);
+
+        rvComments.setAdapter(discussionRVAdapter);
+
+        imageView = findViewById(R.id.close);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
     }
 
     private void initUI() {
@@ -125,7 +142,7 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
         switch (view.getId()) {
             case R.id.tvSendComment:
                 if (validComment()) {
-                  //  loadMessages();
+                    //  loadMessages();
                     //get time
                     Date date = new Date();
                     Calendar cal = Calendar.getInstance();
@@ -179,7 +196,7 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
 
                     }
 
-                   // discussionRVAdapter.notifyDataSetChanged();
+                    // discussionRVAdapter.notifyDataSetChanged();
                     etComment.setText("");
                 }
                 break;
@@ -188,44 +205,64 @@ public class EventDiscussionDialog extends Dialog implements View.OnClickListene
 
     private void loadMessages() {
 
-        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
+        // DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
         discussionList.clear();
 
-        dbref.addValueEventListener(new ValueEventListener() {
+        mRootRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                Log.e("Inside", "");
-                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    //arrayList.add(String.valueOf(dsp.geValue()));
-                    MessageModel m = new MessageModel();
+//               Log.e("Inside", String.valueOf(dataSnapshot.getChildrenCount()));
+//               for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+//                   //arrayList.add(String.valueOf(dsp.geValue()));
+//                   MessageModel m = new MessageModel();
+//
+//                   String name = dsp.child("name").getValue().toString();
+//                   String message = dsp.child("message").getValue().toString();
+//                   String post = dsp.child("post").getValue().toString();
+//                   String date = dsp.child("date").getValue().toString();
+//                   String time = dsp.child("time").getValue().toString();
+//
+//
+//                   m.setName(name);
+//                   m.setMessage(message);
+//                   m.setPost(post);
+//                   m.setDate(date);
+//                   m.setTime(time);
+//                   discussionList.add(m);
+//                   Log.e("size", String.valueOf(discussionList.size()));
+//
+//
+//               }
 
-                    String name = dsp.child("name").getValue().toString();
-                    String message = dsp.child("message").getValue().toString();
-                    String post = dsp.child("post").getValue().toString();
-                    String date = dsp.child("date").getValue().toString();
-                    String time = dsp.child("time").getValue().toString();
+                MessageModel m = dataSnapshot.getValue(MessageModel.class);
 
-
-                    m.setName(name);
-                    m.setMessage(message);
-                    m.setPost(post);
-                    m.setDate(date);
-                    m.setTime(time);
                     discussionList.add(m);
-                    Log.e("size", String.valueOf(discussionList.size()));
 
-
-                }
 
                 discussionRVAdapter.notifyDataSetChanged();
+
                 Log.e("After notify!", String.valueOf(discussionList.size()));
-               // discussionList.clear();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("Error", databaseError.getMessage());
+
             }
         });
     }

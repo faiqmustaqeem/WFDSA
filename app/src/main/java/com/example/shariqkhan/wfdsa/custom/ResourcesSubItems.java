@@ -15,7 +15,7 @@ public class ResourcesSubItems implements Parcelable {
         this.title = title;
     }
 
-    protected ResourcesSubItems(Parcel in) {
+    public ResourcesSubItems(Parcel in) {
         title = in.readString();
     }
 

@@ -14,7 +14,7 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 public class ResourceItemViewHolder extends ChildViewHolder {
 
-    private TextView tvTitle;
+    public TextView tvTitle;
     public ImageView image;
 
     public ResourceItemViewHolder(View itemView) {

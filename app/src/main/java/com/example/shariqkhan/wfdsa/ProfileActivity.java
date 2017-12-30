@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,13 +25,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+
 import com.example.shariqkhan.wfdsa.Dialog.ProfileEditPermissionDialog;
 import com.example.shariqkhan.wfdsa.Singleton.MySingleton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -45,9 +50,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +65,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.profile_image)
@@ -87,6 +95,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public static Uri uri;
     Bitmap bmp;
 
+    StorageReference storageRef;
+
     String BASE_URL = "http://codiansoft.com/wfdsa/apis/member/Edit_member";
     public static String path;
 
@@ -96,16 +106,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_profile);
 
         Log.e("email", MainActivity.getEmail);
-
 //
-
-
         ButterKnife.bind(this);
 
         initUI();
         newFirstName = MainActivity.getFirstName;
         newLastName = MainActivity.getLastName;
         newEmail = MainActivity.getEmail;
+
+        storageRef = FirebaseStorage.getInstance().getReference();
 
 
         etEmail.setText(MainActivity.getEmail);
@@ -114,11 +123,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         etMobileNumber.setText(MainActivity.phoneNo);
 
 
-
         d.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if (tvEditOrUpdate.getText().toString().equals("EDIT")) {
+                if (tvEditOrUpdate.getText().toString().equals("EDIT") && ProfileEditPermissionDialog.editedOption == true) {
                     makeFieldsEditable();
                     tvEditOrUpdate.setText("SAVE");
 
@@ -171,7 +179,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     private void makeFieldsEditable() {
         etFirstName.setEnabled(true);
         etLastName.setEnabled(true);
@@ -191,11 +198,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  Intent galleryIntent = new Intent();
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_CONSTANT);
-            */
+//                Intent galleryIntent = new Intent();
+//                galleryIntent.setType("image/*");
+//                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_CONSTANT);
+
+
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .start(ProfileActivity.this);
@@ -213,17 +221,48 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 uri = result.getUri();
-                try {
-                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                    path = convertTOString(bmp);
-                    Log.e("Path", path);
+
+                File file = new File(uri.getPath());
 
 
-                } catch (IOException e) {
-                    Log.e("ExceptionFoundOfImage", e.getMessage());
+                DatabaseReference fb = FirebaseDatabase.getInstance().getReference();
+                String imageName = fb.push().getKey();
 
-                    e.printStackTrace();
-                }
+                StorageReference imageRef = storageRef.child("profile_images").child(imageName + ".jpg");
+
+//                Compressor imageComp = new Compressor(ProfileActivity.this).compressToFile(file)
+
+                imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ProfileActivity.this, "WorkingFine", Toast.LENGTH_SHORT).show();
+                            Uri url = task.getResult().getDownloadUrl();
+                            path = url.toString();
+
+                            SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
+                            edit.putString("image",path);
+                            edit.apply();
+
+
+                            Log.e("url", String.valueOf(url));
+
+                        }
+                    }
+                });
+
+//                try {
+//                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+//                    path = convertTOString(bmp);
+//                    Log.e("Path", path);
+//
+//
+//                } catch (IOException e) {
+//                    Log.e("ExceptionFoundOfImage", e.getMessage());
+//
+//                    e.printStackTrace();
+//                }
 
 
                 Log.e("Uri", String.valueOf(uri));
@@ -232,6 +271,46 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Exception error = result.getError();
             }
         }
+//        if (requestCode == 1) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                if (data.getClipData() != null) {
+//                    int count = data.getClipData().getItemCount();
+//                    int currentItem = 0;
+//
+//                    while (currentItem < count) {
+//                        Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
+//                        try {
+//                            Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                  //          imagesPath[currentItem] = convertTOString(bmp);
+//                    //        Log.e("Path", imagesPath[currentItem]);
+//
+//
+//                        } catch (IOException e) {
+//                            Log.e("ExceptionFoundOfImage", e.getMessage());
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                        Log.e("Uri", imageUri.toString());
+//                        //do something with the image (save it to some directory or whatever you need to do with it here)
+//                        currentItem = currentItem + 1;
+//                    }
+//                } else if (data.getData() != null) {
+//                   // imagesPath = new String[1];
+//                    Bitmap bmp;
+//                    Uri uri = data.getData();
+//                    try {
+//                        bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+//                        path= convertTOString(bmp);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Log.e("Uri",path.toString());
+//                    //do something with the image (save it to some directory or whatever you need to do with it here)
+//                }
+//            }
+//        }
+
     }
 
     @OnClick({R.id.ivBack, R.id.tvSignOut, R.id.tvEditOrUpdate})
@@ -285,95 +364,95 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    class Task extends AsyncTask<String, Void, String> {
+        String stream = null;
+        ProgressDialog progressDialog;
 
-         class Task extends AsyncTask<String, Void, String> {
-            String stream = null;
-            ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(ProfileActivity.this);
+            progressDialog.setTitle("Changing profile information");
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressDialog = new ProgressDialog(ProfileActivity.this);
-                progressDialog.setTitle("Changing profile information");
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
 
-                progressDialog.setMessage("Please Wait");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
+        }
 
-            }
+        @Override
+        protected String doInBackground(String[] params) {
 
-            @Override
-            protected String doInBackground(String[] params) {
+            String getResponse = getJson();
+            stream = getResponse;
 
-                String getResponse = getJson();
-                stream = getResponse;
+            return stream;
 
-                return stream;
+        }
 
-            }
-
-            private String getJson() {
-                HttpClient httpClient = new DefaultHttpClient();
+        private String getJson() {
+            HttpClient httpClient = new DefaultHttpClient();
 
 
-                HttpPost post = new HttpPost(BASE_URL);
-                Log.e("Must", "Must");
+            HttpPost post = new HttpPost(BASE_URL);
+            Log.e("Must", "Must");
 
-                List<NameValuePair> parameters = new ArrayList<>();
+            List<NameValuePair> parameters = new ArrayList<>();
 
 //                params.put("last_name", etLastName.getText().toString());
 //                params.put("cell", etMobileNumber.getText().toString());
 //                params.put("id", MainActivity.getId);
 //                params.put("image", path)
-                parameters.add(new BasicNameValuePair("first_name", etFirstName.getText().toString()));
-                parameters.add(new BasicNameValuePair("last_name", etFirstName.getText().toString()));
 
-                parameters.add(new BasicNameValuePair("cell", etMobileNumber.getText().toString()));
-                parameters.add(new BasicNameValuePair("id", MainActivity.getId));
-                parameters.add(new BasicNameValuePair("image", path));
+            parameters.add(new BasicNameValuePair("first_name", etFirstName.getText().toString()));
+            parameters.add(new BasicNameValuePair("last_name", etFirstName.getText().toString()));
 
-                StringBuilder buffer = new StringBuilder();
+            parameters.add(new BasicNameValuePair("cell", etMobileNumber.getText().toString()));
+            parameters.add(new BasicNameValuePair("member_id", MainActivity.getId));
+            parameters.add(new BasicNameValuePair("image", path));
 
-                try {
-                    // Log.e("Insidegetjson", "insidetry");
-                    UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
-                    post.setEntity(encoded);
-                    HttpResponse response = httpClient.execute(post);
+            StringBuilder buffer = new StringBuilder();
 
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                    String Line = "";
+            try {
+                // Log.e("Insidegetjson", "insidetry");
+                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+                post.setEntity(encoded);
+                HttpResponse response = httpClient.execute(post);
 
-                    while ((Line = reader.readLine()) != null) {
-                        Log.e("reader", Line);
-                        Log.e("buffer", buffer.toString());
-                        buffer.append(Line);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String Line = "";
 
-                    }
-                    reader.close();
-
-                } catch (Exception o) {
-                    Log.e("Error", o.getMessage());
+                while ((Line = reader.readLine()) != null) {
+                    Log.e("reader", Line);
+                    Log.e("buffer", buffer.toString());
+                    buffer.append(Line);
 
                 }
-                return buffer.toString();
+                reader.close();
+
+            } catch (Exception o) {
+                Log.e("Error", o.getMessage());
+
             }
+            return buffer.toString();
+        }
 
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
 
-                JSONObject jsonobj;
-                if (s != null) {
-                    try {
-                        jsonobj = new JSONObject(s);
-                        Log.e("JSON", s);
+            JSONObject jsonobj;
+            if (s != null) {
+                try {
+                    jsonobj = new JSONObject(s);
+                    Log.e("JSON", s);
 
 
-                        JSONObject result = jsonobj.getJSONObject("result");
-                        String checkResult = result.getString("status");
+                    JSONObject result = jsonobj.getJSONObject("result");
+                    String checkResult = result.getString("status");
 
-                        if (checkResult.equals("success")) {
+                    if (checkResult.equals("success")) {
 //
 //                            Log.e("insidepost", checkResult);
 //                            String get_api_secret = result.getString("api_secret");
@@ -388,48 +467,48 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //                            String password = user_data.getString("password");
 //                            String phNo = user_data.getString("contact_no");
 //                            Log.e("email", email);
-                            SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
-                            editor.putString("first_name",etFirstName.getText().toString());
-                            editor.putString("last_name",etLastName.getText().toString());
-                           editor.putString("contact_no", etMobileNumber.getText().toString());
-
-
-                            editor.apply();
-
-                            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        } else {
+                        editor.putString("first_name", etFirstName.getText().toString());
+                        editor.putString("last_name", etLastName.getText().toString());
+                        editor.putString("contact_no", etMobileNumber.getText().toString());
 
 
-                            progressDialog.dismiss();
-                        }
+                        editor.apply();
+
+                        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
 
 
-                    } catch (JSONException e) {
-                        Log.e("ErrorMessage", e.getMessage());
                         progressDialog.dismiss();
                     }
 
 
+                } catch (JSONException e) {
+                    Log.e("ErrorMessage", e.getMessage());
+                    progressDialog.dismiss();
                 }
 
-                progressDialog.dismiss();
+
             }
+
+            progressDialog.dismiss();
         }
+    }
 
 //        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
 //            @Override
 //            public void onResponse(String response) {
 //                Log.e("HelloWorld", "HeloWorld");
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response);
-//                    Log.e("HelloWorld", "HeloWorld");
 //                    JSONObject job = jsonObject.getJSONObject("result");
 //                    if (job.getString("response").equals("success")) {
 //
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    Log.e("HelloWorld", "HeloWorld");
 //                        SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 //                        edit.putString("first_name", etFirstName.getText().toString());
 //                        edit.putString("last_name", etLastName.getText().toString());
@@ -473,9 +552,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //        MySingleton.getInstance(ProfileActivity.this).addToRequestQueue(request);
 
 
-
-
-
     public boolean isValidEmail(String emailStr) {
         final Pattern VALID_EMAIL_ADDRESS_REGEX =
                 Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -486,9 +562,40 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private String convertTOString(Bitmap bmp) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream);
         byte[] imgBytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+        //StringBuilder builder = new StringBuilder();
+        return (Base64.encodeToString(imgBytes, Base64.DEFAULT));
+        //return Base64.encodeToString(imgBytes, Base64.DEFAULT);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private static String getPicture(Bitmap bmp) {
+        String picture = "";
+
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 50, stream);
+//                itemImage.compress(Bitmap.CompressFormat.PNG, 60, stream);
+        byte[] image = stream.toByteArray();
+//                System.out.println("byte array:" + image);
+
+        String base64 = Base64.encodeToString(image, 0);
+
+        picture = base64;
+
+
+//                    ,{\"path\":\"title\",\"detail\":\"dddd\"}]"
+
+        return picture;
+    }
+
 }
 

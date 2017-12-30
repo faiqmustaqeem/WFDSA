@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -72,6 +73,9 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.spCountry)
     Spinner spCountry;
 
+   @BindView(R.id.cbAcceptTerms)
+   CheckBox cbAcceptTerms;
+
     TextInputLayout tilFirstName;
     TextInputLayout tilLastName;
     TextInputLayout tilContactNum;
@@ -88,6 +92,10 @@ public class SignUpActivity extends AppCompatActivity {
     String password;
     ProgressDialog dialog;
     String confirmPassword;
+
+
+
+
 
     LoginButton tvNonMemberFBSignIn;
 
@@ -110,6 +118,8 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
+
+
 
         printKeyhash();
         callbackManager = CallbackManager.Factory.create();
@@ -222,7 +232,8 @@ public class SignUpActivity extends AppCompatActivity {
                     if (!password.equals(confirmPassword))
                         Toast.makeText(SignUpActivity.this, "Invalid password confirmation!", Toast.LENGTH_SHORT).show();
 
-                    if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))) {
+                    if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))
+                            && cbAcceptTerms.isSelected()) {
                         Task task = new Task();
                         task.execute();
 

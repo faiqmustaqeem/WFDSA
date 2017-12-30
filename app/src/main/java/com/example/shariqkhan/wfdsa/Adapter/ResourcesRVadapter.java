@@ -1,9 +1,12 @@
 package com.example.shariqkhan.wfdsa.Adapter;
 
+import android.app.DownloadManager;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.R;
 import com.example.shariqkhan.wfdsa.custom.ResourceGroupViewHolder;
@@ -46,15 +49,34 @@ public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGr
                                       ExpandableGroup group, int childIndex) {
 
         final ResourcesSubItems subItem = ((ResourcesGroup) group).getItems().get(childIndex);
+
         holder.setTitle(subItem.getTitle());
         String id = subItem.getId();
-        if  (id.equals("1")) {
+        if (subItem.getTitle().contains(".docx")) {
             holder.image.setImageResource(R.drawable.word);
-        } else if (id.equals("2")) {
-            holder.image.setImageResource(R.drawable.excel);
-        } else if (id.equals("3")) {
+        } else if (subItem.getTitle().contains(".pptx")) {
+            holder.image.setImageResource(R.drawable.ppttfile);
+        } else if (subItem.getTitle().contains(".pdf")) {
             holder.image.setImageResource(R.drawable.pdf);
+        }else if (subItem.getTitle().contains(".xls")) {
+            holder.image.setImageResource(R.drawable.excel);
         }
+        else {
+            holder.image.setImageResource(R.drawable.fileother);
+        }
+        holder.tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                Toast.makeText(context, "Downloading!!", Toast.LENGTH_SHORT).show();
+                Uri uri = Uri.parse(subItem.getTitle());
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                Long refer = manager.enqueue(request);
+            }
+        });
+
 
     }
 

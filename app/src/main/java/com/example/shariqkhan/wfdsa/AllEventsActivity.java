@@ -17,13 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+
 import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
@@ -267,7 +261,7 @@ public class AllEventsActivity extends AppCompatActivity {
 
                             model.setDay(filter);
 
-                            model.setMonth(job.getString("start_date").substring(5, 7));
+                            model.setMonth(job.getString("start_date").substring(5, 8));
                             model.setYear(job.getString("start_date").substring(0, 4));
                             model.setTime(job.getString("start_date").substring(11, 19));
                             //   model.setImageUrl(job.getString("upload_image"));

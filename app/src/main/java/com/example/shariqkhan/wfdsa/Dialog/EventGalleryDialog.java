@@ -3,6 +3,7 @@ package com.example.shariqkhan.wfdsa.Dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -53,6 +54,8 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
     ProgressDialog progressDialog;
     String id;
 
+    public static int MULTI_SELECT = 1;
+
 
     String URL = "http://codiansoft.com/wfdsa/apis/Event/Gallery?";
 
@@ -82,6 +85,8 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
 
 
     }
+
+
 
     private class Task extends AsyncTask<Object, Object, String> {
 
@@ -159,6 +164,7 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
     }
 
 
+
     private void fetchEventImages() {
         imagesList.add(new EventGalleryModel("1", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
         imagesList.add(new EventGalleryModel("2", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
@@ -180,11 +186,24 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fabAddImage);
 
-        if (MainActivity.DECIDER.equals("member")) {
-            floatingActionButton.setVisibility(View.VISIBLE);
-        } else {
-            floatingActionButton.setVisibility(View.INVISIBLE);
-        }
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
+//**These following line is the important one!
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+              act.startActivityForResult(Intent.createChooser(intent, "Select Pictures"), MULTI_SELECT);
+            }
+        });
+
+
+
+//        if (MainActivity.DECIDER.equals("member")) {
+//            floatingActionButton.setVisibility(View.VISIBLE);
+//        } else {
+//            floatingActionButton.setVisibility(View.INVISIBLE);
+//        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,12 +213,15 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
         });
     }
 
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvSendComment:
-
                 break;
         }
     }
+
+
 }

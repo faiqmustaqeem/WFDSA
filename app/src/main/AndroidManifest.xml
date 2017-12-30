@@ -54,6 +54,10 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".GalleryActivityMine"
+            android:screenOrientation="portrait" >
+        </activity>
         <activity android:name=".Demo">
 
         </activity>
@@ -104,7 +108,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SelectedEventActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            >
 
         </activity>
         <activity

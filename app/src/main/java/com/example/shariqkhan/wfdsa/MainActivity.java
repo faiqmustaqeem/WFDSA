@@ -31,10 +31,13 @@ import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
+import com.example.shariqkhan.wfdsa.Adapter.ResourcesRVadapter;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
+import com.example.shariqkhan.wfdsa.custom.ResourcesGroup;
+import com.example.shariqkhan.wfdsa.custom.ResourcesSubItems;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
@@ -79,6 +82,10 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.rvEvents)
     RecyclerView rvEvents;
 
+
+    String[] titlesArray;
+
+
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
 
@@ -107,8 +114,8 @@ public class MainActivity extends AppCompatActivity
     public ArrayList<EventsModel> arrayList = new ArrayList<>();
     public ArrayList<AnnouncementsModel> arrayList2 = new ArrayList<>();
 
-   public static String getFirstName;
-  public  static String getLastName;
+    public static String getFirstName;
+    public static String getLastName;
     static String password;
     static String getCountry;
     static String getEmail;
@@ -116,7 +123,11 @@ public class MainActivity extends AppCompatActivity
     static String phoneNo;
     public static final int INTENT_CONSTANT_GALLERY = 1;
     public static String DECIDER = "";
-   public static String stype;
+    public static String stype;
+    public static String imageUrl = "";
+
+
+    ProgressDialog PGdialog;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -143,9 +154,6 @@ public class MainActivity extends AppCompatActivity
         FacebookSdk.sdkInitialize(getApplicationContext());
 
 
-
-
-
         initUI();
 
 //
@@ -158,7 +166,9 @@ public class MainActivity extends AppCompatActivity
         getEmail = prefs.getString("email", "");
         DECIDER = prefs.getString("type", "");
         stype = prefs.getString("stype", "");
-        getId= prefs.getString("deciderId", "");
+        getId = prefs.getString("deciderId", "");
+
+        imageUrl = prefs.getString("image", "");
 
 
         Log.e("first_name", getFirstName);
@@ -167,7 +177,7 @@ public class MainActivity extends AppCompatActivity
         Log.e("contact_no", phoneNo);
         Log.e("password", password);
         Log.e("type", DECIDER);
-
+        Log.e("imageUrl", imageUrl);
 
 //        ivUserPic.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -191,6 +201,13 @@ public class MainActivity extends AppCompatActivity
         tvUserName = (TextView) layout.findViewById(R.id.tvUserName);
         textView1 = (TextView) layout.findViewById(R.id.textView1);
 
+        try {
+            Picasso.with(this).load(imageUrl).into(ivUserPic);
+        } catch (Exception e) {
+            ivUserPic.setImageResource(R.drawable.ic_user);
+            Log.e("PicsetMessage", e.getMessage());
+        }
+
 
         Task task = new Task();
         task.execute();
@@ -199,10 +216,10 @@ public class MainActivity extends AppCompatActivity
         task2.execute();
 
 
-        if (stype.equals("fb")){
+        if (stype.equals("fb")) {
             tvUserName.setText("Facebook user");
             textView1.setVisibility(View.GONE);
-        }else{
+        } else {
             tvUserName.setText(getFirstName + " " + getLastName);
             textView1.setText(getEmail);
 
@@ -258,13 +275,13 @@ public class MainActivity extends AppCompatActivity
                 if (MainActivity.DECIDER.equals("member")) {
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
+                    finish();
                 } else {
                     Toast.makeText(MainActivity.this, "Only members can edit profiles!", Toast.LENGTH_LONG).show();
                 }
 
             }
         });
-
 
 
         Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivWFDSALogo);
@@ -285,7 +302,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         }));
-
 
 
         rvEvents.addOnItemTouchListener(new RecyclerTouchListener(MainActivity.this, rvEvents, new RecyclerTouchListener.ClickListener() {
@@ -319,6 +335,8 @@ public class MainActivity extends AppCompatActivity
             }
         }));
 
+        Task5 task5 = new Task5();
+        task5.execute();
 
 
     }
@@ -557,7 +575,7 @@ public class MainActivity extends AppCompatActivity
 
                             model.setDay(filter);
 
-                            model.setMonth(job.getString("start_date").substring(5, 7));
+                            model.setMonth(job.getString("start_date").substring(5, 8));
                             model.setYear(job.getString("start_date").substring(0, 4));
                             model.setTime(job.getString("start_date").substring(11, 19));
                             //   model.setImageUrl(job.getString("upload_image"));
@@ -574,7 +592,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     } else {
-                       // Toast.makeText(MainActivity.this, "Error!!", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(MainActivity.this, "Error!!", Toast.LENGTH_LONG).show();
 
 
                         progressDialog.dismiss();
@@ -680,7 +698,7 @@ public class MainActivity extends AppCompatActivity
 
                     }
 
-                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this,arrayList2);
+                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, arrayList2);
                     RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
                     rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
                     rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
@@ -710,5 +728,81 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+    private class Task5 extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
+
+            Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+
+            String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+                    JSONArray resourcesData = resultObj.getJSONArray("data");
+
+                    //    resourcesGroupList = new ArrayList<>(resourcesData.length());
+
+
+                    //   roleArray = new String[rolesArray.length()];
+                    // String idArray[] = new String[rolesArray.length()];
+                    titlesArray = new String[resourcesData.length()];
+                    for (int i = 0; i < resourcesData.length(); i++) {
+                        JSONObject job = resourcesData.getJSONObject(i);
+
+
+                        titlesArray[i] = job.getString("title");
+
+                    }
+
+                }
+
+                tvAdvocacy.setText(titlesArray[0]);
+                tvAssociationService.setText(titlesArray[1]);
+                tvGlobalRegulatory.setText(titlesArray[2]);
+
+                PGdialog.dismiss();
+//                } else {
+//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+
+            }
+            PGdialog.dismiss();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            PGdialog = new ProgressDialog(MainActivity.this);
+            PGdialog.setTitle("Fetching Resources");
+            PGdialog.setCanceledOnTouchOutside(false);
+            PGdialog.show();
+
+        }
+    }
+
 
 }

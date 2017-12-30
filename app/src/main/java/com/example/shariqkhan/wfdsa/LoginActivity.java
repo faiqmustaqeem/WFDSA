@@ -246,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     JSONObject result = jsonobj.getJSONObject("result");
                     String checkResult = result.getString("status");
-
+                    String getId;
                     if (checkResult.equals("success")) {
 
                         Log.e("insidepost", checkResult);
@@ -254,13 +254,20 @@ public class LoginActivity extends AppCompatActivity {
 
                         JSONObject user_data = result.getJSONObject("user_data");
 
-                        String getId = user_data.getString("non_member_id");
+                        if (LoginActivity.decider.equals("2"))
+                        {
+                             getId = user_data.getString("non_member_id");
+                        }else{
+                            getId = user_data.getString("member_id");
+                        }
+
                         String email = user_data.getString("email");
                         String country = user_data.getString("country");
                         String first_name = user_data.getString("first_name");
                         String last_name = user_data.getString("last_name");
                         String password = user_data.getString("password");
-                        String phNo = user_data.getString("contact_no");
+                        String phNo = user_data.getString("cell");
+
                         Log.e("email", email);
                         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
@@ -295,6 +302,7 @@ public class LoginActivity extends AppCompatActivity {
                     etMemberEmail.getEditText().setText("");
                     etMemberPass.getEditText().setText("");
                     progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
                 }
 
 

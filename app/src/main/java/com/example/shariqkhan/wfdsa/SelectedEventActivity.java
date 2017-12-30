@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -27,18 +28,21 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
 import com.example.shariqkhan.wfdsa.Adapter.PaymentsRVAdapter;
 import com.example.shariqkhan.wfdsa.Dialog.EventAttendeesDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventDiscussionDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventGalleryDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventPollsDialog;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
+import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
 import com.example.shariqkhan.wfdsa.Model.PaymentModel;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -143,7 +147,25 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//    callBackManager.onActivityResult(requestCode, resultCode,data);
+        Log.e("InsideActivityResult", "Result");
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.getClipData() != null) {
+                    int count = data.getClipData().getItemCount();
+                    int currentItem = 0;
+                    while (currentItem < count) {
+                        Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
+                        Log.e("Uri", imageUri.toString());
+                        //do something with the image (save it to some directory or whatever you need to do with it here)
+                        currentItem = currentItem + 1;
+                    }
+                } else if (data.getData() != null) {
+                    String imagePath = data.getData().getPath();
+                    Log.e("Uri", imagePath);
+                    //do something with the image (save it to some directory or whatever you need to do with it here)
+                }
+            }
+        }
     }
 
     @Override
@@ -288,70 +310,81 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 Date date = new Date();
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-                Date d1= null;
+                Date d1 = null;
                 Date d2 = null;
                 long elapsedDays = 0;
                 long elapsedMinutes = 0;
                 long elapsedSeconds = 0;
                 long elapsedHours = 0;
-                long different=0;
+                long different = 0;
+
+                long timeInMiliStart = 0;
+                long timeInMiliEnd = 0;
+
                 long difference = 0;
 
                 try {
                     d1 = df3.parse(startEventTime);
                     d2 = df3.parse(endEventTime);
 
-                     different = d2.getTime() - d1.getTime();
-difference = different;
-                    Log.e("Difference", String.valueOf(different));
-
-                    long secondsInMilli = 1000;
-                    long minutesInMilli = secondsInMilli * 60;
-                    long hoursInMilli = minutesInMilli * 60;
-                    long daysInMilli = hoursInMilli * 24;
-
-                    Log.e("seconds", String.valueOf(secondsInMilli));
-                    Log.e("seconds", String.valueOf(minutesInMilli));
-                    Log.e("seconds", String.valueOf(hoursInMilli));
-                    Log.e("seconds", String.valueOf(daysInMilli));
-
-
-                    elapsedDays = different / daysInMilli;
-                    different = different % daysInMilli;
-
-                    elapsedHours = different / hoursInMilli;
-                    different = different % hoursInMilli;
-
-                    elapsedMinutes = different / minutesInMilli;
-                    different = different % minutesInMilli;
-
-                    elapsedSeconds = different / secondsInMilli;
-
-
-                    Log.e("elDay", String.valueOf(elapsedDays));
-                    Log.e("elHours", String.valueOf(elapsedHours));
-                    Log.e("elMinutes", String.valueOf(elapsedMinutes));
-                    Log.e("elSeconds", String.valueOf(elapsedSeconds));
+                    timeInMiliStart = d1.getTime();
+                    timeInMiliEnd = d2.getTime();
+//
+//                    Log.e("timeStartMili", String.valueOf(timeInMiliStart));
+//                    Log.e("timeEndMili", String.valueOf(timeInMiliEnd));
+//
+//
+//                    different = d2.getTime() - d1.getTime();
+//                    difference = different;
+//                    Log.e("Difference", String.valueOf(different));
+//
+//                    long secondsInMilli = 1000;
+//                    long minutesInMilli = secondsInMilli * 60;
+//                    long hoursInMilli = minutesInMilli * 60;
+//                    long daysInMilli = hoursInMilli * 24;
+//
+//                    Log.e("seconds", String.valueOf(secondsInMilli));
+//                    Log.e("seconds", String.valueOf(minutesInMilli));
+//                    Log.e("seconds", String.valueOf(hoursInMilli));
+//                    Log.e("seconds", String.valueOf(daysInMilli));
+//
+//
+//                    elapsedDays = different / daysInMilli;
+//                    different = different % daysInMilli;
+//
+//                    elapsedHours = different / hoursInMilli;
+//                    different = different % hoursInMilli;
+//
+//                    elapsedMinutes = different / minutesInMilli;
+//                    different = different % minutesInMilli;
+//
+//                    elapsedSeconds = different / secondsInMilli;
+//
+//
+//                    Log.e("elDay", String.valueOf(elapsedDays));
+//                    Log.e("elHours", String.valueOf(elapsedHours));
+//                    Log.e("elMinutes", String.valueOf(elapsedMinutes));
+//                    Log.e("elSeconds", String.valueOf(elapsedSeconds));
 
                 } catch (ParseException e) {
                     Log.e("ParseException", e.getMessage());
                 }
 
 
+//
+//                Log.e("startTime", startEventTime);
+//                Log.e("endTime", endEventTime);
+//                Log.e("calendarGetTimeInstance", String.valueOf(cal.getTimeInMillis()));
                 Calendar cal = Calendar.getInstance();
-
-                Log.e("startTime", startEventTime);
-                Log.e("endTime", endEventTime);
-                Log.e("calendarGetTimeInstance", String.valueOf(cal.getTimeInMillis()));
-
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
-                intent.putExtra("beginTime", d1);
+                intent.putExtra("beginTime", timeInMiliStart);
                 intent.putExtra("allDay", false);
                 intent.putExtra("rrule", "FREQ=YEARLY");
-                intent.putExtra("endTime", cal.getTimeInMillis()+difference);
+                intent.putExtra("endTime", timeInMiliEnd);
                 intent.putExtra("title", "A Test Event 2 from android app");
                 startActivity(intent);
+
                 //     Toast.makeText(SelectedEventActivity.this, "Event Added Seccuessfully!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -446,8 +479,62 @@ difference = different;
         ivgallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this, id);
-                eventGalleryDialog.show();
+//                GridView gridView;
+//                EventGalleryGVadapter gridAdapter;
+//                ArrayList<EventGalleryModel> imagesList = new ArrayList<EventGalleryModel>();
+//                ImageView imageView;
+//                FloatingActionButton floatingActionButton;
+//                Dialog dialog = new Dialog(SelectedEventActivity.this);
+//                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//
+//                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//                dialog.setContentView(R.layout.event_gallery_dialog);
+//
+//                gridView = (GridView) dialog.findViewById(R.id.gridView);
+//                imageView = (ImageView) dialog.findViewById(R.id.close);
+//
+//                imagesList.add(new EventGalleryModel("1", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
+//                imagesList.add(new EventGalleryModel("2", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
+//                imagesList.add(new EventGalleryModel("3", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
+//                imagesList.add(new EventGalleryModel("4", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
+//                imagesList.add(new EventGalleryModel("5", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
+//                imagesList.add(new EventGalleryModel("6", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
+//                imagesList.add(new EventGalleryModel("7", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
+//                imagesList.add(new EventGalleryModel("8", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
+//                imagesList.add(new EventGalleryModel("9", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
+//
+//                gridAdapter = new EventGalleryGVadapter(SelectedEventActivity.this, R.layout.event_gallery_item, imagesList);
+//                gridView.setAdapter(gridAdapter);
+//
+//                floatingActionButton = (FloatingActionButton)dialog.findViewById(R.id.fabAddImage);
+//
+//                floatingActionButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                        intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
+////**These following line is the important one!
+//                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), 1);
+//                    }
+//                });
+//
+//
+//                dialog.show();
+
+//                EventGalleryDialog dialog = new EventGalleryDialog(SelectedEventActivity.this, id);
+//                dialog.show();
+
+                Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
+                overridePendingTransition(0,0);
+                intent.putExtra("Event_id", id);
+                startActivity(intent);
+
+
             }
         });
         ivdiscussion.setOnClickListener(new View.OnClickListener() {
@@ -875,6 +962,8 @@ difference = different;
                     if (tvCityCountry.getText().toString().equals("")) {
                         tvCityCountry.setText("Washington,America");
                     }
+
+
                 }
                 progressDialog.dismiss();
 
@@ -1097,4 +1186,5 @@ difference = different;
             progressDialog.show();
         }
     }
+
 }
