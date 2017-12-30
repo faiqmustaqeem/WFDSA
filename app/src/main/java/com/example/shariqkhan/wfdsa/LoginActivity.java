@@ -254,10 +254,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         JSONObject user_data = result.getJSONObject("user_data");
 
-                        if (LoginActivity.decider.equals("2"))
-                        {
-                             getId = user_data.getString("non_member_id");
-                        }else{
+                        if (LoginActivity.decider.equals("2")) {
+                            getId = user_data.getString("non_member_id");
+                        } else {
                             getId = user_data.getString("member_id");
                         }
 
@@ -267,6 +266,8 @@ public class LoginActivity extends AppCompatActivity {
                         String last_name = user_data.getString("last_name");
                         String password = user_data.getString("password");
                         String phNo = user_data.getString("cell");
+                        String up_image = user_data.getString("upload_image");
+
 
                         Log.e("email", email);
                         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
@@ -279,9 +280,10 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("last_name", last_name);
                         editor.putString("password", password);
                         editor.putString("contact_no", phNo);
-                        editor.putString("type","member");
+                        editor.putString("type", "member");
                         editor.putString("stype", "member");
 
+                        editor.putString("image", up_image);
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

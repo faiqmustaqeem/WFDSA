@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity
     public static String stype;
     public static String imageUrl = "";
 
+    Button b1;
 
     ProgressDialog PGdialog;
 

@@ -225,23 +225,23 @@ public class GalleryActivityMine extends AppCompatActivity {
                     }
 
 
-                    SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, "",
+                    SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, "http://codiansoft.com/wfdsa/apis/Event/Upload_Gallery",
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
                                     Log.d("Response", response);
-                                    try {
-                                        JSONObject jObj = new JSONObject(response);
-
-                                        String message = jObj.getString("message");
-
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-                                    } catch (JSONException e) {
-                                        // JSON error
-                                        e.printStackTrace();
-                                        Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                    }
+//                                    try {
+//                                        JSONObject jObj = new JSONObject(response);
+//
+//                                        String message = jObj.getString("message");
+//
+//                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+//
+//                                    } catch (JSONException e) {
+//                                        // JSON error
+//                                        e.printStackTrace();
+//                                        Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                                    }
                                 }
                             }, new Response.ErrorListener() {
                         @Override
@@ -250,9 +250,9 @@ public class GalleryActivityMine extends AppCompatActivity {
                         }
                     });
                     for (int i = 0; i <imagesPath.length ; i++) {
-                        smr.addFile("image"+String.valueOf(i), imagesPath[i]);
+                        smr.addFile("image_"+String.valueOf(i), imagesPath[i]);
                     }
-                    smr.addStringParam("event_id", id);
+                   // smr.addStringParam("event_id", id);
 
                     MySingleton.getInstance().addToRequestQueue(smr);
 
