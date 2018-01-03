@@ -257,13 +257,14 @@ public class AllEventsActivity extends AppCompatActivity {
                             model.setVenueCity(job.getString("place"));
                             String sub = job.getString("start_date");
 
+
                             String filter = sub.substring(8, 10);
 
                             model.setDay(filter);
 
                             model.setMonth(job.getString("start_date").substring(5, 8));
                             model.setYear(job.getString("start_date").substring(0, 4));
-                            model.setTime(job.getString("start_date").substring(11, 19));
+                            model.setTime(job.getString("start_date"));
                             //   model.setImageUrl(job.getString("upload_image"));
                             model.setPersonal(job.getString("permission"));
 

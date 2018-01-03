@@ -21,11 +21,17 @@ import android.widget.Toast;
 
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.stripe.android.Stripe;
+import com.stripe.android.TokenCallback;
+import com.stripe.android.model.Card;
+import com.stripe.android.model.Token;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by Codiansoft on 12/11/2017.
@@ -54,7 +60,9 @@ public class RegisterEvent extends AppCompatActivity {
     EditText tilContactEdit;
     EditText tilEmailEditedt;
     EditText tilCardNumberEdit;
+    int monthToVerify;
 
+    int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
     String addr, fname, contact, email, cardno, cvcno;
 
@@ -168,7 +176,7 @@ public class RegisterEvent extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 month = parent.getItemAtPosition(position).toString();
-
+                monthToVerify = array[position];
             }
 
             @Override
@@ -201,6 +209,37 @@ public class RegisterEvent extends AppCompatActivity {
                 contact = tilContact.getEditText().getText().toString();
                 email = tilEmailEdit.getEditText().getText().toString();
                 cardno = tilCardNumber.getEditText().getText().toString();
+
+
+                Card card = new Card(
+                        cardno,
+                        monthToVerify,
+                        Integer.valueOf(year),
+                        cvcno
+                );
+
+                card.setName(MainActivity.getFirstName+" "+MainActivity.getLastName);
+                card.setCurrency("usd");
+
+                if (card.validateCard() && card.validateCVC())
+                {
+                    //begin transaction
+                    Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_6pRNASCoBOKtIshFeQd4XMUh");
+                    stripe.createToken(
+                            card,
+                            new TokenCallback() {
+                                public void onSuccess(Token token) {
+                                    // Send token to your server
+                                }
+                                public void onError(Exception error) {
+                                    // Show localized error message
+                                    Toast.makeText(RegisterEvent.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                    );
+
+                }
+
 
 //                tilAddress.getEditText().setText("");
 //                tilFirstName.getEditText().setText("");

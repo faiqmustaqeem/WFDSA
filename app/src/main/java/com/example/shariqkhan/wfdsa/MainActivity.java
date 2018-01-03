@@ -426,7 +426,7 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.startActivity(eventsIntent);
 
         } else if (id == R.id.nav_resources) {
-            Intent resourcesIntent = new Intent(MainActivity.this, MyResourcesActivity.class);
+            Intent resourcesIntent = new Intent(MainActivity.this, MainResources.class);
             MainActivity.this.startActivity(resourcesIntent);
         } else if (id == R.id.nav_my_payment) {
             Intent paymentIntent = new Intent(MainActivity.this, MyPaymentActivity.class);
@@ -500,6 +500,7 @@ public class MainActivity extends AppCompatActivity
 
             HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Events");
             Log.e("Must", "Must");
+
 //
 //
 //            List<NameValuePair> parameters = new ArrayList<>();
@@ -518,6 +519,7 @@ public class MainActivity extends AppCompatActivity
 //            Log.e("c", contactNum);
 //            Log.e("p", password);
 //            Log.e("c", confirmPassword);
+
 
             StringBuilder buffer = new StringBuilder();
 
@@ -570,6 +572,7 @@ public class MainActivity extends AppCompatActivity
                             model.setId(job.getString("event_id"));
                             model.setEventTitle(job.getString("title"));
                             model.setVenueCity(job.getString("place"));
+
                             String sub = job.getString("start_date");
 
 
@@ -579,7 +582,7 @@ public class MainActivity extends AppCompatActivity
 
                             model.setMonth(job.getString("start_date").substring(5, 8));
                             model.setYear(job.getString("start_date").substring(0, 4));
-                            model.setTime(job.getString("start_date").substring(11, 19));
+                            model.setTime(job.getString("start_date"));
                             //   model.setImageUrl(job.getString("upload_image"));
                             model.setPersonal(job.getString("permission"));
 
@@ -738,7 +741,7 @@ public class MainActivity extends AppCompatActivity
 
             //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-            Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+          //  Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
             String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
@@ -770,7 +773,7 @@ public class MainActivity extends AppCompatActivity
                         JSONObject job = resourcesData.getJSONObject(i);
 
 
-                        titlesArray[i] = job.getString("title");
+                        titlesArray[i] = job.getString("title_2");
 
                     }
 
@@ -801,7 +804,7 @@ public class MainActivity extends AppCompatActivity
             PGdialog = new ProgressDialog(MainActivity.this);
             PGdialog.setTitle("Fetching Resources");
             PGdialog.setCanceledOnTouchOutside(false);
-            PGdialog.show();
+           // PGdialog.show();
 
         }
     }

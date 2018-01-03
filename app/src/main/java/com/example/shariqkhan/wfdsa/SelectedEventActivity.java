@@ -119,6 +119,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     URL url;
     String pollResponse;
 
+    String textToPost;
     String startEventTime;
     String endEventTime;
 
@@ -132,6 +133,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String idKeepTrack[];
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
+   public String Eventname;
+   public String loc ;
+
     Animation shareSlideUp, shareSlideDown;
     private BottomNavigationViewEx bottomNavigationViewEx;
     ImageView ivTwitter, ivLinkedIn, ivFacebook;
@@ -142,6 +146,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
     public static String pollResponseUrl = " http://codiansoft.com/wfdsa/apis/Event/Get_Poll?";
     CallbackManager callBackManager;
+    private String textonFb;
 
 
     @Override
@@ -214,7 +219,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
 
                 TweetComposer.Builder build = new TweetComposer.Builder(SelectedEventActivity.this);
-                build.text("Simple first explicit tweet!").
+                build.text(textToPost).
                         url(url);
                 build.show();
 
@@ -228,7 +233,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 CallbackManager.Factory.create();
                 Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
                 linkedinIntent.setType("text/plain");
-                linkedinIntent.putExtra(Intent.EXTRA_TEXT, "Hello this is plain text!" + "http");
+                linkedinIntent.putExtra(Intent.EXTRA_TEXT, textToPost);
+                linkedinIntent.putExtra(Intent.EXTRA_SUBJECT, textonFb);
 
                 boolean linkedinAppFound = false;
                 List<ResolveInfo> matches2 = getPackageManager()
@@ -268,7 +274,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             public void onClick(View view) {
                 Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
                 linkedinIntent.setType("text/plain");
-                linkedinIntent.putExtra(Intent.EXTRA_TEXT, "Hello this is plain text!");
+                linkedinIntent.putExtra(Intent.EXTRA_TEXT, textToPost);
 
                 boolean linkedinAppFound = false;
                 List<ResolveInfo> matches2 = getPackageManager()
@@ -530,7 +536,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                dialog.show();
 
                 Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
                 intent.putExtra("Event_id", id);
                 startActivity(intent);
 
@@ -955,15 +961,22 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     Log.e("start", startEventTime);
                     Log.e("end", endEventTime);
-                    tvDayTime.setText(obj.getString("start_time") + "---" + obj.getString("end_time"));
-                    heelo.setText((obj.getString("start_date").substring(0, 10)) + "---" + obj.getString("end_date").substring(0, 10));
+                    tvDayTime.setText(obj.getString("start_time"));
+                    heelo.setText((obj.getString("start_date").substring(0, 10)));
                     address.setText(obj.getString("place"));
+                    loc = obj.getString("place");
+                    Eventname = obj.getString("title");
                     tvCityCountry.setText(obj.getString("venue"));
                     if (tvCityCountry.getText().toString().equals("")) {
                         tvCityCountry.setText("Washington,America");
                     }
+                    textToPost = tvAgenda.getText().toString()
+                            + " event will be held on \n" + startEventTime + "around " + obj.getString("start_time") + "\n" + obj.getString("speaker")
+                            + "will be speaker."+"\n for more details visit our website https://wfdsa.org";
 
-
+                    textonFb =   textToPost = tvAgenda.getText().toString()
+                            + " event will be held on \n" + startEventTime + "around " + obj.getString("start_time") + "\n" + obj.getString("speaker")
+                            + " will be speaker."+" \n";
                 }
                 progressDialog.dismiss();
 

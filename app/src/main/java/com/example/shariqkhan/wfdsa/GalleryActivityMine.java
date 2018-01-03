@@ -2,10 +2,12 @@ package com.example.shariqkhan.wfdsa;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.content.CursorLoader;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,10 +22,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.error.VolleyError;
-import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.VolleyError;
+
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
@@ -42,7 +47,7 @@ import java.util.ArrayList;
  */
 
 public class GalleryActivityMine extends AppCompatActivity {
-
+    Uri.Builder builder;
     ArrayList<EventGalleryModel> imagesList = new ArrayList<EventGalleryModel>();
     GridView gridView;
     FloatingActionButton floatingActionButton;
@@ -50,20 +55,33 @@ public class GalleryActivityMine extends AppCompatActivity {
     ImageView imageView;
     ProgressDialog progressDialog;
     public static int MULTI_SELECT = 1;
-    String []imagesPath;
+    String[] imagesPath;
+    ArrayList<Uri> imagesUriList;
+    ArrayList<String> encodedImageList;
+    JSONObject jsonObject;
+    ProgressDialog dialog;
 
-
-    String URL = "http://codiansoft.com/wfdsa/apis/Event/Gallery?";
+    String URL = "http://codiansoft.com/wfdsa/apis/Event/Upload_Gallery";
     String id;
+    private String imageURI;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_gallery_dialog);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
         id = getIntent().getStringExtra("Event_id");
 
+
         initUI();
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Uploading Image...");
+        dialog.setCancelable(false);
+
+        jsonObject = new JSONObject();
+        encodedImageList = new ArrayList<>();
+
         Task task = new Task();
         task.execute();
         //fetchEventImages();
@@ -75,7 +93,7 @@ public class GalleryActivityMine extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = URL + "event_id=" + id;
+            String url = "http://codiansoft.com/wfdsa/apis/Event/Gallery" + "event_id=" + id;
 
             Log.e("url", url);
 
@@ -104,7 +122,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
+                        EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("upload_image"));
                         imagesList.add(model);
 
                     }
@@ -170,22 +188,13 @@ public class GalleryActivityMine extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
-//**These following line is the important one!
+                Intent intent = new Intent();
+                intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(Intent.createChooser(intent, "Select Pictures"), MULTI_SELECT);
-
-
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Choose application"), 100);
             }
         });
-
-
-//        if (MainActivity.DECIDER.equals("member")) {
-//            floatingActionButton.setVisibility(View.VISIBLE);
-//        } else {
-//            floatingActionButton.setVisibility(View.INVISIBLE);
-//        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,91 +204,119 @@ public class GalleryActivityMine extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("InsideActivityResult", "Result");
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
+        dialog.show();
+
+        try {
+            // When an Image is picked
+            if (requestCode == 100 && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                imagesUriList = new ArrayList<Uri>();
+                encodedImageList.clear();
+//                if(data.getData()!=null){
+//
+//                    Uri mImageUri=data.getData();
+//
+//                    // Get the cursor
+//                    Cursor cursor = getContentResolver().query(mImageUri,
+//                            filePathColumn, null, null, null);
+//                    // Move to first row
+//                    cursor.moveToFirst();
+//
+//                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                    imageURI  = cursor.getString(columnIndex);
+//                    cursor.close();
+//
+//                }else {
                 if (data.getClipData() != null) {
-                    int count = data.getClipData().getItemCount();
-                    int currentItem = 0;
-                    imagesPath = new String[count];
-                    while (currentItem < count) {
-                        Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
-                        try {
-                            //Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                            imagesPath[currentItem] = getPath(imageUri);
-                            Log.e("Path", imagesPath[currentItem]);
+                    ClipData mClipData = data.getClipData();
+                    ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
+                    for (int i = 0; i < mClipData.getItemCount(); i++) {
 
+                        ClipData.Item item = mClipData.getItemAt(i);
+                        Uri uri = item.getUri();
+                        mArrayUri.add(uri);
+                        // Get the cursor
+                        Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
+                        // Move to first row
+                        cursor.moveToFirst();
 
-                        } catch (Exception e) {
-                            Log.e("ExceptionFoundOfImage", e.getMessage());
-                            e.printStackTrace();
-                        }
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        imageURI = cursor.getString(columnIndex);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                        encodedImageList.add(encodedImage);
+                        cursor.close();
 
-
-                        Log.e("Uri", imageUri.toString());
-                        //do something with the image (save it to some directory or whatever you need to do with it here)
-                        currentItem = currentItem + 1;
                     }
-
-
-                    SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, "http://codiansoft.com/wfdsa/apis/Event/Upload_Gallery",
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    Log.d("Response", response);
-//                                    try {
-//                                        JSONObject jObj = new JSONObject(response);
-//
-//                                        String message = jObj.getString("message");
-//
-//                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//
-//                                    } catch (JSONException e) {
-//                                        // JSON error
-//                                        e.printStackTrace();
-//                                        Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-//                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    for (int i = 0; i <imagesPath.length ; i++) {
-                        smr.addFile("image_"+String.valueOf(i), imagesPath[i]);
-                    }
-                   // smr.addStringParam("event_id", id);
-
-                    MySingleton.getInstance().addToRequestQueue(smr);
-
-
-
-
-
-
-
-
-
-                } else if (data.getData() != null) {
-                    imagesPath = new String[1];
-                    Bitmap bmp;
-                    Uri uri = data.getData();
-                    try {
-                        bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        imagesPath[0]= convertTOString(bmp);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Log.e("Uri",imagesPath[0]);
-                    //do something with the image (save it to some directory or whatever you need to do with it here)
+                    //  noImage.setText("Selected Images: " + mArrayUri.size());
+                    Log.e("Size", String.valueOf(encodedImageList.size()));
                 }
+            } else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
             }
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage());
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
+
+
+        JSONArray jsonArray = new JSONArray();
+
+        if (encodedImageList.isEmpty()) {
+            Toast.makeText(this, "Please select some images first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for (String encoded : encodedImageList) {
+            jsonArray.put(encoded);
+            Log.e("forLoop", "o");
+        }
+        //  Toast.makeText(this, String.valueOf(encodedImageList.size()), Toast.LENGTH_SHORT).show();
+        try {
+            builder = Uri.parse(URL).buildUpon();
+            jsonObject.put("event_id", SelectedEventActivity.id);
+            Log.e("event_id", SelectedEventActivity.id);
+            jsonObject.put("imageList", jsonArray);
+        } catch (JSONException e) {
+            Log.e("JSONObject Here", e.toString());
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, builder.toString(), jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Log.e("Ok", jsonObject.toString());
+                        dialog.dismiss();
+
+                        Toast.makeText(getApplication(), "Images Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e("Error", volleyError.toString());
+                Toast.makeText(getApplication(), volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                finish();
+            }
+        });
+//        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(200 * 30000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+
     }
+
 
     private String convertTOString(Bitmap bmp) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -290,8 +327,8 @@ public class GalleryActivityMine extends AppCompatActivity {
 
 
     private String getPath(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        CursorLoader loader = new CursorLoader(getApplicationContext(),    contentUri, proj, null, null, null);
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
         Cursor cursor = loader.loadInBackground();
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();

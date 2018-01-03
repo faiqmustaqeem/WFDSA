@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,67 +13,42 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
-import com.example.shariqkhan.wfdsa.Model.LeaderShipModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 /**
- * Created by Codiansoft on 12/7/2017.
+ * Created by Codiansoft on 1/2/2018.
  */
 
-public class LeaderShipActivity extends AppCompatActivity {
-    public ListView listOfMembers;
+public class MainResources extends AppCompatActivity {
 
-    Toolbar toolbar;
-    ProgressDialog progressDialog;
-
-    public static String URL = "http://codiansoft.com/wfdsa/Api/roles";
-    String roleArray[];
-    String Array[] = {"Ceo Council", "Operational Group", "Board of Delegates", "Association Advisory Council"};
+    ListView list;
+    ProgressDialog dialog;
+    String[] filesArray;
     String idArray[];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leadership);
+        setContentView(R.layout.activity_main_resources);
+        list = (ListView) findViewById(R.id.recView);
 
-        listOfMembers = (ListView) findViewById(R.id.memberList);
-
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Task task = new Task();
+        Task5 task = new Task5();
         task.execute();
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
-
     }
 
-    private class Task extends AsyncTask<Object, Object, String> {
+    private class Task5 extends AsyncTask<Object, Object, String> {
 
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = URL;
+            //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-            Log.e("url", url);
+            Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
-            String response = getHttpData.getData(url);
+            String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
             return response;
         }
@@ -92,28 +66,34 @@ public class LeaderShipActivity extends AppCompatActivity {
                 String getstatus = resultObj.getString("status");
 
                 if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("roles");
-                    roleArray = new String[rolesArray.length()];
-                    idArray = new String[rolesArray.length()];
+                    JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        LeaderShipModel model = new LeaderShipModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                    //    resourcesGroupList = new ArrayList<>(resourcesData.length());
 
-                        model.setGetRoleid(obj.getString("member_role_id"));
-                        model.setGetRoleName(obj.getString("name"));
-                        roleArray[i] = model.getGetRoleName();
-                        idArray[i] = model.getGetRoleid();
+
+                    filesArray = new String[resourcesData.length()];
+                    idArray = new String[resourcesData.length()];
+
+                    //   titlesArray = new String[resourcesData.length()];
+                    for (int i = 0; i < resourcesData.length(); i++) {
+                        JSONObject job = resourcesData.getJSONObject(i);
+
+                        filesArray[i] = job.getString("title_2");
+                        idArray[i] = job.getString("resources_id");
+                        //         titlesArray[i] = job.getString("title");
 
                     }
+
                 }
-                listOfMembers.setAdapter(new ArrayAdapter<String>(LeaderShipActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, roleArray));
-                listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+                list.setAdapter(new ArrayAdapter<String>(MainResources.this, android.R.layout.simple_list_item_1, android.R.id.text1, filesArray));
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String get = parent.getItemAtPosition(position).toString();
                         String roleId = idArray[position];
-                        String roleName = roleArray[position];
+                        String roleName = filesArray[position];
                         Log.e("role", get);
                         Log.e("id", roleId);
 //                if (get.equals(Array[0])) {
@@ -127,7 +107,7 @@ public class LeaderShipActivity extends AppCompatActivity {
 //
 //                }
 
-                        Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
+                        Intent intent = new Intent(MainResources.this, MyResourcesActivity.class);
                         intent.putExtra("RoleName", roleId);
                         intent.putExtra("Name", roleName);
 
@@ -136,8 +116,7 @@ public class LeaderShipActivity extends AppCompatActivity {
                     }
                 });
 
-                progressDialog.dismiss();
-
+                dialog.dismiss();
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
@@ -146,20 +125,21 @@ public class LeaderShipActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
-                progressDialog.dismiss();
-            }
 
+            }
+            dialog.dismiss();
 
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(LeaderShipActivity.this);
-            progressDialog.setTitle("Loading ");
-            progressDialog.setMessage("Please Wait");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
+            dialog = new ProgressDialog(MainResources.this);
+            dialog.setTitle("Fetching Resources");
+            dialog.setCanceledOnTouchOutside(false);
+            // PGdialog.show();
+
         }
     }
+
 }

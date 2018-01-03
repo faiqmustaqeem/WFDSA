@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:background="@null"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    >
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -52,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="They vastly improved their overall performance over the last year due to our positive feedback. "
-                    android:textAllCaps="true"
+                    android:textAllCaps="false"
                     android:textSize="10sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="4dp"/>

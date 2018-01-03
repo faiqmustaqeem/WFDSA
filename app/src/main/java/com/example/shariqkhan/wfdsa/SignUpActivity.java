@@ -57,6 +57,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -234,8 +236,17 @@ public class SignUpActivity extends AppCompatActivity {
 
                     if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))
                             && cbAcceptTerms.isSelected()) {
-                        Task task = new Task();
-                        task.execute();
+
+
+                       if (isValidEmail(email))
+                       {
+                           Task task = new Task();
+                           task.execute();
+
+                       }else{
+                           Toast.makeText(SignUpActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                           tilEmail.getEditText().setText("");
+                       }
 
                     }
                 }
@@ -482,5 +493,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
-
+    public  boolean isValidEmail(String emailStr) {
+        final Pattern VALID_EMAIL_ADDRESS_REGEX =
+                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
+    }
 }

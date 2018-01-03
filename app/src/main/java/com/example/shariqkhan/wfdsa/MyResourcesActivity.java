@@ -41,8 +41,9 @@ public class MyResourcesActivity extends AppCompatActivity {
     ProgressDialog dialog;
     List<ResourcesGroup> resourcesGroupList;
 
-    String BASE_URL = "http://codiansoft.com/wfdsa/apis/Resources/Get_resource";
+    String BASE_URL = "http://codiansoft.com/wfdsa/apis/Resources/Get_resource?";
 
+    String resourceId;
 
     public ResourcesRVadapter adapter;
     List<ResourcesSubItems> resourcesSubItemsList;
@@ -53,11 +54,16 @@ public class MyResourcesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_resources);
         ButterKnife.bind(this);
 
+        resourceId = getIntent().getStringExtra("id");
+
+        BASE_URL = BASE_URL + "resource_id=" + resourceId;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("MY RESOURCES");
+        mTitle.setText("Sub Resources");
+
 
         Task task = new Task();
         task.execute();
@@ -112,7 +118,7 @@ public class MyResourcesActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-          //  String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
+            //  String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
             Log.e("url", BASE_URL);
 

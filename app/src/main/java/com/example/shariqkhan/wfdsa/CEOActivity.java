@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.CEOAdapter;
@@ -38,6 +39,9 @@ public class CEOActivity extends AppCompatActivity {
     ArrayList<ModelMember> arrayList = new ArrayList<>();
     String sendRole;
     ProgressDialog dialog;
+    String roleName;
+
+    TextView txt;
 
     String URL = "http://codiansoft.com/wfdsa/apis/member/member_frmRoles?";
 
@@ -49,6 +53,8 @@ public class CEOActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ceo_activity);
         sendRole = getIntent().getStringExtra("RoleName");
+        roleName = getIntent().getStringExtra("Name");
+
         URL = URL + "role_id=" + sendRole;
 
         listOfMembers = (RecyclerView) findViewById(R.id.memberList);
@@ -59,6 +65,8 @@ public class CEOActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        txt = (TextView) toolbar.findViewById(R.id.tollbarText);
+        txt.setText(roleName+" Members");
 
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
