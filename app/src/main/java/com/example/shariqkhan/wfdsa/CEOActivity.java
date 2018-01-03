@@ -41,6 +41,7 @@ public class CEOActivity extends AppCompatActivity {
     ProgressDialog dialog;
     String roleName;
 
+
     TextView txt;
 
     String URL = "http://codiansoft.com/wfdsa/apis/member/member_frmRoles?";

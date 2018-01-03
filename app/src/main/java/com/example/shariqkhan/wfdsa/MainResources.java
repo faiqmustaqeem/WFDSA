@@ -6,11 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 
@@ -28,13 +30,26 @@ public class MainResources extends AppCompatActivity {
     ProgressDialog dialog;
     String[] filesArray;
     String idArray[];
-
+Toolbar toolbar;
+    TextView txt;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_resources);
         list = (ListView) findViewById(R.id.recView);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        txt = (TextView) toolbar.findViewById(R.id.tollbarText);
+
+        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         Task5 task = new Task5();
         task.execute();
     }
@@ -109,7 +124,7 @@ public class MainResources extends AppCompatActivity {
 
                         Intent intent = new Intent(MainResources.this, MyResourcesActivity.class);
                         intent.putExtra("RoleName", roleId);
-                        intent.putExtra("Name", roleName);
+                      //  intent.putExtra("Name", roleName);
 
                         startActivity(intent);
 

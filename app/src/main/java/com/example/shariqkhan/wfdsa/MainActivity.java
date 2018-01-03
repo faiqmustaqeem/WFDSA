@@ -41,6 +41,7 @@ import com.example.shariqkhan.wfdsa.custom.ResourcesGroup;
 import com.example.shariqkhan.wfdsa.custom.ResourcesSubItems;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Twitter;
 
@@ -155,6 +156,11 @@ public class MainActivity extends AppCompatActivity
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.e("Tooken", refreshedToken);
+        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+        editor.putString("myToken", refreshedToken);
+        editor.apply();
 
         initUI();
 
@@ -377,7 +383,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.tvAdvocacy:
             case R.id.tvAssociationService:
             case R.id.tvGlobalRegulatory:
-                Intent i3 = new Intent(this, MyResourcesActivity.class);
+                Intent i3 = new Intent(this, MainResources.class);
                 startActivity(i3);
                 break;
         }

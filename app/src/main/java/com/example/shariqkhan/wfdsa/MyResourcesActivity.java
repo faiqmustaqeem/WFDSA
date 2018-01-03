@@ -41,7 +41,7 @@ public class MyResourcesActivity extends AppCompatActivity {
     ProgressDialog dialog;
     List<ResourcesGroup> resourcesGroupList;
 
-    String BASE_URL = "http://codiansoft.com/wfdsa/apis/Resources/Get_resource?";
+    String BASE_URL = "http://codiansoft.com/wfdsa/apis/Resources/Get_resource_file?";
 
     String resourceId;
 
@@ -54,9 +54,9 @@ public class MyResourcesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_resources);
         ButterKnife.bind(this);
 
-        resourceId = getIntent().getStringExtra("id");
+        resourceId = getIntent().getStringExtra("RoleName");
 
-        BASE_URL = BASE_URL + "resource_id=" + resourceId;
+        BASE_URL = BASE_URL + "resources_id=" + resourceId;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -151,18 +151,18 @@ public class MyResourcesActivity extends AppCompatActivity {
                     for (int i = 0; i < resourcesData.length(); i++) {
                         JSONObject job = resourcesData.getJSONObject(i);
 
-                        String id = job.getString("id");
-                        String title = job.getString("title");
-                        JSONArray FilesArray = job.getJSONArray("sub_scheme");
+                       // String id = job.getString("id");
+                        String title = job.getString("Schemes");
+                        JSONArray FilesArray = job.getJSONArray("subscheme");
                         resourcesSubItemsList = new ArrayList<>(FilesArray.length());
                         for (int j = 0; j < FilesArray.length(); j++) {
                             JSONObject fileObj = FilesArray.getJSONObject(j);
-                            String file_id = fileObj.getString("resources_file_id");
-                            String path = fileObj.getString("file_path");
+                            String file_id = fileObj.getString("file_name");
+                            String path = fileObj.getString("file");
 
                             resourcesSubItemsList.add(new ResourcesSubItems(file_id, path));
                         }
-                        resourcesGroupList.add(new ResourcesGroup(id, title, resourcesSubItemsList));
+                        resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), title, resourcesSubItemsList));
 
                     }
 

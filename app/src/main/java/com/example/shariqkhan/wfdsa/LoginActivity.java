@@ -103,6 +103,11 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("Email", getEmail);
                 Log.e("Password", getPassword);
 
+                SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
+                edit.putString("type", "member");
+                edit.apply();
+
                 fetchEvents();
                 fetchAnnouncements();
                 Task task = new Task();
@@ -135,6 +140,12 @@ public class LoginActivity extends AppCompatActivity {
                 llNonMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 clMember.setVisibility(View.VISIBLE);
                 clNonMember.setVisibility(View.GONE);
+
+                SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
+                editor.putString("type", "member");
+                editor.apply();
+
                 break;
             case R.id.tvNonMember:
                 decider = "2";
@@ -142,6 +153,12 @@ public class LoginActivity extends AppCompatActivity {
                 llNonMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
                 clNonMember.setVisibility(View.VISIBLE);
                 clMember.setVisibility(View.GONE);
+
+                SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
+                edit.putString("type", "non_member");
+                edit.apply();
+
                 break;
             case R.id.tvNonMemberSignUp:
                 Intent signUpIntent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -280,7 +297,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("last_name", last_name);
                         editor.putString("password", password);
                         editor.putString("contact_no", phNo);
-                        editor.putString("type", "member");
+                      //  editor.putString("type", "member");
                         editor.putString("stype", "member");
 
                         editor.putString("image", up_image);

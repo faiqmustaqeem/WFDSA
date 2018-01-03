@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
@@ -57,7 +58,14 @@ Context context;
         } else {
             holder.relative.setVisibility(View.GONE);
         }
-        Picasso.with(context).load(member.getUpload_image()).into(holder.logoFront);
+        try{
+            Picasso.with(context).load(member.getUpload_image()).into(holder.logoFront);    
+        }catch (Exception e)
+        {
+//            Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            //Picasso.with(context).load(member.getUpload_image()).into(holder.logoFront);
+        }
+        
 
 
 //        holder.holder.Post.setText("Member");logoFront.setImageResource(R.drawable.hr);

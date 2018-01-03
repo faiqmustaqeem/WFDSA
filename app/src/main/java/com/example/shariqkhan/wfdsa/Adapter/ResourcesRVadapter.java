@@ -3,6 +3,7 @@ package com.example.shariqkhan.wfdsa.Adapter;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,19 +50,18 @@ public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGr
                                       ExpandableGroup group, int childIndex) {
 
         final ResourcesSubItems subItem = ((ResourcesGroup) group).getItems().get(childIndex);
-
-        holder.setTitle(subItem.getTitle());
         String id = subItem.getId();
+        holder.setTitle(id);
+
         if (subItem.getTitle().contains(".docx")) {
             holder.image.setImageResource(R.drawable.word);
         } else if (subItem.getTitle().contains(".pptx")) {
             holder.image.setImageResource(R.drawable.ppttfile);
         } else if (subItem.getTitle().contains(".pdf")) {
             holder.image.setImageResource(R.drawable.pdf);
-        }else if (subItem.getTitle().contains(".xls")) {
+        } else if (subItem.getTitle().contains(".xls")) {
             holder.image.setImageResource(R.drawable.excel);
-        }
-        else {
+        } else {
             holder.image.setImageResource(R.drawable.fileother);
         }
         holder.tvTitle.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +71,7 @@ public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGr
                 DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
                 Toast.makeText(context, "Downloading!!", Toast.LENGTH_SHORT).show();
                 Uri uri = Uri.parse(subItem.getTitle());
+                Log.e("sub", subItem.getTitle());
                 DownloadManager.Request request = new DownloadManager.Request(uri);
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 Long refer = manager.enqueue(request);

@@ -971,8 +971,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         tvCityCountry.setText("Washington,America");
                     }
                     textToPost = tvAgenda.getText().toString()
-                            + " event will be held on \n" + startEventTime + "around " + obj.getString("start_time") + "\n" + obj.getString("speaker")
-                            + "will be speaker."+"\n for more details visit our website https://wfdsa.org";
+                            + " event will be held on \n" + startEventTime.substring(0,11) + "around " + obj.getString("start_time") +" in "+obj.getString("venue")
+                            + " at "+loc+"\n"
+                            + obj.getString("speaker")
+                            + "will be speaker."+"";
 
                     textonFb =   textToPost = tvAgenda.getText().toString()
                             + " event will be held on \n" + startEventTime + "around " + obj.getString("start_time") + "\n" + obj.getString("speaker")

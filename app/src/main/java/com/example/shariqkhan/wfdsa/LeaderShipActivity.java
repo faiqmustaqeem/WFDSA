@@ -32,7 +32,7 @@ public class LeaderShipActivity extends AppCompatActivity {
     Toolbar toolbar;
     ProgressDialog progressDialog;
 
-    public static String URL = "http://codiansoft.com/wfdsa/Api/roles";
+    public static String URL = "http://codiansoft.com/wfdsa/apis/Member/Leadership";
     String roleArray[];
     String Array[] = {"Ceo Council", "Operational Group", "Board of Delegates", "Association Advisory Council"};
     String idArray[];
@@ -92,7 +92,7 @@ public class LeaderShipActivity extends AppCompatActivity {
                 String getstatus = resultObj.getString("status");
 
                 if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("roles");
+                    JSONArray rolesArray = resultObj.getJSONArray("data");
                     roleArray = new String[rolesArray.length()];
                     idArray = new String[rolesArray.length()];
 
