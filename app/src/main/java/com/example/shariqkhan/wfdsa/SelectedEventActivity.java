@@ -133,8 +133,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String idKeepTrack[];
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
-   public String Eventname;
-   public String loc ;
+    public String Eventname;
+    public String loc;
 
     Animation shareSlideUp, shareSlideDown;
     private BottomNavigationViewEx bottomNavigationViewEx;
@@ -147,6 +147,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public static String pollResponseUrl = " http://codiansoft.com/wfdsa/apis/Event/Get_Poll?";
     CallbackManager callBackManager;
     private String textonFb;
+
+    public String eventNameToPass;
+    public String locationToSend;
 
 
     @Override
@@ -234,7 +237,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
                 linkedinIntent.setType("text/plain");
                 linkedinIntent.putExtra(Intent.EXTRA_TEXT, textToPost);
-                linkedinIntent.putExtra(Intent.EXTRA_SUBJECT, textonFb);
+                linkedinIntent.putExtra(Intent.EXTRA_SUBJECT, "https://wfdsa.org");
 
                 boolean linkedinAppFound = false;
                 List<ResolveInfo> matches2 = getPackageManager()
@@ -701,6 +704,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectedEventActivity.this, RegisterEvent.class);
+                intent.putExtra("name", eventNameToPass);
+                intent.putExtra("location", locationToSend);
                 startActivity(intent);
 
             }
@@ -952,6 +957,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     JSONObject obj = rolesArray.getJSONObject(0);
                     tvAgenda.setText(obj.getString("title"));
+
+                    eventNameToPass = tvAgenda.getText().toString();
+
                     // tvAgendaDescription.setText(obj.getString(""));
 
                     tvSpeakersDetails.setText(obj.getString("speaker"));
@@ -965,20 +973,24 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
                     address.setText(obj.getString("place"));
                     loc = obj.getString("place");
+
+                    locationToSend = obj.getString("place") + " " + obj.getString("venue");
+
+
                     Eventname = obj.getString("title");
                     tvCityCountry.setText(obj.getString("venue"));
                     if (tvCityCountry.getText().toString().equals("")) {
                         tvCityCountry.setText("Washington,America");
                     }
                     textToPost = tvAgenda.getText().toString()
-                            + " event will be held on \n" + startEventTime.substring(0,11) + "around " + obj.getString("start_time") +" in "+obj.getString("venue")
-                            + " at "+loc+"\n"
+                            + " event will be held on \n" + startEventTime.substring(0, 11) + " in " + obj.getString("venue")
+                            + " at " + loc + " "
                             + obj.getString("speaker")
-                            + "will be speaker."+"";
+                            + "will be speaker." + "";
 
-                    textonFb =   textToPost = tvAgenda.getText().toString()
-                            + " event will be held on \n" + startEventTime + "around " + obj.getString("start_time") + "\n" + obj.getString("speaker")
-                            + " will be speaker."+" \n";
+                    textonFb = tvAgenda.getText().toString()
+                            + " event will be held on \n" + startEventTime + "\n" + obj.getString("speaker")
+                            + " will be speaker." + " \n";
                 }
                 progressDialog.dismiss();
 

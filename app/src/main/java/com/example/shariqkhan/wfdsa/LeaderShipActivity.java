@@ -130,6 +130,7 @@ public class LeaderShipActivity extends AppCompatActivity {
                         Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
                         intent.putExtra("RoleName", roleId);
                         intent.putExtra("Name", roleName);
+                        intent.putExtra("url", "http://codiansoft.com/wfdsa/apis/Member/Leadership_byRole?");
 
                         startActivity(intent);
 

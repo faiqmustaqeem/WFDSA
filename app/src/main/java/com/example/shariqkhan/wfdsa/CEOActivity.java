@@ -44,7 +44,7 @@ public class CEOActivity extends AppCompatActivity {
 
     TextView txt;
 
-    String URL = "http://codiansoft.com/wfdsa/apis/member/member_frmRoles?";
+    String URL = "";
 
 
     Toolbar toolbar;
@@ -55,6 +55,8 @@ public class CEOActivity extends AppCompatActivity {
         setContentView(R.layout.ceo_activity);
         sendRole = getIntent().getStringExtra("RoleName");
         roleName = getIntent().getStringExtra("Name");
+
+        URL = getIntent().getStringExtra("url");
 
         URL = URL + "role_id=" + sendRole;
 

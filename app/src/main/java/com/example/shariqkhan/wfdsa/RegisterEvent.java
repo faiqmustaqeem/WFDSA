@@ -1,6 +1,7 @@
 package com.example.shariqkhan.wfdsa;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -44,6 +46,8 @@ public class RegisterEvent extends AppCompatActivity {
     ArrayList<String> days = new ArrayList<>();
     Toolbar toolbar;
     Button btn;
+    ProgressDialog dialog;
+
 
     TextInputLayout tilFirstName;
     TextInputLayout tilAddress;
@@ -61,6 +65,8 @@ public class RegisterEvent extends AppCompatActivity {
     EditText tilEmailEditedt;
     EditText tilCardNumberEdit;
     int monthToVerify;
+    TextView eventname;
+    TextView eventlocation;
 
     int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
@@ -80,6 +86,16 @@ public class RegisterEvent extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_registration);
+        eventname = (TextView) findViewById(R.id.eventname);
+        eventlocation = (TextView) findViewById(R.id.eventlocation);
+
+        eventname.setText(getIntent().getStringExtra("name"));
+        eventlocation.setText(getIntent().getStringExtra("location"));
+
+
+        dialog = new ProgressDialog(RegisterEvent.this);
+        dialog.setTitle("Payment in progress");
+        dialog.setTitle("Please Wait");
 
         tilAddress = (TextInputLayout) findViewById(R.id.tilAddress);
         tilFirstName = (TextInputLayout) findViewById(R.id.tilFirstName);
@@ -135,7 +151,7 @@ public class RegisterEvent extends AppCompatActivity {
 
 
         for (int i = thisYear; i <= maxyears; i++) {
-            Log.e("year", String.valueOf(i));
+            //Log.e("year", String.valueOf(i));
             years.add(Integer.toString(i));
 
         }
@@ -202,6 +218,7 @@ public class RegisterEvent extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.show();
                 cvcno = cvcnoedit.getText().toString();
 
                 addr = tilAddress.getEditText().getText().toString();
@@ -212,33 +229,39 @@ public class RegisterEvent extends AppCompatActivity {
 
 
                 Card card = new Card(
-                        cardno,
-                        monthToVerify,
-                        Integer.valueOf(year),
-                        cvcno
+                        "4242424242424242",
+                        12,
+                        19,
+                        "123"
                 );
+                Log.e("CVC", card.getCVC());
 
-                card.setName(MainActivity.getFirstName+" "+MainActivity.getLastName);
-                card.setCurrency("usd");
+                card.setName("Jenny Rosen");
+                //card.setCurrency("usd");
 
-                if (card.validateCard() && card.validateCVC())
-                {
-                    //begin transaction
-                    Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_6pRNASCoBOKtIshFeQd4XMUh");
-                    stripe.createToken(
-                            card,
-                            new TokenCallback() {
-                                public void onSuccess(Token token) {
-                                    // Send token to your server
-                                }
-                                public void onError(Exception error) {
-                                    // Show localized error message
-                                    Toast.makeText(RegisterEvent.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                                }
+                //begin transaction
+                Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_hBDKg0otup1IdPx0qS2o29Fl");
+                stripe.createToken(
+                        card,
+                        new TokenCallback() {
+                            public void onSuccess(Token token) {
+                                dialog.dismiss();
+                                Log.e("StripeToken", token.getId());
+                                Toast.makeText(RegisterEvent.this, token.getId(), Toast.LENGTH_SHORT).show();
+
+
                             }
-                    );
 
-                }
+                            public void onError(Exception error) {
+                                // Show localized error message
+                                // Toast.makeText(RegisterEvent.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                Log.e("ExceptionFromStripe", error.getMessage());
+                                Log.e("ExceptionFromStripe", error.getLocalizedMessage());
+                                dialog.dismiss();
+
+                            }
+                        }
+                );
 
 
 //                tilAddress.getEditText().setText("");

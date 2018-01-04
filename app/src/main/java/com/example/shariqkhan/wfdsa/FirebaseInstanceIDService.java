@@ -2,6 +2,7 @@ package com.example.shariqkhan.wfdsa;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
@@ -32,29 +33,9 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
         String token = prefs.getString("myToken", "");
 
 
-        sendRegistrationToServer(token);
+
     }
 
-    private void sendRegistrationToServer(String refreshedToken) {
 
-        OkHttpClient client = new OkHttpClient();
-
-        RequestBody body = new FormBody.Builder()
-                .add("Token", refreshedToken)
-                .build();
-
-
-Request request = new Request.Builder()
-        .url("hhhhhh")
-        .post(body)
-        .build();
-
-        try {
-            client.newCall(request).execute();
-        } catch (IOException e) {
-            Log.e("Exception", e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
 }

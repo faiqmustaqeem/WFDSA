@@ -69,6 +69,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -121,13 +125,13 @@ public class MainActivity extends AppCompatActivity
     static String password;
     static String getCountry;
     static String getEmail;
-    static String getId;
+    public static String getId;
     static String phoneNo;
     public static final int INTENT_CONSTANT_GALLERY = 1;
     public static String DECIDER = "";
     public static String stype;
     public static String imageUrl = "";
-
+    String refreshedToken;
     Button b1;
 
     ProgressDialog PGdialog;
@@ -154,17 +158,25 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.e("Tooken", refreshedToken);
         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
         editor.putString("myToken", refreshedToken);
         editor.apply();
 
+
+        Task6 task6 = new Task6();
+        task6.execute();
         initUI();
 
+
 //
+
+
         prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         getFirstName = prefs.getString("first_name", "");
         getLastName = prefs.getString("last_name", "");
@@ -176,7 +188,9 @@ public class MainActivity extends AppCompatActivity
         stype = prefs.getString("stype", "");
         getId = prefs.getString("deciderId", "");
 
+
         imageUrl = prefs.getString("image", "");
+
 
 
         Log.e("first_name", getFirstName);
@@ -186,6 +200,8 @@ public class MainActivity extends AppCompatActivity
         Log.e("password", password);
         Log.e("type", DECIDER);
         Log.e("imageUrl", imageUrl);
+
+
 
 //        ivUserPic.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -209,13 +225,6 @@ public class MainActivity extends AppCompatActivity
         tvUserName = (TextView) layout.findViewById(R.id.tvUserName);
         textView1 = (TextView) layout.findViewById(R.id.textView1);
 
-        try {
-            Picasso.with(this).load(imageUrl).into(ivUserPic);
-        } catch (Exception e) {
-            ivUserPic.setImageResource(R.drawable.ic_user);
-            Log.e("PicsetMessage", e.getMessage());
-        }
-
 
         Task task = new Task();
         task.execute();
@@ -225,16 +234,26 @@ public class MainActivity extends AppCompatActivity
 
 
         if (stype.equals("fb")) {
+
             tvUserName.setText("Facebook user");
             textView1.setVisibility(View.GONE);
+
         } else {
+
             tvUserName.setText(getFirstName + " " + getLastName);
             textView1.setText(getEmail);
-
         }
 
         if (ProfileActivity.uri != null)
             ivUserPic.setImageURI(ProfileActivity.uri);
+
+
+        try {
+            Picasso.with(this).load(imageUrl).into(ivUserPic);
+        } catch (Exception e) {
+            ivUserPic.setImageResource(R.drawable.ic_user);
+            Log.e("PicsetMessage", e.getMessage());
+        }
 
         ivSignOut = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSignOut);
         ivSettings = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.ivSettings);
@@ -347,6 +366,140 @@ public class MainActivity extends AppCompatActivity
         task5.execute();
 
 
+    }
+
+    private void sendToken(String refreshedToken) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = new FormBody.Builder()
+                .add("Token", refreshedToken)
+                .build();
+
+
+        Request request = new Request.Builder()
+                .url("http://codiansoft.com/wfdsa/apis/Event/Events_Notification")
+                .post(body)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+            // Toast.makeText(this, "Hello from fbidclass", Toast.LENGTH_SHORT).show();
+
+            Log.e("Paappppiii", "Inside Paapiu");
+        } catch (IOException e) {
+            Log.e("ExceptionOfToken", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    private class Task6 extends AsyncTask<String, Void, String> {
+        String stream = null;
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String[] params) {
+
+            String getResponse = getJson();
+            stream = getResponse;
+
+            return stream;
+
+        }
+
+        private String getJson() {
+            HttpClient httpClient = new DefaultHttpClient();
+
+
+            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Events_Notification");
+            Log.e("Must", "Must");
+//
+//
+            List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new BasicNameValuePair("token", refreshedToken));
+//            parameters.add(new BasicNameValuePair("last_name", lastName));
+//            parameters.add(new BasicNameValuePair("email", email));
+//            parameters.add(new BasicNameValuePair("country", getItem));
+//            parameters.add(new BasicNameValuePair("contact", contactNum));
+//            parameters.add(new BasicNameValuePair("password", password));
+//            parameters.add(new BasicNameValuePair("confirm_password", confirmPassword));
+//
+//            Log.e("f", firstName);
+//            Log.e("l", lastName);
+//            Log.e("e", email);
+//            Log.e("c", getItem);
+//            Log.e("c", contactNum);
+//            Log.e("p", password);
+//            Log.e("c", confirmPassword);
+
+            StringBuilder buffer = new StringBuilder();
+
+            try {
+                // Log.e("Insidegetjson", "insidetry");
+//                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+//                post.setEntity(encoded);
+                HttpResponse response = httpClient.execute(post);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String Line = "";
+
+                while ((Line = reader.readLine()) != null) {
+                    Log.e("reader", Line);
+                    Log.e("buffer", buffer.toString());
+                    buffer.append(Line);
+
+                }
+                reader.close();
+
+            } catch (Exception o) {
+                Log.e("Error", o.getMessage());
+
+            }
+            return buffer.toString();
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            JSONObject jsonobj;
+            if (s != null) {
+                try {
+                    jsonobj = new JSONObject(s);
+                    Log.e("JSON", s);
+
+
+                    JSONObject result = jsonobj.getJSONObject("result");
+                    String checkResult = result.getString("status");
+
+                    if (checkResult.equals("success")) {
+
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "Error!!", Toast.LENGTH_LONG).show();
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    Log.e("ErrorMessage", e.getMessage());
+
+
+                }
+
+
+            }
+
+
+        }
     }
 
     private void initUI() {
@@ -747,7 +900,7 @@ public class MainActivity extends AppCompatActivity
 
             //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-          //  Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+            //  Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
             String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
@@ -810,7 +963,7 @@ public class MainActivity extends AppCompatActivity
             PGdialog = new ProgressDialog(MainActivity.this);
             PGdialog.setTitle("Fetching Resources");
             PGdialog.setCanceledOnTouchOutside(false);
-           // PGdialog.show();
+            // PGdialog.show();
 
         }
     }

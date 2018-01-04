@@ -4,13 +4,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     ImageView ivBack;
+
+
+    @BindView(R.id.etMemberEmail)
+    EditText etMemberEmail;
+
+    @BindView(R.id.tvSubmit)
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +32,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("ABOUT US");
+        mTitle.setText("Confirm Password");
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!etMemberEmail.getText().toString().equals(""))
+                {
+                    String sendEmail = etMemberEmail.getText().toString();
+
+
+                }
+
+            }
+        });
+
 
         ivBack = (ImageView) findViewById(R.id.ivBack);
 
