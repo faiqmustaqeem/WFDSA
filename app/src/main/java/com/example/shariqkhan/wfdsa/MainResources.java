@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 
@@ -30,8 +31,11 @@ public class MainResources extends AppCompatActivity {
     ProgressDialog dialog;
     String[] filesArray;
     String idArray[];
-Toolbar toolbar;
+    String[] typeArray;
+
+    Toolbar toolbar;
     TextView txt;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,12 +93,14 @@ Toolbar toolbar;
                     filesArray = new String[resourcesData.length()];
                     idArray = new String[resourcesData.length()];
 
+                    typeArray = new String[resourcesData.length()];
                     //   titlesArray = new String[resourcesData.length()];
                     for (int i = 0; i < resourcesData.length(); i++) {
                         JSONObject job = resourcesData.getJSONObject(i);
 
                         filesArray[i] = job.getString("title_2");
                         idArray[i] = job.getString("resources_id");
+                        typeArray[i] = job.getString("resource_member");
                         //         titlesArray[i] = job.getString("title");
 
                     }
@@ -122,11 +128,17 @@ Toolbar toolbar;
 //
 //                }
 
-                        Intent intent = new Intent(MainResources.this, MyResourcesActivity.class);
-                        intent.putExtra("RoleName", roleId);
-                      //  intent.putExtra("Name", roleName);
+                        if (typeArray[position].equals("Member") && MainActivity.DECIDER.equals("nonmember"))
+                        {
+                            Toast.makeText(MainResources.this, "This resource restricted to members only!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent intent = new Intent(MainResources.this, MyResourcesActivity.class);
+                            intent.putExtra("RoleName", roleId);
+                            //  intent.putExtra("Name", roleName);
 
-                        startActivity(intent);
+                            startActivity(intent);
+
+                        }
 
                     }
                 });
