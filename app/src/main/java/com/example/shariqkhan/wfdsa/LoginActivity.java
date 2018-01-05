@@ -179,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.tvNonMemberForgetPassword:
                 Intent forgotPasswordIntent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 LoginActivity.this.startActivity(forgotPasswordIntent);
+                finish();
                 break;
         }
     }

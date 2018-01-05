@@ -93,7 +93,7 @@ public class GalleryActivityMine extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/Event/Gallery" + "event_id=" + id;
+            String url = "http://codiansoft.com/wfdsa/apis/Event/Gallery?" + "event_id=" + id;
 
             Log.e("url", url);
 
@@ -261,8 +261,34 @@ public class GalleryActivityMine extends AppCompatActivity {
                     Log.e("Size", String.valueOf(encodedImageList.size()));
                 }
             } else {
-                Toast.makeText(this, "You haven't picked Image",
-                        Toast.LENGTH_LONG).show();
+                if (data.getData() != null)
+                {
+
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    imagesUriList = new ArrayList<Uri>();
+                    encodedImageList.clear();
+                    Uri mImageUri=data.getData();
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(mImageUri,
+                            filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imageURI  = cursor.getString(columnIndex);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                    encodedImageList.add(encodedImage);
+                    cursor.close();
+
+                }else{
+                    Toast.makeText(this, "You haven't picked Image",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         } catch (Exception e) {
             Log.e("Exception", e.getMessage());
@@ -285,6 +311,7 @@ public class GalleryActivityMine extends AppCompatActivity {
         try {
             builder = Uri.parse(URL).buildUpon();
             jsonObject.put("event_id", SelectedEventActivity.id);
+            jsonObject.put("user_id", MainActivity.getId);
             Log.e("event_id", SelectedEventActivity.id);
             jsonObject.put("imageList", jsonArray);
         } catch (JSONException e) {

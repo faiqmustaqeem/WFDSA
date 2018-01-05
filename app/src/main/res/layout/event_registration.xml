@@ -18,8 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textAllCaps="false"
             android:layout_gravity="center_horizontal"
-            android:text="REGISTER EVENT"
+            android:text="Register Event"
             android:textColor="#fff" />
 
     </android.support.v7.widget.Toolbar>
