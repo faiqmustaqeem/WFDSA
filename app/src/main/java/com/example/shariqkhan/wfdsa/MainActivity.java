@@ -618,8 +618,16 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nae_committees) {
-            Intent intent = new Intent(MainActivity.this, CommiteesActivity.class);
-            startActivity(intent);
+            if (MainActivity.DECIDER.equals("member"))
+            {
+                Intent intent = new Intent(MainActivity.this, CommiteesActivity.class);
+                startActivity(intent);
+            }else
+                {
+                    Intent intent = new Intent(MainActivity.this, BlankActivity.class);
+                    startActivity(intent);
+                }
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

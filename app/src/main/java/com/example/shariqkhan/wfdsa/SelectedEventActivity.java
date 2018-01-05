@@ -124,9 +124,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     TextView heelo;
     TextView tvDayTime;
     TextView tvCityCountry;
-    String latlng;
-    String start;
-    String end;
+
     String choice_array[];
     ShareDialog dialog;
     URL url;
@@ -135,6 +133,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String textToPost;
     String startEventTime;
     String endEventTime;
+
+    double destinationlat;
+    double destinationLng;
+
 
     String idKeep;
     TextView tvAgenda;
@@ -442,7 +444,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 intent.putExtra("allDay", false);
                 intent.putExtra("rrule", "FREQ=YEARLY");
                 intent.putExtra("endTime", timeInMiliEnd);
-                intent.putExtra("title", "A Test Event 2 from android app");
+                intent.putExtra("title", tvAgenda.getText().toString());
                 startActivity(intent);
 
                 //     Toast.makeText(SelectedEventActivity.this, "Event Added Seccuessfully!", Toast.LENGTH_SHORT).show();
@@ -817,8 +819,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             case R.id.tvGetDirections:
 
                 try {
-                    Uri uri = Uri.parse("geo:" + 38.903210 + "," + -77.038123);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=17&q=%f,%f", currentLatitude, currentLongitude, destinationlat, destinationLng);
+                    Uri URI = Uri.parse(uri);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, URI);
                     intent.setPackage("com.google.android.apps.maps");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -868,7 +871,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     }
 
 
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -886,7 +888,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             currentLatitude = location.getLatitude();
             currentLongitude = location.getLongitude();
 
-            Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+            Log.e("current LatLng", currentLatitude + " " + currentLongitude);
+       //     Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1108,6 +1111,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
                     address.setText(obj.getString("place"));
                     loc = obj.getString("place");
+
+                    destinationlat = Double.parseDouble(obj.getString("latitude"));
+                    destinationLng = Double.parseDouble(obj.getString("longitude"));
 
                     locationToSend = obj.getString("place") + " " + obj.getString("venue");
 

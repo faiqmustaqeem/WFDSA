@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
-                edit.putString("type", "non_member");
+                edit.putString("type", "nonmember");
                 edit.apply();
 
                 break;

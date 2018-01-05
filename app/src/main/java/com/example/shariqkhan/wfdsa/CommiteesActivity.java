@@ -127,6 +127,7 @@ public class CommiteesActivity extends AppCompatActivity {
 //
 //                }
 
+
                         Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
                         intent.putExtra("RoleName", roleId);
                         intent.putExtra("Name", roleName);
