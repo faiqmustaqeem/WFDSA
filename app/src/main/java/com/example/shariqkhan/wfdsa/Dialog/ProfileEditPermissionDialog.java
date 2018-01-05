@@ -157,6 +157,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("member_id", MainActivity.getId));
             parameters.add(new BasicNameValuePair("password", etPassword.getText().toString()));
+
 //            parameters.add(new BasicNameValuePair("email", email));
 //            parameters.add(new BasicNameValuePair("country", getItem));
 //            parameters.add(new BasicNameValuePair("contact", contactNum));

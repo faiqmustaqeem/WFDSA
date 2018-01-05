@@ -377,7 +377,7 @@ public class EventDiscussionDialog extends Dialog {
         };
 
         rvComments.setAdapter(adapter);
-        rvComments.smoothScrollToPosition(pos);
+
         dialog.dismiss();
 //        // DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
 //        discussionList.clear();

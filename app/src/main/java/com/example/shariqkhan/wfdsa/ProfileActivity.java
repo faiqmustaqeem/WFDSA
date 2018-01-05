@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -115,6 +116,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         newEmail = MainActivity.getEmail;
 
         storageRef = FirebaseStorage.getInstance().getReference();
+
+
+        Picasso.with(this).load(MainActivity.imageUrl).into(profile_image);
 
 
         etEmail.setText(MainActivity.getEmail);
@@ -242,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                             SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
-                            edit.putString("image",path);
+                            edit.putString("image", path);
                             edit.apply();
 
 

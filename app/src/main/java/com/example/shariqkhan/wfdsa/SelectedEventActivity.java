@@ -501,6 +501,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ivcheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (!checkedIn) {
                     final Dialog dialog = new Dialog(SelectedEventActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -524,9 +525,17 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     view1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
-                            Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
-                            checkedIn = true;
+
+                            if (currentLatitude == destinationlat && currentLongitude == destinationLng)
+                            {
+                                dialog.dismiss();
+                                Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
+                                checkedIn = true;
+                            }else{
+                                Toast.makeText(SelectedEventActivity.this, "You are not on the event location!", Toast.LENGTH_SHORT).show();
+                            }
+
+
                         }
                     });
 

@@ -28,6 +28,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
         android:layout_marginTop="18dp"
         app:layout_constraintBottom_toTopOf="@+id/etComment"
         app:layout_constraintLeft_toLeftOf="parent"
