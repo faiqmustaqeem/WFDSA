@@ -3,6 +3,8 @@ package com.example.shariqkhan.wfdsa.Dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -48,8 +50,10 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
     public Activity c;
     EditText etPassword;
     TextView tvSubmit, tvCancel;
-    String password;
+
     public static boolean editedOption = false;
+
+    public static String password = "";
 
     public ProfileEditPermissionDialog(Activity a, String password) {
         super(a);
@@ -88,7 +92,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!etPassword.getText().toString().equals("")) {
-                    editedOption = true;
+
                     tvSubmit.setTextColor(c.getResources().getColor(R.color.colorAccent));
                     tvSubmit.setClickable(true);
                 } else {
@@ -106,8 +110,8 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
         switch (v.getId()) {
             case R.id.tvSubmit:
 
-                Task task = new Task();
-                task.execute();
+                password = etPassword.getText().toString();
+                editedOption = true;
 
                 break;
             case R.id.tvCancel:
@@ -150,7 +154,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("");
+            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/User/ConfirmPassword");
             Log.e("Must", "Must");
 //
 //
@@ -213,13 +217,21 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
                     JSONObject result = jsonobj.getJSONObject("result");
                     String checkResult = result.getString("status");
 
+                    Log.e("checkResult", checkResult);
+
+
                     if (checkResult.equals("success")) {
-                        ProfileActivity.canEdit = true;
+                        SharedPreferences.Editor edit = c.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE).edit();
+                        edit.putString("canEdit", "true");
+                        edit.apply();
+                        etPassword.setText("");
 
                     } else {
-                        Toast.makeText(c, "Error!!", Toast.LENGTH_LONG).show();
-
-
+                        Toast.makeText(c, "Invalid Password", Toast.LENGTH_LONG).show();
+                        SharedPreferences.Editor edit = c.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE).edit();
+                        edit.putString("canEdit", "false");
+                        edit.apply();
+                        etPassword.setText("");
                         progressDialog.dismiss();
 
                     }

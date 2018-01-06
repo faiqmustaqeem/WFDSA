@@ -2,6 +2,7 @@ package com.example.shariqkhan.wfdsa;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -130,11 +131,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         d.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if (tvEditOrUpdate.getText().toString().equals("EDIT") && ProfileEditPermissionDialog.editedOption == true) {
-                    makeFieldsEditable();
-                    tvEditOrUpdate.setText("SAVE");
 
+                if (ProfileEditPermissionDialog.editedOption == true) {
+                    Task10 task = new Task10();
+                    task.execute();
                 }
+
             }
         });
 
@@ -222,11 +224,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if (requestCode == GALLERY_CONSTANT && resultCode == RESULT_OK)
-        {
+        if (requestCode == GALLERY_CONSTANT && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
             CropImage.activity(imageUri)
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(1, 1)
                     .start(this);
         }
 
@@ -610,5 +611,127 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         return picture;
     }
 
-}
+
+        class Task10 extends AsyncTask<String, Void, String> {
+            String stream = null;
+            ProgressDialog progressDialog;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog = new ProgressDialog(ProfileActivity.this);
+                progressDialog.setTitle("Verifying");
+
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
+            }
+
+            @Override
+            protected String doInBackground(String[] params) {
+
+                String getResponse = getJson();
+                stream = getResponse;
+
+                return stream;
+
+            }
+
+            private String getJson() {
+                HttpClient httpClient = new DefaultHttpClient();
+
+
+                HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/User/ConfirmPassword");
+                Log.e("Must", "Must");
+//
+//
+                List<NameValuePair> parameters = new ArrayList<>();
+                parameters.add(new BasicNameValuePair("member_id", MainActivity.getId));
+                parameters.add(new BasicNameValuePair("password", ProfileEditPermissionDialog.password));
+
+//            parameters.add(new BasicNameValuePair("email", email));
+//            parameters.add(new BasicNameValuePair("country", getItem));
+//            parameters.add(new BasicNameValuePair("contact", contactNum));
+//            parameters.add(new BasicNameValuePair("password", password));
+//            parameters.add(new BasicNameValuePair("confirm_password", confirmPassword));
+//
+//            Log.e("f", firstName);
+//            Log.e("l", lastName);
+//            Log.e("e", email);
+//            Log.e("c", getItem);
+//            Log.e("c", contactNum);
+//            Log.e("p", password);
+//            Log.e("c", confirmPassword);
+
+                StringBuilder buffer = new StringBuilder();
+
+                try {
+                    // Log.e("Insidegetjson", "insidetry");
+                    UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+                    post.setEntity(encoded);
+                    HttpResponse response = httpClient.execute(post);
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                    String Line = "";
+
+                    while ((Line = reader.readLine()) != null) {
+                        Log.e("reader", Line);
+                        Log.e("buffer", buffer.toString());
+                        buffer.append(Line);
+
+                    }
+                    reader.close();
+
+                } catch (Exception o) {
+                    Log.e("Error", o.getMessage());
+
+                }
+                return buffer.toString();
+            }
+
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+                JSONObject jsonobj;
+                if (s != null) {
+                    try {
+                        jsonobj = new JSONObject(s);
+                        Log.e("JSON", s);
+
+
+                        JSONObject result = jsonobj.getJSONObject("result");
+                        String checkResult = result.getString("status");
+
+                        Log.e("checkResult", checkResult);
+
+                        String response = result.getString("response");
+
+                        if (response.equals("Session Restored Successfully.")) {
+                            makeFieldsEditable();
+                            tvEditOrUpdate.setText("SAVE");
+                        } else {
+                            Toast.makeText(ProfileActivity.this, response, Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.e("ErrorMessage", e.getMessage());
+
+                        progressDialog.dismiss();
+                    }
+
+
+                }
+
+                progressDialog.dismiss();
+            }
+        }
+    }
+
+
 

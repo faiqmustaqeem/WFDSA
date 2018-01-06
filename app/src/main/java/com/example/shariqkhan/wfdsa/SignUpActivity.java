@@ -234,8 +234,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (!password.equals(confirmPassword))
                         Toast.makeText(SignUpActivity.this, "Invalid password confirmation!", Toast.LENGTH_SHORT).show();
 
-                    if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))
-                            && cbAcceptTerms.isSelected()) {
+                    if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))) {
 
 
                        if (isValidEmail(email))
@@ -248,6 +247,8 @@ public class SignUpActivity extends AppCompatActivity {
                            tilEmail.getEditText().setText("");
                        }
 
+                    }else{
+                        Toast.makeText(SignUpActivity.this, "Check if all details are filled!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -442,7 +443,8 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.apply();
                         LoginActivity.decider = "2";
 
-                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                        Toast.makeText(SignUpActivity.this, "Check your account to get dummy email password!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
 

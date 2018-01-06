@@ -195,7 +195,6 @@ public class LoginActivity extends AppCompatActivity {
             super.onPreExecute();
             progressDialog = new ProgressDialog(LoginActivity.this);
             progressDialog.setTitle("Logging In");
-
             progressDialog.setMessage("Please Wait");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();

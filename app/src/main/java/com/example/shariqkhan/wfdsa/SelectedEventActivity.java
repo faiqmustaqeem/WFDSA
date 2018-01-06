@@ -42,6 +42,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
 import com.example.shariqkhan.wfdsa.Adapter.PaymentsRVAdapter;
 import com.example.shariqkhan.wfdsa.Dialog.EventAttendeesDialog;
@@ -526,12 +530,24 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         @Override
                         public void onClick(View v) {
 
-                            if (currentLatitude == destinationlat && currentLongitude == destinationLng)
-                            {
+                            if (currentLatitude == destinationlat && currentLongitude == destinationLng) {
                                 dialog.dismiss();
                                 Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
                                 checkedIn = true;
-                            }else{
+
+                                StringRequest req = new StringRequest(Request.Method.GET, "", new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                });
+                            } else {
                                 Toast.makeText(SelectedEventActivity.this, "You are not on the event location!", Toast.LENGTH_SHORT).show();
                             }
 
@@ -898,7 +914,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             currentLongitude = location.getLongitude();
 
             Log.e("current LatLng", currentLatitude + " " + currentLongitude);
-       //     Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+            //     Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1077,7 +1093,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = URL + "event_id=" + id;
+            String url = URL + "event_id=" + id + "&user_id=" + MainActivity.getId + "&signin_type=" + LoginActivity.decider;
 
             Log.e("url", url);
 

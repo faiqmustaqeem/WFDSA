@@ -22,16 +22,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import static java.security.AccessController.getContext;
 
@@ -244,12 +255,50 @@ public class RegisterEvent extends AppCompatActivity {
                 stripe.createToken(
                         card,
                         new TokenCallback() {
-                            public void onSuccess(Token token) {
+                            public void onSuccess(final Token token) {
                                 dialog.dismiss();
                                 Log.e("StripeToken", token.getId());
+                                Log.e("PureToken", token.toString());
                                 Toast.makeText(RegisterEvent.this, token.getId(), Toast.LENGTH_SHORT).show();
 
+                                StringRequest request = new StringRequest(Request.Method.POST, ",", new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
 
+                                        try {
+                                            JSONObject job = new JSONObject(response);
+                                            String resp = job.getString("response");
+                                            if (resp.equals("Successful")) {
+                                                Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            } else {
+                                                Toast.makeText(RegisterEvent.this, "Payment Transaction Failed!", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.e("ErrorMessage", e.getMessage());
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("stripe_token", token.toString());
+                                        params.put("amount", String.valueOf(500));
+                                        params.put("user_id", MainActivity.getId);
+                                        params.put("signin_type", LoginActivity.decider);
+
+                                        return params;
+                                    }
+                                };
+                                Volley.newRequestQueue(RegisterEvent.this).add(request);
                             }
 
                             public void onError(Exception error) {

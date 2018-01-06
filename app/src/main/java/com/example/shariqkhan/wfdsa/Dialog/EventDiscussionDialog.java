@@ -378,6 +378,7 @@ public class EventDiscussionDialog extends Dialog {
 
         rvComments.setAdapter(adapter);
 
+
         dialog.dismiss();
 //        // DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
 //        discussionList.clear();
