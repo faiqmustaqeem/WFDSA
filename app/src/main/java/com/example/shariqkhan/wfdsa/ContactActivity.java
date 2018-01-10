@@ -271,6 +271,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
                         lat = Double.valueOf(job.getString("lat"));
                         lng = Double.valueOf(job.getString("lng"));
                         phNo = job.getString("contact_no");
+
                         tvDiscussion.setText(job.getString("address"));
 
                     }

@@ -15,7 +15,7 @@
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="185dp"
         android:layout_below="@+id/tool_bar"
 android:scaleType="fitXY"
 

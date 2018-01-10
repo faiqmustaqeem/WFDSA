@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +51,7 @@ import butterknife.ButterKnife;
  * Created by Codiansoft on 11/4/2017.
  */
 
-public class EventDiscussionDialog extends Dialog {
+public class EventDiscussionDialog extends AppCompatActivity {
     public Activity act;
     public Dialog d;
     ArrayList<MessageModel> discussionList = new ArrayList<>();
@@ -71,28 +72,35 @@ public class EventDiscussionDialog extends Dialog {
 
     ProgressDialog dialog;
 
-    public EventDiscussionDialog(Activity a) {
-        super(a);
-        // TODO Auto-generated constructor stub
-        this.act = a;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.event_discussion_dialog);
+
+
+
         ButterKnife.bind(this);
-        setCanceledOnTouchOutside(false);
 
-        mRootRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
-        Window window = getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        overridePendingTransition(0,0);
 
-        dialog = new ProgressDialog(act);
+
+        dialog = new ProgressDialog(EventDiscussionDialog.this);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setMessage("Please Wait");
         dialog.setTitle("Loading Messages");
         dialog.show();
+
+        mRootRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
+//        Window window = getWindow();
+//        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
 //        discussionRVAdapter = new DiscussionRVAdapter(act, discussionList);
 //        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
@@ -100,11 +108,11 @@ public class EventDiscussionDialog extends Dialog {
 //        rvComments.setItemAnimator(new DefaultItemAnimator());
 //        rvComments.setAdapter(discussionRVAdapter);
 
-        imageView = findViewById(R.id.close);
+        imageView =(ImageView) findViewById(R.id.close);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                finish();
             }
         });
 
@@ -352,7 +360,7 @@ public class EventDiscussionDialog extends Dialog {
 //        TextView tvComment;
 //        @BindView(R.id.ivSenderImage)
 //        ImageView ivSenderImage;
-        adapter = new FirebaseListAdapter<MessageModel>(act, MessageModel.class, R.layout.discussion_rv_item,
+        adapter = new FirebaseListAdapter<MessageModel>(EventDiscussionDialog.this, MessageModel.class, R.layout.discussion_rv_item,
                 FirebaseDatabase.getInstance().getReference().child(SelectedEventActivity.id)) {
             @Override
             protected void populateView(View v, MessageModel model, int position) {
@@ -372,7 +380,13 @@ public class EventDiscussionDialog extends Dialog {
                 tvTime.setText(model.getTime());
                 tvComment.setText(model.getMessage());
                 pos = position;
-                Picasso.with(act).load(model.getImageurl()).into(image);
+               try{
+                   Picasso.with(act).load(model.getImageurl()).into(image);
+               }catch(Exception e)
+               {
+                   image.setImageResource(R.drawable.ic_profile_pic);
+               }
+
             }
         };
 

@@ -192,7 +192,6 @@ public class MainActivity extends AppCompatActivity
         imageUrl = prefs.getString("image", "");
 
 
-
         Log.e("first_name", getFirstName);
         Log.e("last_name", getLastName);
         Log.e("email", getEmail);
@@ -200,7 +199,6 @@ public class MainActivity extends AppCompatActivity
         Log.e("password", password);
         Log.e("type", DECIDER);
         Log.e("imageUrl", imageUrl);
-
 
 
 //        ivUserPic.setOnClickListener(new View.OnClickListener() {
@@ -618,15 +616,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nae_committees) {
-            if (MainActivity.DECIDER.equals("member"))
-            {
+            if (MainActivity.DECIDER.equals("member")) {
                 Intent intent = new Intent(MainActivity.this, CommiteesActivity.class);
                 startActivity(intent);
-            }else
-                {
-                    Intent intent = new Intent(MainActivity.this, BlankActivity.class);
-                    startActivity(intent);
-                }
+            } else {
+                Intent intent = new Intent(MainActivity.this, BlankActivity.class);
+                startActivity(intent);
+            }
 
         }
 
@@ -936,19 +932,37 @@ public class MainActivity extends AppCompatActivity
                     //   roleArray = new String[rolesArray.length()];
                     // String idArray[] = new String[rolesArray.length()];
                     titlesArray = new String[resourcesData.length()];
+                    Toast.makeText(MainActivity.this, String.valueOf(resourcesData.length()), Toast.LENGTH_SHORT).show();
                     for (int i = 0; i < resourcesData.length(); i++) {
+
                         JSONObject job = resourcesData.getJSONObject(i);
-
-
                         titlesArray[i] = job.getString("title_2");
 
                     }
 
                 }
 
-                tvAdvocacy.setText(titlesArray[0]);
-                tvAssociationService.setText(titlesArray[1]);
-                tvGlobalRegulatory.setText(titlesArray[2]);
+
+                try {
+                    tvAdvocacy.setText(titlesArray[0]);
+                } catch (Exception e) {
+
+                    tvAdvocacy.setVisibility(View.GONE);
+                }
+
+                try {
+                    tvAssociationService.setText(titlesArray[1]);
+                } catch (Exception e) {
+
+                    tvAssociationService.setVisibility(View.GONE);
+                }
+                try {
+                    tvGlobalRegulatory.setText(titlesArray[2]);
+                } catch (Exception e) {
+
+                    tvGlobalRegulatory.setVisibility(View.GONE);
+                }
+
 
                 PGdialog.dismiss();
 //                } else {

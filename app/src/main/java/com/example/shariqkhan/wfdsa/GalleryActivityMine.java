@@ -122,7 +122,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("upload_image"));
+                        EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
                         imagesList.add(model);
 
                     }
@@ -259,12 +259,10 @@ public class GalleryActivityMine extends AppCompatActivity {
                     }
                     //  noImage.setText("Selected Images: " + mArrayUri.size());
                     Log.e("Size", String.valueOf(encodedImageList.size()));
-                }
-            } else {
-                if (data.getData() != null)
+                }else  if (data.getData() != null)
                 {
 
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
                     imagesUriList = new ArrayList<Uri>();
                     encodedImageList.clear();
                     Uri mImageUri=data.getData();
@@ -287,7 +285,11 @@ public class GalleryActivityMine extends AppCompatActivity {
                 }else{
                     Toast.makeText(this, "You haven't picked Image",
                             Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                    //Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(this, "Northing", Toast.LENGTH_SHORT).show();
 
             }
         } catch (Exception e) {

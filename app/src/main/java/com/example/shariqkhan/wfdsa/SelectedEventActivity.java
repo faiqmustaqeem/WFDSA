@@ -35,6 +35,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -140,6 +141,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
     double destinationlat;
     double destinationLng;
+    String remark;
 
 
     String idKeep;
@@ -627,8 +629,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ivdiscussion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
-                d.show();
+                Intent intent = new Intent(SelectedEventActivity.this, EventDiscussionDialog.class);
+                overridePendingTransition(0,0);
+                intent.putExtra("Event_id", id);
+                startActivity(intent);
+//                EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
+//                d.show();
             }
         });
         //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
@@ -872,7 +878,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         if (requestCode == 101) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -914,7 +920,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             currentLongitude = location.getLongitude();
 
             Log.e("current LatLng", currentLatitude + " " + currentLongitude);
-            //     Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1018,8 +1024,40 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                     idKeep = idKeepTrack[i];
                                     Log.e("id", idKeep);
                                     Log.e("answer", choice_array[i]);
-                                    Task3 task3 = new Task3();
-                                    task3.execute();
+
+                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                    dialog.getWindow().setLayout(lp.width, lp.height);
+                                    dialog.setContentView(R.layout.remarks_dialog);
+
+                                    EditText editText = dialog.findViewById(R.id.etPassword);
+                                    remark = editText.getText().toString();
+                                    TextView cancel = dialog.findViewById(R.id.tvCancel);
+                                    TextView submit = dialog.findViewById(R.id.tvSubmit);
+
+                                    cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    submit.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            Task3 task3 = new Task3();
+                                            task3.execute();
+
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
+
 //
 
 
@@ -1052,9 +1090,38 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                         findItbyId[f] = idKeepTrack[f];
                                         Log.e("findItById", findItbyId[f]);
                                     }
-                                    Task4 task4 = new Task4();
-                                    task4.execute();
 
+                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                    dialog.getWindow().setLayout(lp.width, lp.height);
+                                    dialog.setContentView(R.layout.remarks_dialog);
+
+                                    EditText editText = dialog.findViewById(R.id.etPassword);
+                                    remark = editText.getText().toString();
+                                    TextView cancel = dialog.findViewById(R.id.tvCancel);
+                                    TextView submit = dialog.findViewById(R.id.tvSubmit);
+
+                                    cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    submit.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            Task4 task4 = new Task4();
+                                            task4.execute();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
                                 }
                             })
                             .setConfirmButtonText("Confirm")
@@ -1210,7 +1277,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("user_id", MainActivity.getId));
             parameters.add(new BasicNameValuePair("poll_id", pollId));
+            parameters.add(new BasicNameValuePair("remark", remark));
             parameters.add(new BasicNameValuePair("poll_answer_id", idKeep));
+
             parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
 
             StringBuilder buffer = new StringBuilder();
@@ -1306,6 +1375,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("user_id", MainActivity.getId));
             parameters.add(new BasicNameValuePair("poll_id", pollId));
+            parameters.add(new BasicNameValuePair("remark", remark));
             for (int i = 0; i < findItbyId.length; i++) {
                 pollAnswerId += findItbyId[i] + ",";
             }

@@ -67,6 +67,11 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Dialog.EventDiscussionDialog"
+            android:screenOrientation="portrait" />
+
+
+        <activity
             android:name=".MainResources"
             android:screenOrientation="portrait" />
         <activity
