@@ -153,6 +153,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public static String id;
     String idKeepTrack[];
 
+    public String AttendeesID;
+
     public String isLikeable;
     public boolean isCheckedIn;
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
@@ -1213,6 +1215,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     address.setText(obj.getString("place"));
                     loc = obj.getString("place");
                     tvLikeQty.setText(obj.getString("total_likes"));
+
+                    AttendeesID = obj.getString("attendees_id");
 
                     isLikeable = obj.getString("is_like");
                     if (isLikeable.equals("1")) {

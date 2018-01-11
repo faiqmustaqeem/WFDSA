@@ -93,7 +93,7 @@ public class MyPaymentActivity extends AppCompatActivity {
                                         memberToCheck = arrayListSave.get(counter);
                                         Log.e("MEMBER", String.valueOf(memberToCheck));
 
-                                        if (memberToCheck.type.equals(filterableString)) {
+                                        if (memberToCheck.type.equals("1")) {
 
                                             Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
                                             paymentsList.add(memberToCheck);
@@ -121,7 +121,7 @@ public class MyPaymentActivity extends AppCompatActivity {
                                         memberToCheck = arrayListSave.get(counter);
                                         Log.e("MEMBER", String.valueOf(memberToCheck));
 
-                                        if (memberToCheck.type.equals(filterableString)) {
+                                        if (memberToCheck.type.equals("0")) {
 
                                             Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
                                             paymentsList.add(memberToCheck);

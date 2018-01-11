@@ -189,9 +189,8 @@ public class GalleryActivityMine extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
-        if (!prefs.getString("type", "").equals("member"))
-        {
-floatingActionButton.setVisibility(View.GONE);
+        if (!prefs.getString("type", "").equals("member")) {
+            floatingActionButton.setVisibility(View.GONE);
         }
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
