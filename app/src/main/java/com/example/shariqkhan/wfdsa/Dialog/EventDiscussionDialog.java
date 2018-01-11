@@ -76,9 +76,8 @@ public class EventDiscussionDialog extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

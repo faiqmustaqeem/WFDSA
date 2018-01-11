@@ -70,6 +70,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
         etPassword = (EditText) findViewById(R.id.etPassword);
         //   etPassword.setText(password);
 
+
         etPassword.setEnabled(true);
         tvSubmit = (TextView) findViewById(R.id.tvSubmit);
         tvCancel = (TextView) findViewById(R.id.tvCancel);

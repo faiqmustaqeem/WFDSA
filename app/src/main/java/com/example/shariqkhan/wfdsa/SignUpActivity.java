@@ -75,8 +75,8 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.spCountry)
     Spinner spCountry;
 
-   @BindView(R.id.cbAcceptTerms)
-   CheckBox cbAcceptTerms;
+    @BindView(R.id.cbAcceptTerms)
+    CheckBox cbAcceptTerms;
 
     TextInputLayout tilFirstName;
     TextInputLayout tilLastName;
@@ -94,9 +94,6 @@ public class SignUpActivity extends AppCompatActivity {
     String password;
     ProgressDialog dialog;
     String confirmPassword;
-
-
-
 
 
     LoginButton tvNonMemberFBSignIn;
@@ -120,7 +117,6 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
-
 
 
         printKeyhash();
@@ -151,6 +147,9 @@ public class SignUpActivity extends AppCompatActivity {
                         dialog.dismiss();
                         Log.e("Response", object.toString());
 
+                        Log.e("email", object.optString("email"));
+                        Log.e("first_name", object.optString("first_name"));
+
                         SharedPreferences.Editor prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
                         prefs.putString("stype", "fb");
                         prefs.putString("api_secret", "not_null");
@@ -174,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
 
                 Bundle bundle = new Bundle();
-                bundle.putString("fields", "id,email");
+                bundle.putString("fields", "id,name,first_name,last_name,email");
                 request.setParameters(bundle);
                 request.executeAsync();
 
@@ -230,24 +229,29 @@ public class SignUpActivity extends AppCompatActivity {
                     password = tilPassword.getEditText().getText().toString();
                     confirmPassword = tilConfirmPassword.getEditText().getText().toString();
 
+                    if (password.length() < 5) {
+                        Toast.makeText(SignUpActivity.this, "Password should be atleast of 5 characters or numbers!", Toast.LENGTH_SHORT).show();
+                        tilPassword.getEditText().setText("");
+                        tilConfirmPassword.getEditText().setText("");
 
+                    }
                     if (!password.equals(confirmPassword))
                         Toast.makeText(SignUpActivity.this, "Invalid password confirmation!", Toast.LENGTH_SHORT).show();
+
 
                     if (!firstName.equals("") && !lastName.equals("") && !contactNum.equals("") && !email.equals("") && (password.equals(confirmPassword))) {
 
 
-                       if (isValidEmail(email))
-                       {
-                           Task task = new Task();
-                           task.execute();
+                        if (isValidEmail(email)) {
+                            Task task = new Task();
+                            task.execute();
 
-                       }else{
-                           Toast.makeText(SignUpActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
-                           tilEmail.getEditText().setText("");
-                       }
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                            tilEmail.getEditText().setText("");
+                        }
 
-                    }else{
+                    } else {
                         Toast.makeText(SignUpActivity.this, "Check if all details are filled!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -495,10 +499,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
-    public  boolean isValidEmail(String emailStr) {
+
+    public boolean isValidEmail(String emailStr) {
         final Pattern VALID_EMAIL_ADDRESS_REGEX =
                 Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
 }

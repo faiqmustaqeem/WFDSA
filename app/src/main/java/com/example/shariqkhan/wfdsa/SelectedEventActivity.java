@@ -152,6 +152,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     TextView tvHostsDetails;
     public static String id;
     String idKeepTrack[];
+
+    public String isLikeable;
+    public boolean isCheckedIn;
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
 
     public String Eventname;
@@ -166,11 +169,15 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     private ProgressDialog progressDialog;
 
     public static String pollResponseUrl = " http://codiansoft.com/wfdsa/apis/Event/Get_Poll?";
+
     CallbackManager callBackManager;
     private String textonFb;
 
     public String eventNameToPass;
+
     public String locationToSend;
+    ImageView likesView;
+    TextView tvLikeQty;
 
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -489,6 +496,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     tvRegister.setEnabled(false);
                     llShare.startAnimation(shareSlideUp);
 
+
                 } else {
                     llShare.startAnimation(shareSlideDown);
                     tvRegister.setEnabled(true);
@@ -508,7 +516,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
-                if (!checkedIn) {
+                if (!isCheckedIn) {
                     final Dialog dialog = new Dialog(SelectedEventActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -630,7 +638,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SelectedEventActivity.this, EventDiscussionDialog.class);
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
                 intent.putExtra("Event_id", id);
                 startActivity(intent);
 //                EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
@@ -772,8 +780,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                dialog.show();
 //            }
 //        });
-        final ImageView likesView = (ImageView) findViewById(R.id.ivLike);
-        final TextView tvLikeQty = (TextView) findViewById(R.id.tvLikesQty);
+        likesView = (ImageView) findViewById(R.id.ivLike);
+        tvLikeQty = (TextView) findViewById(R.id.tvLikesQty);
 
         likesView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -852,6 +860,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 try {
                     String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=17&q=%f,%f", currentLatitude, currentLongitude, destinationlat, destinationLng);
                     Uri URI = Uri.parse(uri);
+                    Log.e("SendToMapUri", String.valueOf(URI));
                     Intent intent = new Intent(Intent.ACTION_VIEW, URI);
                     intent.setPackage("com.google.android.apps.maps");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -882,16 +891,16 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-                    if (location == null) {
-                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-                    } else {
-                        //If everything went fine lets get latitude and longitude
-                        currentLatitude = location.getLatitude();
-                        currentLongitude = location.getLongitude();
-
-                        Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
-                    }
+//                    if (location == null) {
+//                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+//
+//                    } else {
+//                        //If everything went fine lets get latitude and longitude
+//                        currentLatitude = location.getLatitude();
+//                        currentLongitude = location.getLongitude();
+//
+//                        Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+//                    }
 
                 }
 
@@ -1173,7 +1182,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
+            Log.e("EventDetailResponse", s);
             try {
                 JSONObject jsonObject = new JSONObject(s);
 
@@ -1203,6 +1212,21 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
                     address.setText(obj.getString("place"));
                     loc = obj.getString("place");
+                    tvLikeQty.setText(obj.getString("total_likes"));
+
+                    isLikeable = obj.getString("is_like");
+                    if (isLikeable.equals("1")) {
+                        //hide button
+                        likesView.setVisibility(View.GONE);
+
+                    }
+
+                    if (obj.getString("checked_in").equals("1")) {
+                        isCheckedIn = true;
+                    }else
+                        {
+                            isCheckedIn = false;
+                        }
 
                     destinationlat = Double.parseDouble(obj.getString("latitude"));
                     destinationLng = Double.parseDouble(obj.getString("longitude"));
@@ -1233,7 +1257,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                }
 
             } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
+                Log.e("EventDetailError", e.getMessage());
                 e.printStackTrace();
                 progressDialog.dismiss();
             }

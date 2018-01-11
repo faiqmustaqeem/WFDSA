@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.content.CursorLoader;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 
 /**
@@ -185,6 +187,13 @@ public class GalleryActivityMine extends AppCompatActivity {
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fabAddImage);
 
+        SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+
+        if (!prefs.getString("type", "").equals("member"))
+        {
+floatingActionButton.setVisibility(View.GONE);
+        }
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,13 +268,12 @@ public class GalleryActivityMine extends AppCompatActivity {
                     }
                     //  noImage.setText("Selected Images: " + mArrayUri.size());
                     Log.e("Size", String.valueOf(encodedImageList.size()));
-                }else  if (data.getData() != null)
-                {
+                } else if (data.getData() != null) {
 
 
                     imagesUriList = new ArrayList<Uri>();
                     encodedImageList.clear();
-                    Uri mImageUri=data.getData();
+                    Uri mImageUri = data.getData();
 
                     // Get the cursor
                     Cursor cursor = getContentResolver().query(mImageUri,
@@ -274,7 +282,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imageURI  = cursor.getString(columnIndex);
+                    imageURI = cursor.getString(columnIndex);
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -282,7 +290,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                     encodedImageList.add(encodedImage);
                     cursor.close();
 
-                }else{
+                } else {
                     Toast.makeText(this, "You haven't picked Image",
                             Toast.LENGTH_LONG).show();
                     dialog.dismiss();
