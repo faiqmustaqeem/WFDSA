@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity
 
         imageUrl = prefs.getString("image", "");
 
-
+        Log.e("api_sec", prefs.getString("api_secret", ""));
         Log.e("first_name", getFirstName);
         Log.e("last_name", getLastName);
         Log.e("email", getEmail);

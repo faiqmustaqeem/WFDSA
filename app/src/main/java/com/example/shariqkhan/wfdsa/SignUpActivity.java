@@ -155,8 +155,9 @@ public class SignUpActivity extends AppCompatActivity {
                         prefs.putString("api_secret", "not_null");
                         prefs.putString("deciderId", "nonmember");
                         prefs.putString("type", "nonmember");
-                        prefs.putString("first_name", "Facebook");
-                        prefs.putString("last_name", "User");
+                        prefs.putString("first_name", object.optString("first_name"));
+                        prefs.putString("last_name", object.optString("last_name"));
+                        prefs.putString("email", object.optString("email"));
 
                         prefs.apply();
 

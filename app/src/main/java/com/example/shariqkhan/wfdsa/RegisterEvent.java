@@ -3,6 +3,7 @@ package com.example.shariqkhan.wfdsa;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -43,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.security.AccessController.getContext;
 
@@ -241,13 +243,14 @@ public class RegisterEvent extends AppCompatActivity {
 
                 Card card = new Card(
                         "4242424242424242",
-                        12,
-                        19,
-                        "123"
+                        monthToVerify,
+                        Integer.valueOf(year),
+                        cvcno
                 );
                 Log.e("CVC", card.getCVC());
 
                 card.setName("Jenny Rosen");
+
                 //card.setCurrency("usd");
 
                 //begin transaction
@@ -261,7 +264,7 @@ public class RegisterEvent extends AppCompatActivity {
                                 Log.e("PureToken", token.toString());
                                 Toast.makeText(RegisterEvent.this, token.getId(), Toast.LENGTH_SHORT).show();
 
-                                StringRequest request = new StringRequest(Request.Method.POST, ",", new Response.Listener<String>() {
+                                StringRequest request = new StringRequest(Request.Method.POST, "http://codiansoft.com/wfdsa/apis/payment/Payment_Verification", new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
 
@@ -290,10 +293,19 @@ public class RegisterEvent extends AppCompatActivity {
                                     @Override
                                     protected Map<String, String> getParams() throws AuthFailureError {
                                         Map<String, String> params = new HashMap<String, String>();
-                                        params.put("stripe_token", token.toString());
+                                        SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+
+                                        params.put("api_secret", prefs.getString("api_secret", ""));
+                                        params.put("stripe_token", token.getId());
                                         params.put("amount", String.valueOf(500));
                                         params.put("user_id", MainActivity.getId);
                                         params.put("signin_type", LoginActivity.decider);
+
+                                        Log.e("api_sec", prefs.getString("api_secret", ""));
+                                        Log.e("stripe_token", token.getId());
+                                        Log.e("amount", String.valueOf(500));
+                                        Log.e("user_id", MainActivity.getId);
+                                        Log.e("signin_type", LoginActivity.decider);
 
                                         return params;
                                     }
