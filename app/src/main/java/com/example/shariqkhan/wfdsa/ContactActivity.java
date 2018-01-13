@@ -124,8 +124,8 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ContactActivity.this, MainActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(ContactActivity.this, MainActivity.class);
+//                startActivity(i);
                 finish();
             }
         });
@@ -350,9 +350,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         protected String doInBackground(Object... objects) {
             String getResponse = getJson();
             stream = getResponse;
-
             return stream;
-
         }
 
         @Override
@@ -379,10 +377,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
             parameters.add(new BasicNameValuePair("frm_name", MainActivity.getFirstName + "" + MainActivity.getLastName));
             parameters.add(new BasicNameValuePair("frm_email", MainActivity.getEmail));
             parameters.add(new BasicNameValuePair("message", ValidComment));
-
             Log.e("message", ValidComment);
-
-
 //            parameters.add(new BasicNameValuePair("country", getItem));
 //            parameters.add(new BasicNameValuePair("contact", contactNum));
 //            parameters.add(new BasicNameValuePair("password", password));
@@ -396,7 +391,9 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
 //            Log.e("p", password);
 //            Log.e("c", confirmPassword);
 
+
             StringBuilder buffer = new StringBuilder();
+
 
             try {
                 // Log.e("Insidegetjson", "insidetry");

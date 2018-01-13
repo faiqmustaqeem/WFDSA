@@ -190,7 +190,9 @@ public class GalleryActivityMine extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
         if (!prefs.getString("type", "").equals("member")) {
+
             floatingActionButton.setVisibility(View.GONE);
+
         }
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -297,11 +299,13 @@ public class GalleryActivityMine extends AppCompatActivity {
                 }
             } else {
                 Toast.makeText(this, "Northing", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
 
             }
         } catch (Exception e) {
             Log.e("Exception", e.getMessage());
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+        dialog.dismiss();
         }
 
 

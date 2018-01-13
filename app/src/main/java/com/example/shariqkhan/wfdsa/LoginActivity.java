@@ -297,7 +297,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("last_name", last_name);
                         editor.putString("password", password);
                         editor.putString("contact_no", phNo);
-                      //  editor.putString("type", "member");
+                        //editor.putString("type", "member");
                         editor.putString("stype", "member");
 
                         editor.putString("image", up_image);

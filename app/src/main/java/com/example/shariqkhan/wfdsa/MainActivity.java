@@ -938,6 +938,7 @@ public class MainActivity extends AppCompatActivity
                         JSONObject job = resourcesData.getJSONObject(i);
                         titlesArray[i] = job.getString("title_2");
 
+
                     }
 
                 }
@@ -945,6 +946,17 @@ public class MainActivity extends AppCompatActivity
 
                 try {
                     tvAdvocacy.setText(titlesArray[0]);
+                    if (tvAdvocacy.getText().toString().contains("Word")) {
+                        tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.word, 0, 0, 0);
+                    } else if (tvAdvocacy.getText().toString().contains("Pdf")) {
+                        tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.pdf, 0, 0, 0);
+                    }else if (tvAdvocacy.getText().toString().contains("Excel"))
+                    {
+                        tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.excel, 0, 0, 0);
+                    }else
+                        {
+                            tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+                        }
                 } catch (Exception e) {
 
                     tvAdvocacy.setVisibility(View.GONE);
@@ -952,12 +964,37 @@ public class MainActivity extends AppCompatActivity
 
                 try {
                     tvAssociationService.setText(titlesArray[1]);
+
+                    if (tvAssociationService.getText().toString().contains("Word")) {
+                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.word, 0, 0, 0);
+                    } else if (tvAssociationService.getText().toString().contains("Pdf")) {
+                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.pdf, 0, 0, 0);
+                    }else if (tvAssociationService.getText().toString().contains("Excel"))
+                    {
+                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.excel, 0, 0, 0);
+                    }else
+                    {
+                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+                    }
                 } catch (Exception e) {
 
                     tvAssociationService.setVisibility(View.GONE);
                 }
                 try {
                     tvGlobalRegulatory.setText(titlesArray[2]);
+
+
+                    if (tvGlobalRegulatory.getText().toString().contains("Word")) {
+                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.word, 0, 0, 0);
+                    } else if (tvGlobalRegulatory.getText().toString().contains("Pdf")) {
+                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.pdf, 0, 0, 0);
+                    }else if (tvGlobalRegulatory.getText().toString().contains("Excel"))
+                    {
+                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.excel, 0, 0, 0);
+                    }else
+                    {
+                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+                    }
                 } catch (Exception e) {
 
                     tvGlobalRegulatory.setVisibility(View.GONE);

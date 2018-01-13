@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -180,7 +181,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public String locationToSend;
     ImageView likesView;
     TextView tvLikeQty;
-
+    String signintype;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
@@ -240,6 +241,15 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         pollResponseUrl = pollResponseUrl + "event_id=" + id;
 
         ButterKnife.bind(this);
+
+
+        SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        if (!prefs.getString("type", "").equals("member"))
+        {
+            signintype = "2";
+        }else{
+            signintype = "1";
+        }
 
         address = (TextView) findViewById(R.id.address);
         tvAgenda = (TextView) findViewById(R.id.tvAgenda);
@@ -1171,7 +1181,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = URL + "event_id=" + id + "&user_id=" + MainActivity.getId + "&signin_type=" + LoginActivity.decider;
+
+            String url = URL + "event_id=" + id + "&user_id=" + MainActivity.getId + "&signin_type=" + signintype;
 
             Log.e("url", url);
 

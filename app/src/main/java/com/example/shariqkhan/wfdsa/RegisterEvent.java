@@ -254,7 +254,10 @@ public class RegisterEvent extends AppCompatActivity {
                 //card.setCurrency("usd");
 
                 //begin transaction
-                Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_hBDKg0otup1IdPx0qS2o29Fl");
+
+                //pk_test_hBDKg0otup1IdPx0qS2o29Fl
+
+                Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_5fWYZdG9SUj4KUEuJ8FBO71Q");
                 stripe.createToken(
                         card,
                         new TokenCallback() {
