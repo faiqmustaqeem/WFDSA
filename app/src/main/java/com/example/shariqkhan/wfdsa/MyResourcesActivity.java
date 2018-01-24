@@ -33,6 +33,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.shariqkhan.wfdsa.GlobalClass.selected_resource;
+
 public class MyResourcesActivity extends AppCompatActivity {
     ImageView ivBack;
 
@@ -62,7 +64,7 @@ public class MyResourcesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("Sub Resources");
+        mTitle.setText(selected_resource);
 
 
         Task task = new Task();

@@ -12,4 +12,6 @@ import java.util.ArrayList;
 public class GlobalClass {
     public static ArrayList<EventsModel> eventsList;
     public static ArrayList<AnnouncementsModel> announcementsList;
+    public static String selected_resource="";
+    public static String selelcted_event="";
 }

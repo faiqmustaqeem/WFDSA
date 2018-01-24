@@ -15,6 +15,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -483,7 +484,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         });
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("Selected Events");
+        mTitle.setText(GlobalClass.selelcted_event);
 
         image = (ImageView) findViewById(R.id.ivBack);
 
@@ -1221,9 +1222,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     Log.e("start", startEventTime);
                     Log.e("end", endEventTime);
-                    tvDayTime.setText(obj.getString("start_time"));
+                    tvDayTime.setText(obj.getString("place"));
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
-                    address.setText(obj.getString("place"));
+                    address.setText(obj.getString("start_time"));
                     loc = obj.getString("place");
                     tvLikeQty.setText(obj.getString("total_likes"));
 

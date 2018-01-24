@@ -16,7 +16,6 @@
 
         <RelativeLayout
             android:id="@+id/relativeOutline"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -46,7 +45,6 @@
 
             <TextView
                 android:id="@+id/Post"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
@@ -89,12 +87,24 @@
                 android:textStyle="bold"
 
                 />
+            <TextView
+
+                android:id="@+id/designation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="CEO"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:layout_below="@id/experties"
+                />
 
             <TextView
                 android:id="@+id/company_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/experties"
+                android:layout_below="@id/designation"
                 android:text="Oirflame cosmetics Master Samuelsgatan 56,3rd floor SE-101 39 stockholm"
                 android:textColor="@color/colorPrimary" />
 
@@ -103,7 +113,7 @@
                 android:id="@+id/countryLinear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/experties"
+                android:layout_below="@+id/company_address"
                 android:layout_marginTop="50dp"
                 android:orientation="horizontal">
 

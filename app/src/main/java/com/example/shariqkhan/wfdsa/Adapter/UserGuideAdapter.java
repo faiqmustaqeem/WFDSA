@@ -67,10 +67,13 @@ public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyVi
                 final Dialog dialog = new Dialog(context);
                 dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
+              //  dialog.getWindow().findViewById(R.id.textview)
            //     Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 dialog.setContentView(R.layout.video_dialog_view);
-               // Toast.makeText(context, model.getId(), Toast.LENGTH_SHORT).show();
+                TextView textView=(TextView)dialog.findViewById(R.id.textview);
+                textView.setText(model.getVideotitle());
+                // Toast.makeText(context, model.getId(), Toast.LENGTH_SHORT).show();
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
@@ -78,7 +81,8 @@ public class UserGuideAdapter extends RecyclerView.Adapter<UserGuideAdapter.MyVi
 
                 FullscreenVideoLayout vid = (FullscreenVideoLayout) dialog.findViewById(R.id.videoview);
                 media = new MediaController(context);
-                Uri uri = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.videoviewtestingvideo);
+//                "android.resource://" + context.getPackageName() + "/" + R.raw.videoviewtestingvideo
+                Uri uri = Uri.parse(model.getUploadVideo());
                 try {
                     vid.setVideoURI(uri);
 

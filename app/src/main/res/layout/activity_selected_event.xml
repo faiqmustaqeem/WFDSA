@@ -226,9 +226,8 @@
                         android:layout_below="@+id/timing"
                        android:layout_toRightOf="@+id/heelo"
                         android:gravity="center_vertical"
-
-                        android:drawableLeft="@drawable/ic_loc"
-                        android:text="Austria"
+                        android:drawableLeft="@drawable/ic_clock"
+                        android:text="Wednesday ,@8:00AM"
                         android:textSize="14sp" />
 
                     <TextView
@@ -256,19 +255,18 @@
                             android:id="@+id/tvDayTime"
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_clock"
+                            android:drawableLeft="@drawable/ic_loc"
                             android:gravity="center_vertical"
-                            android:text="Wednesday ,@8:00AM"
+                            android:text="2781 Caminito Chollas MS 44 San Diego, CA"
 
                             />
-
 
 
                         <TextView
                             android:id="@+id/tvCityCountry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
+                                android:visibility="gone"
                             android:drawableLeft="@drawable/ic_city"
                             android:gravity="center_vertical"
                             android:text="Australia" />

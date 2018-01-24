@@ -59,6 +59,7 @@ public class CEOActivity extends AppCompatActivity {
         URL = getIntent().getStringExtra("url");
 
         URL = URL + "role_id=" + sendRole;
+        Log.e("url_new" , URL);
 
         listOfMembers = (RecyclerView) findViewById(R.id.memberList);
 
@@ -83,11 +84,11 @@ public class CEOActivity extends AppCompatActivity {
 //        for (int i = 0; i < 12; i++) {
 //
 //            ModelMember member = new ModelMember();
-//            member.setCompanyName("Codian-Soft-");
 //            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
 //            member.setMemberEmail("codianSoft@org");
 //            member.setMemberName("Shariq Khan");
 //            member.setMemberFax("03342477874");
+//            member.setCompanyName("Codian-Soft-");
 //            member.setMemberPhone("03342477874");
 //            member.setMemberWeb("www.codiansoft.com");
 //            member.setCountry("Argentina");
@@ -117,9 +118,10 @@ public class CEOActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
+            Log.e("Resources", s);
             try {
                 JSONObject jsonObject = new JSONObject(s);
+
 
 
                 JSONObject resultObj = jsonObject.getJSONObject("result");
@@ -127,6 +129,8 @@ public class CEOActivity extends AppCompatActivity {
 
                 if (getstatus.equals("success")) {
                     Log.e("SuccessFull", "Inside");
+                    Log.e("CEO" , s);
+
                     JSONArray rolesArray = resultObj.getJSONArray("data");
                     //   roleArray = new String[rolesArray.length()];
                     // String idArray[] = new String[rolesArray.length()];
@@ -134,6 +138,8 @@ public class CEOActivity extends AppCompatActivity {
                     for (int i = 0; i < rolesArray.length(); i++) {
                         ModelMember model = new ModelMember();
                         JSONObject obj = rolesArray.getJSONObject(i);
+
+
 
                         model.setMemberPhone(obj.getString("telephone"));
                         model.setMemberEmail(obj.getString("email"));
@@ -143,9 +149,11 @@ public class CEOActivity extends AppCompatActivity {
                         model.setLastname(obj.getString("last_name"));
                         model.setTitle(obj.getString("title"));
                         model.setDesignation(obj.getString("designation"));
+                        model.setWfdsa_title(obj.getString("wfdsa_title"));
                         model.setUpload_image(obj.getString("upload_image"));
                         model.setCompanyAddress(obj.getString("address"));
                         model.setCompanyName(obj.getString("company"));
+                        model.setFlag_pic(obj.getString("flag_pic"));
 
                         arrayList.add(model);
 

@@ -110,7 +110,6 @@ public class UserGuideActivity extends AppCompatActivity {
 
                         model.setVideotitle(obj.getString("title"));
                         model.setUploadVideo(obj.getString("upload_video"));
-
                         arrayList.add(model);
                         adapter.notifyDataSetChanged();
                     }

@@ -2,7 +2,7 @@ package com.example.shariqkhan.wfdsa.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView;import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.Model.MainResourceModel;
 import com.example.shariqkhan.wfdsa.MyResourcesActivity;
 import com.example.shariqkhan.wfdsa.R;
@@ -40,7 +41,7 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
     }
 
     @Override
-    public void onBindViewHolder(MainResourceAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MainResourceAdapter.MyViewHolder holder, int position) {
 
         final MainResourceModel model = arrayList.get(position);
 
@@ -63,7 +64,9 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
                 Toast.makeText(con, "Members Access Only!", Toast.LENGTH_SHORT).show();
             }else
                 {
+
                     Intent intent = new Intent(con, MyResourcesActivity.class);
+                    GlobalClass.selected_resource=model.getTitle();
                     intent.putExtra("RoleName",model.getResource_id());
                     con.startActivity(intent);
                 }
@@ -71,7 +74,6 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
     });
 
     }
-
     @Override
     public int getItemCount() {
         return arrayList.size();

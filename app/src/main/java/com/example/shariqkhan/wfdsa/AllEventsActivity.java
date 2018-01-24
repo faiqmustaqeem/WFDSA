@@ -116,7 +116,7 @@ public class AllEventsActivity extends AppCompatActivity {
 
                 EventsModel eventsModel = arrayList.get(position);
 
-
+                GlobalClass.selelcted_event=eventsModel.getEventTitle();
                 if (!MainActivity.DECIDER.equals("member")) {
                     if (eventsModel.getPersonal().equals("member")) {
                         Toast.makeText(AllEventsActivity.this, "Members Access Only!", Toast.LENGTH_SHORT).show();

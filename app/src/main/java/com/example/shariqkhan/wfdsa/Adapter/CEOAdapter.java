@@ -2,6 +2,7 @@ package com.example.shariqkhan.wfdsa.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.example.shariqkhan.wfdsa.R;
+import com.google.android.gms.vision.text.Text;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ Context context;
         ModelMember member = arrayList.get(position);
 
         holder.country.setText(member.getCountry());
-        holder.Post.setText(member.getDesignation());
+        holder.Post.setText(member.getWfdsa_title());
 
 
         // holder.name.setText(member.getMemberName());
@@ -53,16 +55,25 @@ Context context;
         holder.email.setText(member.getMemberEmail());
         holder.name.setText(member.getFirstname()+" "+member.getLastname());
         holder.company_address.setText(member.getCompanyAddress());
-        if (MainActivity.DECIDER.equals("member")) {
+        Log.e("flag_pic" , member.getFlag_pic());
+        holder.designation.setText(member.getDesignation());
+
+
+       if (MainActivity.DECIDER.equals("member"))
+        {
             holder.relative.setVisibility(View.VISIBLE);
         } else {
             holder.relative.setVisibility(View.GONE);
         }
         try{
+            if(!member.getFlag_pic().equals(""))
+            Picasso.with(context).load(member.getFlag_pic()).into(holder.flag);
+            if(!member.getUpload_image().equals(""))
             Picasso.with(context).load(member.getUpload_image()).into(holder.logoFront);    
         }catch (Exception e)
         {
 //            Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            Log.e("exception" , e.getMessage());
             //Picasso.with(context).load(member.getUpload_image()).into(holder.logoFront);
         }
         
@@ -82,6 +93,7 @@ Context context;
         public TextView name;
         public TextView experties;
         public TextView Post;
+        public TextView designation;
         public TextView country;
         public TextView company_address;
         public TextView fax;
@@ -93,7 +105,7 @@ Context context;
         public View view;
         public ImageView logoFront;
 
-        public ImageView logoTopLeft;
+        public ImageView flag;
 
 
         public MyHolder(View itemView) {
@@ -111,8 +123,8 @@ Context context;
 
             logoFront = (ImageView) view.findViewById(R.id.logo);
 
-            logoTopLeft = (ImageView) view.findViewById(R.id.flag);
-
+            flag = (ImageView) view.findViewById(R.id.flag);
+            designation=(TextView)view.findViewById(R.id.designation);
 
         }
     }

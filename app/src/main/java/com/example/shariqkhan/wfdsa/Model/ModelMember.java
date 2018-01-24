@@ -16,6 +16,7 @@ public class ModelMember {
     public String designation;
     public String upload_image;
     public String firstname;
+    private String wfdsa_title;
 
     public String getCompany_logo() {
         return company_logo;
@@ -146,5 +147,13 @@ public class ModelMember {
 
     public void setMemberWeb(String memberWeb) {
         this.memberWeb = memberWeb;
+    }
+
+    public String getWfdsa_title() {
+        return wfdsa_title;
+    }
+
+    public void setWfdsa_title(String wfdsa_title) {
+        this.wfdsa_title = wfdsa_title;
     }
 }
