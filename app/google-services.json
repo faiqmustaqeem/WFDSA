@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "477558073834",
-    "firebase_url": "https://foodies-524d7.firebaseio.com",
-    "project_id": "foodies-524d7",
-    "storage_bucket": "foodies-524d7.appspot.com"
+    "project_number": "126488850229",
+    "firebase_url": "https://pharmacypasha.firebaseio.com",
+    "project_id": "pharmacypasha",
+    "storage_bucket": "pharmacypasha.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:477558073834:android:c709078230bf4af7",
+        "mobilesdk_app_id": "1:126488850229:android:7ba88a1135b92e57",
         "android_client_info": {
-          "package_name": "com.example.shariqkhan.foodies"
+          "package_name": "com.example.faiq.pharmacypasha"
         }
       },
       "oauth_client": [
         {
-          "client_id": "477558073834-me9lb2oe7k2dqul2ikisjgr2otsnjuh7.apps.googleusercontent.com",
+          "client_id": "126488850229-gboe8mq3a70trckdvc3ugn1kio2kpn3s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.shariqkhan.foodies",
-            "certificate_hash": "7da262a23fdc115296f954a4d24d8dc66ec553b8"
+            "package_name": "com.example.faiq.pharmacypasha",
+            "certificate_hash": "cd16c7aea1ccf7b4534ead423eea8a26a75d10c0"
           }
         },
         {
-          "client_id": "477558073834-o0b8btgc87vjf801m76skde1qath2e75.apps.googleusercontent.com",
+          "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnXMJ7JpacIMADQWEolrty4HkeS9n0XNI"
+          "current_key": "AIzaSyCafaDxudp3HwO9Xlb9JMmsQexIR3Gso3w"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "477558073834-o0b8btgc87vjf801m76skde1qath2e75.apps.googleusercontent.com",
+              "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -52,28 +52,28 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:477558073834:android:f0a8f172dca82d09",
+        "mobilesdk_app_id": "1:126488850229:android:34a4d722f99e5dbe",
         "android_client_info": {
-          "package_name": "com.example.shariqkhan.wfdsa"
+          "package_name": "com.codiansoft.teachlery"
         }
       },
       "oauth_client": [
         {
-          "client_id": "477558073834-q884f0uvled5hetuldrei9qbm4t077h8.apps.googleusercontent.com",
+          "client_id": "126488850229-3ma482nphk4864mjh4ef1s4imn1bvbdu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.shariqkhan.wfdsa",
-            "certificate_hash": "af8a2f65dab95840f5aec08740caa9161e09038b"
+            "package_name": "com.codiansoft.teachlery",
+            "certificate_hash": "8adb265a4572ea78c6732772ff254e282f1be7dd"
           }
         },
         {
-          "client_id": "477558073834-o0b8btgc87vjf801m76skde1qath2e75.apps.googleusercontent.com",
+          "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnXMJ7JpacIMADQWEolrty4HkeS9n0XNI"
+          "current_key": "AIzaSyCafaDxudp3HwO9Xlb9JMmsQexIR3Gso3w"
         }
       ],
       "services": {
@@ -84,10 +84,85 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "477558073834-o0b8btgc87vjf801m76skde1qath2e75.apps.googleusercontent.com",
+              "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126488850229:android:76beefee9105ce16",
+        "android_client_info": {
+          "package_name": "com.codiansoft.teachlerystudent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126488850229-6uariies6tj1j55238b527re8jc2n8hd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codiansoft.teachlerystudent",
+            "certificate_hash": "8adb265a4572ea78c6732772ff254e282f1be7dd"
+          }
+        },
+        {
+          "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCafaDxudp3HwO9Xlb9JMmsQexIR3Gso3w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126488850229:android:f0a8f172dca82d09",
+        "android_client_info": {
+          "package_name": "com.example.shariqkhan.wfdsa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126488850229-sihgu739uhkavk1f8sf7cfr0f9if215i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCafaDxudp3HwO9Xlb9JMmsQexIR3Gso3w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

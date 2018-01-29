@@ -5,6 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/earth"
     >
 
     <android.support.v7.widget.Toolbar
@@ -220,7 +221,8 @@
                         android:layout_height="wrap_content"
                         android:text="CVC CODE"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/hint"
@@ -236,7 +238,7 @@
 
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/simpleText"
-                        android:hint="CVC NUMBER"
+                        android:hint="CVC CODE"
                         android:inputType="textCapWords"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="14sp"
@@ -253,11 +255,10 @@
 
                         <Button
                             android:id="@+id/nums4"
-                            android:layout_width="50dp"
+                            android:layout_width="100dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:background="@color/colorPrimary"
-                            android:text="123"
+                            android:background="@drawable/card_dummy"
                             android:textColor="#fff"
                             android:textSize="10sp"
 
@@ -273,7 +274,7 @@
                             android:text="1234"
                             android:textColor="#fff"
                             android:textSize="10sp"
-
+                            android:visibility="gone"
                             />
 
                     </LinearLayout>
@@ -303,7 +304,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignBottom="@+id/tilCardNumber"
                             android:layout_alignStart="@+id/tilCardNumber"
-                            android:hint="YOUR ADDRESS"
+                            android:hint="ADDRESS"
                             android:inputType="textCapWords"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="14sp"
@@ -329,7 +330,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignBottom="@+id/tilCardNumber"
                             android:layout_alignStart="@+id/tilCardNumber"
-                            android:hint="NUMBER"
+                            android:hint="CONTACT NUMBER"
                             android:inputType="textCapWords"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="14sp"
@@ -350,7 +351,7 @@
                     <Spinner
 
                         android:id="@+id/spinner3"
-                        android:layout_width="150dp"
+                        android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@+id/COUNTRY" />
 
@@ -388,6 +389,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="20dp"
                         android:background="@color/colorPrimary"
                         android:text="Register"
                         android:textAllCaps="false"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+android:background="@drawable/earth"
     >
 
     <include
@@ -69,7 +69,6 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_like"
                 android:tint="@color/lightGray"
-
                 app:layout_constraintBottom_toBottomOf="@+id/tvLikesQty"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -177,6 +176,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tvEventDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -317,6 +317,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:visibility="gone"
                         android:text="Hosts details\n Mr. Sammy W. S Lee Chairman Infinitus (Hong Kong) Company Limited, Member of LKK Health Products Group Limited " />
 
 

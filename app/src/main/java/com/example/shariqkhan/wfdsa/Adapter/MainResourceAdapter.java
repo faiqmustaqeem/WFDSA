@@ -46,15 +46,15 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
         final MainResourceModel model = arrayList.get(position);
 
         holder.list_item.setText(model.getTitle());
-        if (holder.list_item.getText().toString().contains("Word"))
-        {
-            holder.leftImage.setImageResource(R.drawable.word);
-        }else if(holder.list_item.getText().toString().contains("Pdf"))
-        {
-            holder.leftImage.setImageResource(R.drawable.pdf);
-        }else{
-            holder.leftImage.setImageResource(R.drawable.excel);
-        }
+//        if (holder.list_item.getText().toString().contains("Word"))
+//        {
+//            holder.leftImage.setImageResource(R.drawable.word);
+//        }else if(holder.list_item.getText().toString().contains("Pdf"))
+//        {
+//            holder.leftImage.setImageResource(R.drawable.pdf);
+//        }else{
+//            holder.leftImage.setImageResource(R.drawable.excel);
+//        }
 
     holder.VIEW.setOnClickListener(new View.OnClickListener() {
         @Override

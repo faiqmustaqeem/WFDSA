@@ -20,8 +20,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,11 +65,11 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
     TextView tvGetDirections;
 
     @BindView(R.id.clLocation)
-    ConstraintLayout clLocation;
+    RelativeLayout clLocation;
     @BindView(R.id.clCall)
-    ConstraintLayout clCall;
+    RelativeLayout clCall;
     @BindView(R.id.clMessage)
-    ConstraintLayout clMessage;
+    RelativeLayout clMessage;
     @BindView(R.id.ivLocation)
     ImageView ivLocation;
     @BindView(R.id.ivCall)
@@ -98,6 +102,9 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
     TextView tvDiscussion;
 
     ProgressDialog PGdialog;
+    @BindView(R.id.spinner)
+    Spinner spinner;
+    String selected_option;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +155,25 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
                 } else {
                     Toast.makeText(ContactActivity.this, "Invalid Comment", Toast.LENGTH_SHORT).show();
                 }
+
+            }
+        });
+        List<String> list =new ArrayList<>();
+        list.add("Membership Inquiry");
+        list.add("General Inquiry");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        spinner.setAdapter(adapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selected_option = adapterView.getItemAtPosition(i).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });

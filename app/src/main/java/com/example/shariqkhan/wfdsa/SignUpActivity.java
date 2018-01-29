@@ -37,6 +37,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -367,13 +368,18 @@ public class SignUpActivity extends AppCompatActivity {
             parameters.add(new BasicNameValuePair("password", password));
             parameters.add(new BasicNameValuePair("confirm_password", confirmPassword));
 
-            Log.e("f", firstName);
-            Log.e("l", lastName);
-            Log.e("e", email);
-            Log.e("c", getItem);
-            Log.e("c", contactNum);
-            Log.e("p", password);
-            Log.e("c", confirmPassword);
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            parameters.add(new BasicNameValuePair("firebase_token", refreshedToken));
+
+            Log.e("signup", firstName);
+            Log.e("signup", lastName);
+            Log.e("signup", email);
+            Log.e("signup", getItem);
+            Log.e("signup", contactNum);
+            Log.e("signup", password);
+            Log.e("signup", confirmPassword);
+            Log.e("signup", refreshedToken);
+
 
             StringBuilder buffer = new StringBuilder();
 
@@ -448,7 +454,7 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.apply();
                         LoginActivity.decider = "2";
 
-                        Toast.makeText(SignUpActivity.this, "Check your account to get dummy email password!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, "Sucessfully created !", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
@@ -507,4 +513,5 @@ public class SignUpActivity extends AppCompatActivity {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
+
 }

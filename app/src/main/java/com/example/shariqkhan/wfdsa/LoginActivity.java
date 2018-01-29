@@ -71,6 +71,13 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.tvNonMemberSignIn)
     TextView tvNonMemberSignIn;
 
+    @BindView(R.id.etEmail)
+            EditText etNonMemberEmail;
+
+    @BindView(R.id.etNonMemberPassword)
+    EditText etNonMemberPassowrd;
+
+
     TextInputLayout etMemberEmail;
     TextInputLayout etMemberPass;
     ImageView ivBack;
@@ -136,8 +143,9 @@ public class LoginActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.tvMember:
                 decider = "1";
-                llMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
-                llNonMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                llMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                llNonMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
+
                 clMember.setVisibility(View.VISIBLE);
                 clNonMember.setVisibility(View.GONE);
 
@@ -149,8 +157,8 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case R.id.tvNonMember:
                 decider = "2";
-                llMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                llNonMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
+                llMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
+                llNonMember.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 clNonMember.setVisibility(View.VISIBLE);
                 clMember.setVisibility(View.GONE);
 
@@ -165,8 +173,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(signUpIntent);
                 break;
             case R.id.tvNonMemberSignIn:
-                getEmail = etMemberEmail.getEditText().getText().toString();
-                getPassword = etMemberPass.getEditText().getText().toString();
+                getEmail = etNonMemberEmail.getText().toString();
+                getPassword = etNonMemberPassowrd.getText().toString();
                 Log.e("Message", "Dhun dhun dhun");
 
                 fetchEvents();
@@ -222,6 +230,8 @@ public class LoginActivity extends AppCompatActivity {
             parameters.add(new BasicNameValuePair("email", getEmail));
             parameters.add(new BasicNameValuePair("password", getPassword));
             parameters.add(new BasicNameValuePair("signin_type", LoginActivity.decider));
+
+            Log.e("params",parameters.toString());
 
             StringBuilder buffer = new StringBuilder();
 
@@ -282,8 +292,8 @@ public class LoginActivity extends AppCompatActivity {
                         String first_name = user_data.getString("first_name");
                         String last_name = user_data.getString("last_name");
                         String password = user_data.getString("password");
-                        String phNo = user_data.getString("cell");
-                        String up_image = user_data.getString("upload_image");
+                        String phNo = user_data.getString("contact_no");
+                      //  String up_image = user_data.getString("upload_image");
 
 
                         Log.e("email", email);
@@ -300,7 +310,7 @@ public class LoginActivity extends AppCompatActivity {
                         //editor.putString("type", "member");
                         editor.putString("stype", "member");
 
-                        editor.putString("image", up_image);
+                       // editor.putString("image", up_image);
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

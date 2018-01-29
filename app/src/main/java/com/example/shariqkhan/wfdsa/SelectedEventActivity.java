@@ -1,6 +1,5 @@
 package com.example.shariqkhan.wfdsa;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -21,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -49,18 +49,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
-import com.example.shariqkhan.wfdsa.Adapter.PaymentsRVAdapter;
 import com.example.shariqkhan.wfdsa.Dialog.EventAttendeesDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventDiscussionDialog;
-import com.example.shariqkhan.wfdsa.Dialog.EventGalleryDialog;
-import com.example.shariqkhan.wfdsa.Dialog.EventPollsDialog;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
-import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
-import com.example.shariqkhan.wfdsa.Model.PaymentModel;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -195,7 +187,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
-
     }
 
     @Override
@@ -249,7 +240,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         {
             signintype = "2";
         }else{
-            signintype = "1";
+            signintype = "1"; // non member
         }
 
         address = (TextView) findViewById(R.id.address);
@@ -485,7 +476,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(GlobalClass.selelcted_event);
-
         image = (ImageView) findViewById(R.id.ivBack);
 
 //        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_bar);
@@ -793,14 +783,17 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                dialog.show();
 //            }
 //        });
+
         likesView = (ImageView) findViewById(R.id.ivLike);
         tvLikeQty = (TextView) findViewById(R.id.tvLikesQty);
 
         likesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                likesView.setVisibility(View.GONE);
+                //likesView.setVisibility(View.GONE);
                 tvLikeQty.setText("422");
+                likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
+                likesView.setClickable(false);
             }
         });
 
@@ -1185,7 +1178,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
             String url = URL + "event_id=" + id + "&user_id=" + MainActivity.getId + "&signin_type=" + signintype;
 
-            Log.e("url", url);
+            Log.e("url_selected_event", url);
 
             String response = getHttpData.getData(url);
 
@@ -1222,12 +1215,16 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     Log.e("start", startEventTime);
                     Log.e("end", endEventTime);
+
+
                     tvDayTime.setText(obj.getString("place"));
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
                     address.setText(obj.getString("start_time"));
                     loc = obj.getString("place");
                     tvLikeQty.setText(obj.getString("total_likes"));
 
+                    String agenda=obj.getString("agenda");
+                    tvAgendaDescription.setText(agenda);
                     AttendeesID = obj.getString("attendees_id");
 
                     isLikeable = obj.getString("is_like");

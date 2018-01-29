@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@drawable/earth"
     >
 
     <include
@@ -69,14 +69,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:background="@android:color/darker_gray"
+                    android:background="@color/colorPrimary"
 
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvMember"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:onClick="onClick"
@@ -92,7 +92,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:background="@color/colorPrimary"
+                    android:background="@android:color/darker_gray"
                     android:orientation="vertical">
 
                     <TextView

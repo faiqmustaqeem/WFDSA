@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@drawable/earth"
     >
 
     <include
@@ -336,6 +336,8 @@
                     android:gravity="center"
                     android:padding="12dp"
                     android:text="Sign Up"
+                    android:layout_marginBottom="0dp"
+                    android:paddingBottom="10dp"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
             </LinearLayout>

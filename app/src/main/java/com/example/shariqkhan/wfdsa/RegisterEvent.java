@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.shariqkhan.wfdsa.Singleton.AppSingleton;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
@@ -60,6 +61,7 @@ public class RegisterEvent extends AppCompatActivity {
     Toolbar toolbar;
     Button btn;
     ProgressDialog dialog;
+    String token_id;
 
 
     TextInputLayout tilFirstName;
@@ -231,101 +233,75 @@ public class RegisterEvent extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.show();
-                cvcno = cvcnoedit.getText().toString();
 
-                addr = tilAddress.getEditText().getText().toString();
-                fname = tilFirstName.getEditText().getText().toString();
-                contact = tilContact.getEditText().getText().toString();
-                email = tilEmailEdit.getEditText().getText().toString();
-                cardno = tilCardNumber.getEditText().getText().toString();
+                if(checkFields())
+                {
+                    dialog.show();
+                    cvcno = cvcnoedit.getText().toString();
+
+                    addr = tilAddress.getEditText().getText().toString();
+                    fname = tilFirstName.getEditText().getText().toString();
+                    contact = tilContact.getEditText().getText().toString();
+                    email = tilEmailEdit.getEditText().getText().toString();
+                    cardno = tilCardNumber.getEditText().getText().toString();
 
 
-                Card card = new Card(
-                        "4242424242424242",
-                        monthToVerify,
-                        Integer.valueOf(year),
-                        cvcno
-                );
-                Log.e("CVC", card.getCVC());
+                    Card card = new Card(
+                            "4242424242424242",
+                            monthToVerify,
+                            Integer.valueOf(year),
+                            cvcno
+                    );
+                    Log.e("CVC", card.getCVC());
 
-                card.setName("Jenny Rosen");
+                    if(!card.validateCard())
+                    {
+                        Toast.makeText(RegisterEvent.this, "Invalid card number" , Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    card.setName("Jenny Rosen");
 
-                //card.setCurrency("usd");
+                    //card.setCurrency("usd");
 
-                //begin transaction
+                    //begin transaction
 
-                //pk_test_hBDKg0otup1IdPx0qS2o29Fl
+                    //pk_test_hBDKg0otup1IdPx0qS2o29Fl
 
-                Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_5fWYZdG9SUj4KUEuJ8FBO71Q");
-                stripe.createToken(
-                        card,
-                        new TokenCallback() {
-                            public void onSuccess(final Token token) {
-                                dialog.dismiss();
-                                Log.e("StripeToken", token.getId());
-                                Log.e("PureToken", token.toString());
-                                Toast.makeText(RegisterEvent.this, token.getId(), Toast.LENGTH_SHORT).show();
+                    Stripe stripe = new Stripe(RegisterEvent.this, "pk_test_5fWYZdG9SUj4KUEuJ8FBO71Q");
+                    stripe.createToken(
+                            card,
+                            new TokenCallback() {
+                                public void onSuccess(final Token token) {
+                                    dialog.dismiss();
+//                                    Log.e("StripeToken", token.getId());
+//                                    Log.e("PureToken", token.toString());
+                                    SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
-                                StringRequest request = new StringRequest(Request.Method.POST, "http://codiansoft.com/wfdsa/apis/payment/Payment_Verification", new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
+                                    Log.e("api_sec", prefs.getString("api_secret", ""));
+                                    Log.e("stripe_token", token.getId());
+                                    Log.e("amount", String.valueOf(500));
+                                    Log.e("user_id", MainActivity.getId);
+                                    Log.e("signin_type", LoginActivity.decider);
 
-                                        try {
-                                            JSONObject job = new JSONObject(response);
-                                            String resp = job.getString("response");
-                                            if (resp.equals("Successful")) {
-                                                Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
-                                                finish();
-                                            } else {
-                                                Toast.makeText(RegisterEvent.this, "Payment Transaction Failed!", Toast.LENGTH_SHORT).show();
-                                                finish();
-                                            }
-                                        } catch (JSONException e) {
-                                            Log.e("ErrorMessage", e.getMessage());
-                                            e.printStackTrace();
-                                        }
+                                  //  Toast.makeText(RegisterEvent.this, "there", Toast.LENGTH_SHORT).show();
 
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
+                                //there
+                                    token_id=token.getId();
+                                    Log.e("agaya","agaya");
+                                    sendData();
 
-                                    }
-                                }) {
-                                    @Override
-                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                        Map<String, String> params = new HashMap<String, String>();
-                                        SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                                }
 
-                                        params.put("api_secret", prefs.getString("api_secret", ""));
-                                        params.put("stripe_token", token.getId());
-                                        params.put("amount", String.valueOf(500));
-                                        params.put("user_id", MainActivity.getId);
-                                        params.put("signin_type", LoginActivity.decider);
+                                public void onError(Exception error) {
+                                    // Show localized error message
+                                    // Toast.makeText(RegisterEvent.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                    Log.e("ExceptionFromStripe", error.getMessage());
+                                    Log.e("ExceptionFromStripe", error.getLocalizedMessage());
+                                    dialog.dismiss();
 
-                                        Log.e("api_sec", prefs.getString("api_secret", ""));
-                                        Log.e("stripe_token", token.getId());
-                                        Log.e("amount", String.valueOf(500));
-                                        Log.e("user_id", MainActivity.getId);
-                                        Log.e("signin_type", LoginActivity.decider);
-
-                                        return params;
-                                    }
-                                };
-                                Volley.newRequestQueue(RegisterEvent.this).add(request);
+                                }
                             }
-
-                            public void onError(Exception error) {
-                                // Show localized error message
-                                // Toast.makeText(RegisterEvent.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                                Log.e("ExceptionFromStripe", error.getMessage());
-                                Log.e("ExceptionFromStripe", error.getLocalizedMessage());
-                                dialog.dismiss();
-
-                            }
-                        }
-                );
+                    );
 
 
 //                tilAddress.getEditText().setText("");
@@ -335,46 +311,142 @@ public class RegisterEvent extends AppCompatActivity {
 //                tilCardNumber.getEditText().setText("");
 //                cvcnoedit.setText("");
 
-                if (!tilAddressEdit.getText().toString().equals("") && !tilFirstNameEdit.getText().toString().equals("") && !tilContactEdit.getText().toString().equals("")
-                        && !tilCardNumberEdit.getText().toString().equals("") && !tilEmailEditedt.getText().toString().equals("") && !cvcnoedit.getText().toString().equals("")) {
-
-                    Dialog dialog = new Dialog(RegisterEvent.this);
-                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                    dialog.getWindow().setLayout(lp.width, lp.height);
-                    dialog.setContentView(R.layout.thanking_activity);
-                    dialog.show();
-                    Log.e("addr", addr);
-                    Log.e("fname", fname);
-                    Log.e("contact", contact);
-                    Log.e("email", email);
-                    Log.e("cardno", cardno);
-                    Log.e("year", year);
-                    Log.e("month", month);
-                    Log.e("country", countryName);
-                    clearFields();
-
-
-                } else {
-                    Log.e("addr", addr);
-                    Log.e("fname", fname);
-                    Log.e("contact", contact);
-                    Log.e("email", email);
-                    Log.e("cardno", cardno);
-                    Log.e("year", year);
-                    Log.e("month", month);
-                    Log.e("country", countryName);
-
-
-                    Toast.makeText(RegisterEvent.this, "Fill all the fields first!", Toast.LENGTH_SHORT).show();
+//                    if (!tilAddressEdit.getText().toString().equals("") && !tilFirstNameEdit.getText().toString().equals("") && !tilContactEdit.getText().toString().equals("")
+//                            && !tilCardNumberEdit.getText().toString().equals("") && !tilEmailEditedt.getText().toString().equals("") && !cvcnoedit.getText().toString().equals("")) {
+//
+//                        Dialog dialog = new Dialog(RegisterEvent.this);
+//                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//
+//                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                        dialog.getWindow().setLayout(lp.width, lp.height);
+//                        dialog.setContentView(R.layout.thanking_activity);
+//                        dialog.show();
+//                        Log.e("addr", addr);
+//                        Log.e("fname", fname);
+//                        Log.e("contact", contact);
+//                        Log.e("email", email);
+//                        Log.e("cardno", cardno);
+//                        Log.e("year", year);
+//                        Log.e("month", month);
+//                        Log.e("country", countryName);
+//                        clearFields();
+//
+//
+//                    } else {
+//                        Log.e("addr", addr);
+//                        Log.e("fname", fname);
+//                        Log.e("contact", contact);
+//                        Log.e("email", email);
+//                        Log.e("cardno", cardno);
+//                        Log.e("year", year);
+//                        Log.e("month", month);
+//                        Log.e("country", countryName);
+//
+//
+//                        Toast.makeText(RegisterEvent.this, "Fill all the fields first!", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             }
         });
 
 
+
     }
+    public void sendData()
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, "http://codiansoft.com/wfdsa/apis/payment/Payment_Verification",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            JSONObject job = new JSONObject(response);
+                            JSONObject result = job.getJSONObject("result");
+                            String res = result.getString("response");
+                            Log.e("response" , res);
+
+                            if (res.equals("Payment Successfully Paid")) {
+
+                                Dialog dialog = new Dialog(RegisterEvent.this);
+                                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                dialog.getWindow().setLayout(lp.width, lp.height);
+                                dialog.setContentView(R.layout.thanking_activity);
+                                dialog.show();
+                                // Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
+                                //finish();
+                            } else {
+                                Toast.makeText(RegisterEvent.this, "Payment Transaction Failed!", Toast.LENGTH_SHORT).show();
+                                // finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("ErrorMessage", e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley_error" , error.getMessage() );
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+
+                params.put("api_secret", prefs.getString("api_secret", ""));
+                params.put("stripe_token", token_id);
+                params.put("amount", String.valueOf(500));
+                params.put("user_id", MainActivity.getId);
+                params.put("signin_type", LoginActivity.decider);
+                params.put("event_id" , GlobalClass.selelcted_event_id);
+
+
+                Log.e("params" , params.toString());
+
+                return params;
+            }
+        };
+       Volley.newRequestQueue(RegisterEvent.this).add(request);
+       // AppSingleton.getInstance().addToRequestQueue(request, "Payment");
+    }
+    public boolean checkFields() {
+        if (tilAddressEdit.getText().toString().equals("")) {
+            Toast.makeText(this, "Please enter Address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (tilFirstNameEdit.getText().toString().equals("")) {
+            Toast.makeText(this, "Please enter First name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (tilContactEdit.getText().toString().equals("")) {
+            Toast.makeText(this, "Please enter Contact number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (tilCardNumberEdit.getText().toString().equals("")) {
+            Toast.makeText(this, "Please enter Card number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (tilEmailEditedt.getText().toString().equals("")) {
+            Toast.makeText(this, "Please enter Email", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (cvcnoedit.getText().toString().equals("")) {
+            Toast.makeText(this, "Please enter CVC code", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
 }

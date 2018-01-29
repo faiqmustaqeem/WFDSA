@@ -14,4 +14,5 @@ public class GlobalClass {
     public static ArrayList<AnnouncementsModel> announcementsList;
     public static String selected_resource="";
     public static String selelcted_event="";
+    public static String selelcted_event_id="";
 }

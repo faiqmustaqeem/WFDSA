@@ -144,7 +144,7 @@ public class CEOActivity extends AppCompatActivity {
                         model.setMemberPhone(obj.getString("telephone"));
                         model.setMemberEmail(obj.getString("email"));
                         model.setMemberFax(obj.getString("fax"));
-                        model.setCountry(obj.getString("country"));
+                        model.setCountry(obj.getString("name"));
                         model.setFirstname(obj.getString("first_name"));
                         model.setLastname(obj.getString("last_name"));
                         model.setTitle(obj.getString("title"));

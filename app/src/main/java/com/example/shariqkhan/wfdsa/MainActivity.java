@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity
 
 
         refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.e("Tooken", refreshedToken);
+        Log.e("Token", refreshedToken);
         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
         editor.putString("myToken", refreshedToken);
         editor.apply();
@@ -629,6 +629,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void checkForPermissions()
+    {
+
     }
 
     private class Task extends AsyncTask<String, Void, String> {

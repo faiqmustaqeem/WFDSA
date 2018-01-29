@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/WFDSA.iml" filepath="$PROJECT_DIR$/WFDSA.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wfdsa.iml" filepath="$PROJECT_DIR$/wfdsa.iml" />
       <module fileurl="file://$PROJECT_DIR$/www.iml" filepath="$PROJECT_DIR$/www.iml" />
     </modules>
   </component>
