@@ -20,6 +20,7 @@ import android.widget.ImageView;
 
 import com.example.shariqkhan.wfdsa.Adapter.EventGalleryGVadapter;
 import com.example.shariqkhan.wfdsa.Adapter.InvoiceAdapter;
+import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
@@ -57,7 +58,7 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
     public static int MULTI_SELECT = 1;
 
 
-    String URL = "http://codiansoft.com/wfdsa/apis/Event/Gallery?";
+    String URL = GlobalClass.base_url+"wfdsa/apis/Event/Gallery?";
 
     public EventGalleryDialog(Activity a, String id) {
         super(a);

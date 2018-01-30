@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 //import com.example.shariqkhan.wfdsa.Adapter.DiscussionRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.InvoiceAdapter;
+import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.LeaderShipActivity;
 import com.example.shariqkhan.wfdsa.Model.DiscussionModel;
@@ -54,7 +55,7 @@ public class InvoiceDialog extends Dialog {
     ProgressDialog progressDialog;
     TextView totalAmount;
 
-    public String URL = "http://codiansoft.com/wfdsa/apis/Invoice/InvoiceDetail?";
+    public String URL = GlobalClass.base_url+"wfdsa/apis/Invoice/InvoiceDetail?";
 
 
     @BindView(R.id.rvAttendees)

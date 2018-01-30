@@ -63,7 +63,7 @@ public class GalleryActivityMine extends AppCompatActivity {
     JSONObject jsonObject;
     ProgressDialog dialog;
 
-    String URL = "http://codiansoft.com/wfdsa/apis/Event/Upload_Gallery";
+    String URL = GlobalClass.base_url+"wfdsa/apis/Event/Upload_Gallery";
     String id;
     private String imageURI;
 
@@ -95,7 +95,7 @@ public class GalleryActivityMine extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/Event/Gallery?" + "event_id=" + id;
+            String url = GlobalClass.base_url+"wfdsa/apis/Event/Gallery?" + "event_id=" + id;
 
             Log.e("url", url);
 

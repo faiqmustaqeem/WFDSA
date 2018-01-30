@@ -93,7 +93,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/User/Forget_Password?email=" + sendEmail;
+            String url = GlobalClass.base_url+"wfdsa/apis/User/Forget_Password?email=" + sendEmail;
 
             Log.e("url", url);
 

@@ -309,7 +309,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivWFDSALogo);
+      //  Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivWFDSALogo);
         Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2017/08/BAS_23341.jpg").into(ivImage);
 
 
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity
 
 
         Request request = new Request.Builder()
-                .url("http://codiansoft.com/wfdsa/apis/Event/Events_Notification")
+                .url(GlobalClass.base_url+"wfdsa/apis/Event/Events_Notification")
                 .post(body)
                 .build();
 
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Events_Notification");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Events_Notification");
             Log.e("Must", "Must");
 //
 //
@@ -488,7 +488,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 } catch (JSONException e) {
-                    Log.e("ErrorMessage", e.getMessage());
+                    Log.e("ErrorMessage1", e.getMessage());
 
 
                 }
@@ -645,7 +645,6 @@ public class MainActivity extends AppCompatActivity
             super.onPreExecute();
             progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setTitle("Fetching Events");
-
             progressDialog.setMessage("Please Wait");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
@@ -666,7 +665,7 @@ public class MainActivity extends AppCompatActivity
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Events");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Events");
             Log.e("Must", "Must");
 
 //
@@ -774,7 +773,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 } catch (JSONException e) {
-                    Log.e("ErrorMessage", e.getMessage());
+                    Log.e("ErrorMessage2", e.getMessage());
 
                     progressDialog.dismiss();
                 }
@@ -832,7 +831,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
+            String url = GlobalClass.base_url+"wfdsa/apis/Announcement/Announcement";
 
             Log.e("url", url);
 
@@ -911,7 +910,7 @@ public class MainActivity extends AppCompatActivity
 
             //  Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
-            String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
 
             return response;
         }

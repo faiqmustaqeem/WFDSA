@@ -197,7 +197,7 @@ public class MyPaymentActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/Payment/All_Payment";
+            String url = GlobalClass.base_url+"wfdsa/apis/Payment/All_Payment";
 
             Log.e("url", url);
 

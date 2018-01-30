@@ -265,7 +265,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
 
             // Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
-            String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/UserGuide/Contact");
+            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/UserGuide/Contact");
 
             return response;
         }
@@ -395,7 +395,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/UserGuide/ContactSubmit?");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/UserGuide/ContactSubmit?");
             Log.e("Must", "Must");
 //
 //

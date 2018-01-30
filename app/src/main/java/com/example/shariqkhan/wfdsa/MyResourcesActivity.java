@@ -43,7 +43,7 @@ public class MyResourcesActivity extends AppCompatActivity {
     ProgressDialog dialog;
     List<ResourcesGroup> resourcesGroupList;
 
-    String BASE_URL = "http://codiansoft.com/wfdsa/apis/Resources/Get_resource_file?";
+    String BASE_URL = GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource_file?";
 
     String resourceId;
 

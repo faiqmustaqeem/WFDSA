@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
@@ -85,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     String getPassword;
     android.app.ActionBar actionbar;
 
-    public static String BASE_URL = "http://www.codiansoft.com/wfdsa/api/login";
+    public static String BASE_URL = GlobalClass.base_url+"wfdsa/api/login";
 
     public static String decider = "1";
 
@@ -96,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivWFDSALogo);
+      //  Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivWFDSALogo);
 
         etMemberEmail = (TextInputLayout) findViewById(R.id.tilMemberEmail);
         etMemberPass = (TextInputLayout) findViewById(R.id.tilMemberPassword);
@@ -230,6 +231,9 @@ public class LoginActivity extends AppCompatActivity {
             parameters.add(new BasicNameValuePair("email", getEmail));
             parameters.add(new BasicNameValuePair("password", getPassword));
             parameters.add(new BasicNameValuePair("signin_type", LoginActivity.decider));
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            parameters.add(new BasicNameValuePair("device_token", refreshedToken));
+
 
             Log.e("params",parameters.toString());
 
@@ -292,7 +296,20 @@ public class LoginActivity extends AppCompatActivity {
                         String first_name = user_data.getString("first_name");
                         String last_name = user_data.getString("last_name");
                         String password = user_data.getString("password");
-                        String phNo = user_data.getString("contact_no");
+                        String phNo;
+
+                        if(user_data.getString("signin_type").equals("2"))
+                        {
+                            phNo   = user_data.getString("contact_no");
+
+                        }
+                        else if(user_data.getString("signin_type").equals("1"))
+                        {
+                            phNo   = user_data.getString("cell");
+                        }
+                        else
+                            phNo="";
+
                       //  String up_image = user_data.getString("upload_image");
 
 
@@ -319,19 +336,19 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
-                        etMemberEmail.getEditText().setText("");
-                        etMemberPass.getEditText().setText("");
+                    //    etMemberEmail.getEditText().setText("");
+                      //  etMemberPass.getEditText().setText("");
 
                         progressDialog.dismiss();
                     }
 
 
                 } catch (JSONException e) {
-                    Log.e("ErrorMessage", e.getMessage());
-                    etMemberEmail.getEditText().setText("");
-                    etMemberPass.getEditText().setText("");
+                    Log.e("Error", e.getMessage());
+                   // etMemberEmail.getEditText().setText("");
+                   // etMemberPass.getEditText().setText("");
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error !!", Toast.LENGTH_SHORT).show();
                 }
 
 

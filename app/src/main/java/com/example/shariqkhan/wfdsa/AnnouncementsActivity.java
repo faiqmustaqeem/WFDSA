@@ -37,7 +37,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
     RecyclerView rvAnnouncements;
     AnnouncementsRVAdapter announcementsRVAdapter;
 
-    public static String URL = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
+    public static String URL = GlobalClass.base_url+"wfdsa/apis/Announcement/Announcement";
     ArrayList<AnnouncementsModel> arrayList = new ArrayList<>();
     ProgressDialog progressDialog;
 

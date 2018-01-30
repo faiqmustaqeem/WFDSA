@@ -172,7 +172,7 @@ public class MemberActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/member/DSA_member";
+            String url = GlobalClass.base_url+"wfdsa/apis/member/DSA_member";
 
             Log.e("url", url);
 

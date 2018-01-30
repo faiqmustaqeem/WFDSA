@@ -78,7 +78,7 @@ public class UserGuideActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/UserGuide/guide";
+            String url = GlobalClass.base_url+"wfdsa/apis/UserGuide/guide";
 
             Log.e("url", url);
 

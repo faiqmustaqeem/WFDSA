@@ -53,7 +53,7 @@ public class AllEventsActivity extends AppCompatActivity {
     public ArrayList<EventsModel> arrayList = new ArrayList<>();
     public ProgressDialog progressDialog;
 
-    String URL = "http://codiansoft.com/wfdsa/apis/Event/Events";
+    String URL = GlobalClass.base_url+"wfdsa/apis/Event/Events";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

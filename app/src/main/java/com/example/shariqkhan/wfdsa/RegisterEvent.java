@@ -357,7 +357,7 @@ public class RegisterEvent extends AppCompatActivity {
     }
     public void sendData()
     {
-        StringRequest request = new StringRequest(Request.Method.POST, "http://codiansoft.com/wfdsa/apis/payment/Payment_Verification",
+        StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url+"wfdsa/apis/payment/Payment_Verification",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -74,9 +74,9 @@ public class MainResources extends AppCompatActivity {
 
             //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-            Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+            Log.e("url", GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
 
-            String response = getHttpData.getData("http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
+            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
 
             return response;
         }

@@ -102,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
     CallbackManager callbackManager;
 
     String getItem;
-    public String BASE_URL = "http://www.codiansoft.com/wfdsa/api/register";
+    public String BASE_URL = GlobalClass.base_url+"wfdsa/api/register";
 
 
     @Override

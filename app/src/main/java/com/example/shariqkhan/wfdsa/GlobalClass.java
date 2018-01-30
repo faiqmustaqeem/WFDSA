@@ -15,4 +15,5 @@ public class GlobalClass {
     public static String selected_resource="";
     public static String selelcted_event="";
     public static String selelcted_event_id="";
+    public static String base_url="http://sastiride.com/";
 }

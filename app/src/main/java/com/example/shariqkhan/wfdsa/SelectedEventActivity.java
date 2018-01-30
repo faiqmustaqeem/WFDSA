@@ -161,10 +161,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     ImageView ivTwitter, ivLinkedIn, ivFacebook;
 
     TextView tvRegister;
-    public String URL = "http://codiansoft.com/wfdsa/apis/Event/EventDetail?";
+    public String URL = GlobalClass.base_url+"wfdsa/apis/Event/EventDetail?";
     private ProgressDialog progressDialog;
 
-    public static String pollResponseUrl = " http://codiansoft.com/wfdsa/apis/Event/Get_Poll?";
+    public static String pollResponseUrl = GlobalClass.base_url+"wfdsa/apis/Event/Get_Poll?";
 
     CallbackManager callBackManager;
     private String textonFb;
@@ -979,7 +979,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/Event/Get_Poll?" + "event_id=" + id;
+            String url = GlobalClass.base_url+"wfdsa/apis/Event/Get_Poll?" + "event_id=" + id;
 
             Log.e("url", url);
 
@@ -1308,7 +1308,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Add_PollAnswer?");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Add_PollAnswer?");
             Log.e("Must", "Must");
 
             List<NameValuePair> parameters = new ArrayList<>();
@@ -1406,7 +1406,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/Event/Add_PollAnswer?");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Add_PollAnswer?");
             Log.e("Must", "Must");
             String pollAnswerId = "";
             List<NameValuePair> parameters = new ArrayList<>();

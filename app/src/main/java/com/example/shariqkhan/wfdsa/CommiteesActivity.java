@@ -71,7 +71,7 @@ public class CommiteesActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = "http://codiansoft.com/wfdsa/apis/Member/Committee";
+            String url = GlobalClass.base_url+"wfdsa/apis/Member/Committee";
 
             Log.e("url", url);
 
@@ -131,7 +131,7 @@ public class CommiteesActivity extends AppCompatActivity {
                         Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
                         intent.putExtra("RoleName", roleId);
                         intent.putExtra("Name", roleName);
-                        intent.putExtra("url", "http://codiansoft.com/wfdsa/apis/Member/Committee_byRole?");
+                        intent.putExtra("url", GlobalClass.base_url+"wfdsa/apis/Member/Committee_byRole?");
 
                         startActivity(intent);
 

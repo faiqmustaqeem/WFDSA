@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.AllEventsActivity;
+import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.ProfileActivity;
@@ -155,7 +156,7 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/User/ConfirmPassword");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/User/ConfirmPassword");
             Log.e("Must", "Must");
 //
 //

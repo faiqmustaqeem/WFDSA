@@ -32,7 +32,7 @@ public class LeaderShipActivity extends AppCompatActivity {
     Toolbar toolbar;
     ProgressDialog progressDialog;
 
-    public static String URL = "http://codiansoft.com/wfdsa/apis/Member/Leadership";
+    public static String URL = GlobalClass.base_url+"wfdsa/apis/Member/Leadership";
     String roleArray[];
     String Array[] = {"Ceo Council", "Operational Group", "Board of Delegates", "Association Advisory Council"};
     String idArray[];
@@ -130,7 +130,7 @@ public class LeaderShipActivity extends AppCompatActivity {
                         Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
                         intent.putExtra("RoleName", roleId);
                         intent.putExtra("Name", roleName);
-                        intent.putExtra("url", "http://codiansoft.com/wfdsa/apis/Member/Leadership_byRole?");
+                        intent.putExtra("url", GlobalClass.base_url+"wfdsa/apis/Member/Leadership_byRole?");
 
                         startActivity(intent);
 

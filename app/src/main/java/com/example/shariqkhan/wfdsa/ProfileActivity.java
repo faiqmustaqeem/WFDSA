@@ -99,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     StorageReference storageRef;
 
-    String BASE_URL = "http://codiansoft.com/wfdsa/apis/member/Edit_member";
+    String BASE_URL = GlobalClass.base_url+"wfdsa/apis/member/Edit_member";
     public static String path;
 
     @Override
@@ -642,7 +642,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 HttpClient httpClient = new DefaultHttpClient();
 
 
-                HttpPost post = new HttpPost("http://codiansoft.com/wfdsa/apis/User/ConfirmPassword");
+                HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/User/ConfirmPassword");
                 Log.e("Must", "Must");
 //
 //
