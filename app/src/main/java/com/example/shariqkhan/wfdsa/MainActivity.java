@@ -743,9 +743,9 @@ public class MainActivity extends AppCompatActivity
                             String sub = job.getString("start_date");
 
 
-                            String filter = sub.substring(8, 10);
+//                            String filter = sub.substring(8, 10);
 
-                            model.setDay(filter);
+                  //          model.setDay(filter);
 
                             model.setMonth(job.getString("start_date").substring(5, 8));
                             model.setYear(job.getString("start_date").substring(0, 4));
@@ -756,11 +756,13 @@ public class MainActivity extends AppCompatActivity
 
                             arrayList.add(model);
                         }
-                        eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
-                        RecyclerView.LayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
-                        rvEvents.setLayoutManager(mEventLayoutManager);
-                        rvEvents.setItemAnimator(new DefaultItemAnimator());
-                        rvEvents.setAdapter(eventsRVAdapter);
+                        if(arrayList.size() > 0) {
+                            eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
+                            RecyclerView.LayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
+                            rvEvents.setLayoutManager(mEventLayoutManager);
+                            rvEvents.setItemAnimator(new DefaultItemAnimator());
+                            rvEvents.setAdapter(eventsRVAdapter);
+                        }
 
 
                     } else {
@@ -866,7 +868,6 @@ public class MainActivity extends AppCompatActivity
                         model.setImage(obj.getString("upload_image"));
                         model.setDate(obj.getString("date"));
                         arrayList2.add(model);
-
 
                     }
 

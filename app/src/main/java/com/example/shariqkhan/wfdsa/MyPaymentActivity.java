@@ -102,9 +102,10 @@ public class MyPaymentActivity extends AppCompatActivity {
                                         }
 
                                     }
-
-                                    paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
-                                    rvPayments.setAdapter(paymentsRVAdapter);
+                                    if(paymentsList.size()>0) {
+                                        paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
+                                        rvPayments.setAdapter(paymentsRVAdapter);
+                                    }
 
                                 } else if (filterableString.equals("All")) {
                                     paymentsList.clear();

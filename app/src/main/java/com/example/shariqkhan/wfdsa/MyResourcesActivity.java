@@ -167,10 +167,11 @@ public class MyResourcesActivity extends AppCompatActivity {
                         resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), title, resourcesSubItemsList));
 
                     }
-
-                    adapter = new ResourcesRVadapter(MyResourcesActivity.this, resourcesGroupList);
-                    rvResources.setLayoutManager(new LinearLayoutManager(MyResourcesActivity.this));
-                    rvResources.setAdapter(adapter);
+                    if( resourcesGroupList.size()>0) {
+                        adapter = new ResourcesRVadapter(MyResourcesActivity.this, resourcesGroupList);
+                        rvResources.setLayoutManager(new LinearLayoutManager(MyResourcesActivity.this));
+                        rvResources.setAdapter(adapter);
+                    }
                     dialog.dismiss();
                 }
 

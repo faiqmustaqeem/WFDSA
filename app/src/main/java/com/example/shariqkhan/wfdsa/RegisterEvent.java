@@ -412,7 +412,6 @@ public class RegisterEvent extends AppCompatActivity {
                 params.put("signin_type", LoginActivity.decider);
                 params.put("event_id" , GlobalClass.selelcted_event_id);
 
-
                 Log.e("params" , params.toString());
 
                 return params;

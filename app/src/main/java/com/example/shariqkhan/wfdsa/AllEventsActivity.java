@@ -185,6 +185,7 @@ public class AllEventsActivity extends AppCompatActivity {
 
 
             HttpPost post = new HttpPost(URL);
+            Log.e("all_events_url" ,URL);
             Log.e("Must", "Must");
 //
 //
@@ -258,7 +259,6 @@ public class AllEventsActivity extends AppCompatActivity {
                             model.setVenueCity(job.getString("place"));
                             String sub = job.getString("start_date");
 
-
                             String filter = sub.substring(8, 10);
 
                             model.setDay(filter);
@@ -272,6 +272,7 @@ public class AllEventsActivity extends AppCompatActivity {
 
                             arrayList.add(model);
                         }
+                        if(arrayList.size()>0)
                         eventsRVAdapter.notifyDataSetChanged();
 
                     } else {

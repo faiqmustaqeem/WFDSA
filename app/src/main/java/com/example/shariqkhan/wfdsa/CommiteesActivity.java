@@ -106,16 +106,18 @@ public class CommiteesActivity extends AppCompatActivity {
                         roleArray[i] = model.getGetRoleName();
                         idArray[i] = model.getGetRoleid();
                     }
+
                 }
-                listOfMembers.setAdapter(new ArrayAdapter<String>(CommiteesActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, roleArray));
-                listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String get = parent.getItemAtPosition(position).toString();
-                        String roleId = idArray[position];
-                        String roleName = roleArray[position];
-                        Log.e("role", get);
-                        Log.e("id", roleId);
+                if(roleArray.length > 0) {
+                    listOfMembers.setAdapter(new ArrayAdapter<String>(CommiteesActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, roleArray));
+                    listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String get = parent.getItemAtPosition(position).toString();
+                            String roleId = idArray[position];
+                            String roleName = roleArray[position];
+                            Log.e("role", get);
+                            Log.e("id", roleId);
 //                if (get.equals(Array[0])) {
 //                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
 //                } else if (get.equals(Array[1])) {
@@ -128,16 +130,16 @@ public class CommiteesActivity extends AppCompatActivity {
 //                }
 
 
-                        Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
-                        intent.putExtra("RoleName", roleId);
-                        intent.putExtra("Name", roleName);
-                        intent.putExtra("url", GlobalClass.base_url+"wfdsa/apis/Member/Committee_byRole?");
+                            Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
+                            intent.putExtra("RoleName", roleId);
+                            intent.putExtra("Name", roleName);
+                            intent.putExtra("url", GlobalClass.base_url + "wfdsa/apis/Member/Committee_byRole?");
 
-                        startActivity(intent);
+                            startActivity(intent);
 
-                    }
-                });
-
+                        }
+                    });
+                }
 
                 progressDialog.dismiss();
 

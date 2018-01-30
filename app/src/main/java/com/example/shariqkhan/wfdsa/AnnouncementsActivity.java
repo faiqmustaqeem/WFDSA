@@ -134,6 +134,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
 
                     }
+                    if(arrayList.size()>0)
                     announcementsRVAdapter.notifyDataSetChanged();
 
                 }
