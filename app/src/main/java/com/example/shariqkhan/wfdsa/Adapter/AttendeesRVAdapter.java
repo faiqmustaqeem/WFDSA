@@ -34,20 +34,6 @@ public class AttendeesRVAdapter extends RecyclerView.Adapter<AttendeesRVAdapter.
         this.context = context;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvName)
-        TextView tvName;
-        @BindView(R.id.tvDescription)
-        TextView tvDescription;
-        @BindView(R.id.ivImage)
-        ImageView ivImage;
-
-        public MyViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.attendees_rv_item, parent, false);
@@ -58,12 +44,10 @@ public class AttendeesRVAdapter extends RecyclerView.Adapter<AttendeesRVAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
         AttendeesModel dataModel = attendeesList.get(position);
         holder.tvName.setText(dataModel.getName());
-        holder.tvDescription.setText(dataModel.getDescription());
-        try {
-            Picasso.with(context).load(dataModel.getImageURL()).into(holder.ivImage);
-        } catch (IllegalArgumentException ie) {
+        // holder.tvDescription.setText(dataModel.getDescription());
+
             holder.ivImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_profile_pic));
-        }
+
 
         Animation animation = AnimationUtils.loadAnimation(context,
                 (position > lastPosition) ? R.anim.rv_up_from_bottom
@@ -81,5 +65,19 @@ public class AttendeesRVAdapter extends RecyclerView.Adapter<AttendeesRVAdapter.
     public void onViewDetachedFromWindow(MyViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.itemView.clearAnimation();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvName)
+        TextView tvName;
+        @BindView(R.id.tvDescription)
+        TextView tvDescription;
+        @BindView(R.id.ivImage)
+        ImageView ivImage;
+
+        public MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 }

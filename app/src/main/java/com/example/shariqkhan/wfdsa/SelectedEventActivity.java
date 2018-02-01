@@ -49,9 +49,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.shariqkhan.wfdsa.Dialog.EventAttendeesDialog;
 import com.example.shariqkhan.wfdsa.Dialog.EventDiscussionDialog;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
+import com.example.shariqkhan.wfdsa.Singleton.AppSingleton;
 import com.facebook.CallbackManager;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.ConnectionResult;
@@ -88,8 +90,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,13 +102,24 @@ import butterknife.OnClick;
 public class SelectedEventActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    public static boolean checkedIn = false;
+    public static String id;
+    public static String pollResponseUrl = GlobalClass.base_url + "wfdsa/apis/Event/Get_Poll?";
+    public String AttendeesID;
+    public String isLikeable;
+    public boolean isCheckedIn;
+    public String Eventname;
+    public String loc;
+    public String URL = GlobalClass.base_url + "wfdsa/apis/Event/EventDetail?";
+    public String eventNameToPass;
+    public String locationToSend;
     @BindView(R.id.llBottomNav)
     LinearLayout llBottomNav;
     @BindView(R.id.llShare)
     LinearLayout llShare;
     @BindView(R.id.fabPolls)
     FloatingActionButton fabPolls;
-
     GoogleMap myGoogleMap;
     ImageView image;
     ImageView location;
@@ -116,67 +131,38 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     String findItbyId[];
     String pollId;
     TextView textView17;
-
-    public static boolean checkedIn = false;
-
     TextView address;
     TextView heelo;
     TextView tvDayTime;
     TextView tvCityCountry;
-
     String choice_array[];
     ShareDialog dialog;
     URL url;
     String pollResponse;
-
     String textToPost;
     String startEventTime;
     String endEventTime;
-
     double destinationlat;
     double destinationLng;
     String remark;
-
-
     String idKeep;
     TextView tvAgenda;
     TextView tvAgendaDescription;
     TextView tvEventDescription;
     TextView tvSpeakersDetails;
     TextView tvHostsDetails;
-    public static String id;
     String idKeepTrack[];
-
-    public String AttendeesID;
-
-    public String isLikeable;
-    public boolean isCheckedIn;
     ImageView ivshare, ivattendees, ivdiscussion, ivgallery, ivcheck;
-
-    public String Eventname;
-    public String loc;
-
     Animation shareSlideUp, shareSlideDown;
-    private BottomNavigationViewEx bottomNavigationViewEx;
     ImageView ivTwitter, ivLinkedIn, ivFacebook;
-
     TextView tvRegister;
-    public String URL = GlobalClass.base_url+"wfdsa/apis/Event/EventDetail?";
-    private ProgressDialog progressDialog;
-
-    public static String pollResponseUrl = GlobalClass.base_url+"wfdsa/apis/Event/Get_Poll?";
-
     CallbackManager callBackManager;
-    private String textonFb;
-
-    public String eventNameToPass;
-
-    public String locationToSend;
     ImageView likesView;
     TextView tvLikeQty;
     String signintype;
-
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private BottomNavigationViewEx bottomNavigationViewEx;
+    private ProgressDialog progressDialog;
+    private String textonFb;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private double currentLatitude;
@@ -791,9 +777,11 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 //likesView.setVisibility(View.GONE);
-                tvLikeQty.setText("422");
+                int likes = Integer.parseInt(tvLikeQty.getText().toString());
+                tvLikeQty.setText(String.valueOf(likes + 1));
                 likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
                 likesView.setClickable(false);
+                sendLikeData();
             }
         });
 
@@ -827,6 +815,56 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    public void sendLikeData() {
+        StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/apis/Event/add_likes",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+
+                            JSONObject job = new JSONObject(response);
+                            JSONObject result = job.getJSONObject("result");
+                            String res = result.getString("response");
+                            Log.e("response", res);
+
+                            if (res.startsWith("Like Successfully Recieved")) {
+
+                                Log.e("like", res);
+                                // Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
+                                //finish();
+                            } else {
+                                // finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("ErrorMessage", e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley_error", error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("user_id", MainActivity.getId);
+                params.put("signin_type", LoginActivity.decider);
+                params.put("event_id", GlobalClass.selelcted_event_id);
+
+                Log.e("params", params.toString());
+
+                return params;
+            }
+        };
+
+        AppSingleton.getInstance().addToRequestQueue(request);
+    }
     private void initUI() {
         shareSlideUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.share_slide_up);
         shareSlideDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.share_slide_down);
@@ -1028,6 +1066,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                 progressDialog.dismiss();
 
+
                 if (choice.equals("Single Choice")) {
                     new MaterialDialog.Builder(SelectedEventActivity.this)
                             .title(pollQuestion)
@@ -1225,21 +1264,26 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     String agenda=obj.getString("agenda");
                     tvAgendaDescription.setText(agenda);
-                    AttendeesID = obj.getString("attendees_id");
+                    // AttendeesID = obj.getString("attendees_id");
 
                     isLikeable = obj.getString("is_like");
-                    if (isLikeable.equals("1")) {
-                        //hide button
-                        likesView.setVisibility(View.GONE);
+                    if (isLikeable.equals(null)) {
+                        Log.e("islike", "null");
 
+                    } else if (isLikeable.equals("1")) {
+                        Log.e("islike", "null");
+                        // tvLikeQty.setText(String.valueOf(Integer.parseInt(tvLikeQty.getText().toString())+1));
+                        likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        likesView.setClickable(false);
                     }
 
-                    if (obj.getString("checked_in").equals("1")) {
-                        isCheckedIn = true;
-                    }else
-                        {
-                            isCheckedIn = false;
-                        }
+
+//                    if (obj.getString("checked_in").equals("1")) {
+//                        isCheckedIn = true;
+//                    }else
+//                        {
+//                            isCheckedIn = false;
+//                        }
 
                     destinationlat = Double.parseDouble(obj.getString("latitude"));
                     destinationLng = Double.parseDouble(obj.getString("longitude"));
@@ -1249,9 +1293,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     Eventname = obj.getString("title");
                     tvCityCountry.setText(obj.getString("venue"));
-                    if (tvCityCountry.getText().toString().equals("")) {
-                        tvCityCountry.setText("Washington,America");
-                    }
+
                     textToPost = tvAgenda.getText().toString()
                             + " event will be held on \n" + startEventTime.substring(0, 11) + " in " + obj.getString("venue")
                             + " at " + loc + " "

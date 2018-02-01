@@ -77,60 +77,48 @@ import okhttp3.RequestBody;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final int INTENT_CONSTANT_GALLERY = 1;
+    public static String getFirstName;
+    public static String getLastName;
+    public static String getId;
+    public static String DECIDER = "";
+    public static String stype;
+    public static String imageUrl = "";
+    static String password;
+    static String getCountry;
+    static String getEmail;
+    static String phoneNo;
+    public ArrayList<EventsModel> arrayList = new ArrayList<>();
+    public ArrayList<AnnouncementsModel> arrayList2 = new ArrayList<>();
     ImageView ivSignOut;
     ImageView ivSettings;
-
     @BindView(R.id.ivImage)
     ImageView ivImage;
     @BindView(R.id.ivWFDSALogo)
     ImageView ivWFDSALogo;
-
     @BindView(R.id.rvEvents)
     RecyclerView rvEvents;
-
-
     String[] titlesArray;
-
-
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
-
     @BindView(R.id.tvViewAllAnnouncements)
     TextView tvViewAllAnnouncements;
-
     @BindView(R.id.tvViewAllEvents)
     TextView tvViewAllEvents;
-
     @BindView(R.id.tvViewAllResources)
     TextView tvViewAllResources;
-
     @BindView(R.id.tvAdvocacy)
     TextView tvAdvocacy;
     @BindView(R.id.tvAssociationService)
     TextView tvAssociationService;
     @BindView(R.id.tvGlobalRegulatory)
     TextView tvGlobalRegulatory;
-
     EventsRVAdapter eventsRVAdapter;
     AnnouncementsRVAdapter announcementsRVAdapter;
     CircleImageView ivUserPic;
     TextView tvUserName;
     TextView textView1;
     SharedPreferences prefs;
-    public ArrayList<EventsModel> arrayList = new ArrayList<>();
-    public ArrayList<AnnouncementsModel> arrayList2 = new ArrayList<>();
-
-    public static String getFirstName;
-    public static String getLastName;
-    static String password;
-    static String getCountry;
-    static String getEmail;
-    public static String getId;
-    static String phoneNo;
-    public static final int INTENT_CONSTANT_GALLERY = 1;
-    public static String DECIDER = "";
-    public static String stype;
-    public static String imageUrl = "";
     String refreshedToken;
     Button b1;
 
@@ -162,15 +150,15 @@ public class MainActivity extends AppCompatActivity
         FacebookSdk.sdkInitialize(getApplicationContext());
 
 
-        refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.e("Token", refreshedToken);
-        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-        editor.putString("myToken", refreshedToken);
-        editor.apply();
-
-
-        Task6 task6 = new Task6();
-        task6.execute();
+//        refreshedToken = FirebaseInstanceId.getInstance().getToken();
+//        Log.e("Token", refreshedToken);
+//        SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+//        editor.putString("myToken", refreshedToken);
+//        editor.apply();
+//
+//
+//        Task6 task6 = new Task6();
+//        task6.execute();
         initUI();
 
 
@@ -310,7 +298,7 @@ public class MainActivity extends AppCompatActivity
 
 
       //  Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivWFDSALogo);
-        Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2017/08/BAS_23341.jpg").into(ivImage);
+        //   Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2017/08/BAS_23341.jpg").into(ivImage);
 
 
         rvAnnouncements.addOnItemTouchListener(new RecyclerTouchListener(MainActivity.this, rvAnnouncements, new RecyclerTouchListener.ClickListener() {
@@ -391,115 +379,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private class Task6 extends AsyncTask<String, Void, String> {
-        String stream = null;
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String[] params) {
-
-            String getResponse = getJson();
-            stream = getResponse;
-
-            return stream;
-
-        }
-
-        private String getJson() {
-            HttpClient httpClient = new DefaultHttpClient();
-
-
-            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Events_Notification");
-            Log.e("Must", "Must");
-//
-//
-            List<NameValuePair> parameters = new ArrayList<>();
-            parameters.add(new BasicNameValuePair("token", refreshedToken));
-//            parameters.add(new BasicNameValuePair("last_name", lastName));
-//            parameters.add(new BasicNameValuePair("email", email));
-//            parameters.add(new BasicNameValuePair("country", getItem));
-//            parameters.add(new BasicNameValuePair("contact", contactNum));
-//            parameters.add(new BasicNameValuePair("password", password));
-//            parameters.add(new BasicNameValuePair("confirm_password", confirmPassword));
-//
-//            Log.e("f", firstName);
-//            Log.e("l", lastName);
-//            Log.e("e", email);
-//            Log.e("c", getItem);
-//            Log.e("c", contactNum);
-//            Log.e("p", password);
-//            Log.e("c", confirmPassword);
-
-            StringBuilder buffer = new StringBuilder();
-
-            try {
-                // Log.e("Insidegetjson", "insidetry");
-//                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
-//                post.setEntity(encoded);
-                HttpResponse response = httpClient.execute(post);
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                String Line = "";
-
-                while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
-                    buffer.append(Line);
-
-                }
-                reader.close();
-
-            } catch (Exception o) {
-                Log.e("Error", o.getMessage());
-
-            }
-            return buffer.toString();
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            JSONObject jsonobj;
-            if (s != null) {
-                try {
-                    jsonobj = new JSONObject(s);
-                    Log.e("JSON", s);
-
-
-                    JSONObject result = jsonobj.getJSONObject("result");
-                    String checkResult = result.getString("status");
-
-                    if (checkResult.equals("success")) {
-
-
-                    } else {
-                        Toast.makeText(MainActivity.this, "Error!!", Toast.LENGTH_LONG).show();
-
-
-                    }
-
-
-                } catch (JSONException e) {
-                    Log.e("ErrorMessage1", e.getMessage());
-
-
-                }
-
-
-            }
-
-
-        }
-    }
-
     private void initUI() {
 //        eventsRVAdapter = new EventsRVAdapter(MainActivity.this, new ArrayList<EventsModel>(GlobalClass.eventsList.subList(1, ((int) GlobalClass.eventsList.size() / 2))));
 //        RecyclerView.LayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -520,7 +399,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivImage:
-                Toast.makeText(this, "Image Clicked", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(this, "Image Clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tvViewAllAnnouncements:
                 Intent i = new Intent(this, AnnouncementsActivity.class);
@@ -634,6 +513,153 @@ public class MainActivity extends AppCompatActivity
     void checkForPermissions()
     {
 
+    }
+
+    private String getJson() {
+        HttpClient httpClient = new DefaultHttpClient();
+        String urltoSend = "";
+
+        HttpPost post = new HttpPost(urltoSend);
+
+        StringBuilder buffer = new StringBuilder();
+
+        List<NameValuePair> pairs = new ArrayList<>();
+
+        pairs.add(new BasicNameValuePair("", ""));
+        try {
+            UrlEncodedFormEntity encodedFormEntity = new UrlEncodedFormEntity(pairs);
+            post.setEntity(encodedFormEntity);
+            HttpResponse res = httpClient.execute(post);
+
+            BufferedReader reader = new BufferedReader
+                    (new InputStreamReader(res.getEntity().getContent()));
+            String Line = "";
+            while ((Line = reader.readLine()) != null) {
+                buffer.append(Line);
+
+            }
+
+            reader.close();
+
+        } catch (UnsupportedEncodingException e) {
+            Log.e("EncodingException", e.getMessage());
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            Log.e("ClientException", e.getMessage());
+        } catch (IOException e) {
+            Log.e("IOException", e.getMessage());
+        }
+
+
+        return buffer.toString();
+    }
+
+    private class Task6 extends AsyncTask<String, Void, String> {
+        String stream = null;
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String[] params) {
+
+            String getResponse = getJson();
+            stream = getResponse;
+
+            return stream;
+
+        }
+
+        private String getJson() {
+            HttpClient httpClient = new DefaultHttpClient();
+
+
+            HttpPost post = new HttpPost(GlobalClass.base_url + "wfdsa/apis/Event/Events_Notification");
+            Log.e("Must", "Must");
+//
+//
+            List<NameValuePair> parameters = new ArrayList<>();
+            parameters.add(new BasicNameValuePair("token", refreshedToken));
+//            parameters.add(new BasicNameValuePair("last_name", lastName));
+//            parameters.add(new BasicNameValuePair("email", email));
+//            parameters.add(new BasicNameValuePair("country", getItem));
+//            parameters.add(new BasicNameValuePair("contact", contactNum));
+//            parameters.add(new BasicNameValuePair("password", password));
+//            parameters.add(new BasicNameValuePair("confirm_password", confirmPassword));
+//
+//            Log.e("f", firstName);
+//            Log.e("l", lastName);
+//            Log.e("e", email);
+//            Log.e("c", getItem);
+//            Log.e("c", contactNum);
+//            Log.e("p", password);
+//            Log.e("c", confirmPassword);
+
+            StringBuilder buffer = new StringBuilder();
+
+            try {
+                // Log.e("Insidegetjson", "insidetry");
+//                UrlEncodedFormEntity encoded = new UrlEncodedFormEntity(parameters);
+//                post.setEntity(encoded);
+                HttpResponse response = httpClient.execute(post);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String Line = "";
+
+                while ((Line = reader.readLine()) != null) {
+                    Log.e("reader", Line);
+                    Log.e("buffer", buffer.toString());
+                    buffer.append(Line);
+
+                }
+                reader.close();
+
+            } catch (Exception o) {
+                Log.e("Error", o.getMessage());
+
+            }
+            return buffer.toString();
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            JSONObject jsonobj;
+            if (s != null) {
+                try {
+                    jsonobj = new JSONObject(s);
+                    Log.e("JSON", s);
+
+
+                    JSONObject result = jsonobj.getJSONObject("result");
+                    String checkResult = result.getString("status");
+
+                    if (checkResult.equals("success")) {
+
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "Error!!", Toast.LENGTH_LONG).show();
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    Log.e("ErrorMessage1", e.getMessage());
+
+
+                }
+
+
+            }
+
+
+        }
     }
 
     private class Task extends AsyncTask<String, Void, String> {
@@ -787,47 +813,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private String getJson() {
-        HttpClient httpClient = new DefaultHttpClient();
-        String urltoSend = "";
-
-        HttpPost post = new HttpPost(urltoSend);
-
-        StringBuilder buffer = new StringBuilder();
-
-        List<NameValuePair> pairs = new ArrayList<>();
-
-        pairs.add(new BasicNameValuePair("", ""));
-        try {
-            UrlEncodedFormEntity encodedFormEntity = new UrlEncodedFormEntity(pairs);
-            post.setEntity(encodedFormEntity);
-            HttpResponse res = httpClient.execute(post);
-
-            BufferedReader reader = new BufferedReader
-                    (new InputStreamReader(res.getEntity().getContent()));
-            String Line = "";
-            while ((Line = reader.readLine()) != null) {
-                buffer.append(Line);
-
-            }
-
-            reader.close();
-
-        } catch (UnsupportedEncodingException e) {
-            Log.e("EncodingException", e.getMessage());
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            Log.e("ClientException", e.getMessage());
-        } catch (IOException e) {
-            Log.e("IOException", e.getMessage());
-        }
-
-
-        return buffer.toString();
-    }
-
-
     private class Task2 extends AsyncTask<Object, Object, String> {
 
         @Override
@@ -937,7 +922,7 @@ public class MainActivity extends AppCompatActivity
                     //   roleArray = new String[rolesArray.length()];
                     // String idArray[] = new String[rolesArray.length()];
                     titlesArray = new String[resourcesData.length()];
-                    Toast.makeText(MainActivity.this, String.valueOf(resourcesData.length()), Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(MainActivity.this, String.valueOf(resourcesData.length()), Toast.LENGTH_SHORT).show();
                     for (int i = 0; i < resourcesData.length(); i++) {
 
                         JSONObject job = resourcesData.getJSONObject(i);

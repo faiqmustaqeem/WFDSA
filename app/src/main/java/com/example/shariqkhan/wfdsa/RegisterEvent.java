@@ -364,6 +364,7 @@ public class RegisterEvent extends AppCompatActivity {
 
                         try {
 
+
                             JSONObject job = new JSONObject(response);
                             JSONObject result = job.getJSONObject("result");
                             String res = result.getString("response");

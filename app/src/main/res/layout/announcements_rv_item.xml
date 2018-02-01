@@ -24,6 +24,7 @@
                 android:layout_height="170dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/card"
+                android:visibility="gone"
 
                 />
 

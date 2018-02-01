@@ -46,13 +46,12 @@ import butterknife.ButterKnife;
 
 public class AllEventsActivity extends AppCompatActivity {
 
+    public ArrayList<EventsModel> arrayList = new ArrayList<>();
+    public ProgressDialog progressDialog;
     @BindView(R.id.rvEvents)
     RecyclerView rvEvents;
     EventsRVAdapter eventsRVAdapter;
     ImageView image;
-    public ArrayList<EventsModel> arrayList = new ArrayList<>();
-    public ProgressDialog progressDialog;
-
     String URL = GlobalClass.base_url+"wfdsa/apis/Event/Events";
 
     @Override
@@ -154,6 +153,45 @@ public class AllEventsActivity extends AppCompatActivity {
         return true;
     }
 
+    private String getJson() {
+        HttpClient httpClient = new DefaultHttpClient();
+        String urltoSend = "";
+
+        HttpPost post = new HttpPost(urltoSend);
+
+        StringBuilder buffer = new StringBuilder();
+
+        List<NameValuePair> pairs = new ArrayList<>();
+
+        pairs.add(new BasicNameValuePair("", ""));
+        try {
+            UrlEncodedFormEntity encodedFormEntity = new UrlEncodedFormEntity(pairs);
+            post.setEntity(encodedFormEntity);
+            HttpResponse res = httpClient.execute(post);
+
+            BufferedReader reader = new BufferedReader
+                    (new InputStreamReader(res.getEntity().getContent()));
+            String Line = "";
+            while ((Line = reader.readLine()) != null) {
+                buffer.append(Line);
+
+            }
+
+            reader.close();
+
+        } catch (UnsupportedEncodingException e) {
+            Log.e("EncodingException", e.getMessage());
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            Log.e("ClientException", e.getMessage());
+        } catch (IOException e) {
+            Log.e("IOException", e.getMessage());
+        }
+
+
+        return buffer.toString();
+    }
+
     private class Task extends AsyncTask<String, Void, String> {
         String stream = null;
         ProgressDialog progressDialog;
@@ -218,8 +256,8 @@ public class AllEventsActivity extends AppCompatActivity {
                 String Line = "";
 
                 while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
+                    // Log.e("reader", Line);
+                    // Log.e("buffer", buffer.toString());
                     buffer.append(Line);
 
                 }
@@ -295,46 +333,6 @@ public class AllEventsActivity extends AppCompatActivity {
 
             progressDialog.dismiss();
         }
-    }
-
-
-    private String getJson() {
-        HttpClient httpClient = new DefaultHttpClient();
-        String urltoSend = "";
-
-        HttpPost post = new HttpPost(urltoSend);
-
-        StringBuilder buffer = new StringBuilder();
-
-        List<NameValuePair> pairs = new ArrayList<>();
-
-        pairs.add(new BasicNameValuePair("", ""));
-        try {
-            UrlEncodedFormEntity encodedFormEntity = new UrlEncodedFormEntity(pairs);
-            post.setEntity(encodedFormEntity);
-            HttpResponse res = httpClient.execute(post);
-
-            BufferedReader reader = new BufferedReader
-                    (new InputStreamReader(res.getEntity().getContent()));
-            String Line = "";
-            while ((Line = reader.readLine()) != null) {
-                buffer.append(Line);
-
-            }
-
-            reader.close();
-
-        } catch (UnsupportedEncodingException e) {
-            Log.e("EncodingException", e.getMessage());
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            Log.e("ClientException", e.getMessage());
-        } catch (IOException e) {
-            Log.e("IOException", e.getMessage());
-        }
-
-
-        return buffer.toString();
     }
 
 

@@ -37,20 +37,6 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
         this.paymentsList = paymentsList;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvTitle)
-        TextView tvTitle;
-        @BindView(R.id.tvDueDate)
-        TextView tvDueDate;
-        @BindView(R.id.tvPayNow)
-        TextView tvPayNow;
-
-        public MyViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_payments_rv_item, parent, false);
@@ -72,7 +58,7 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
             holder.tvPayNow.setText("PAID");
         }
 
-        holder.tvTitle.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -112,5 +98,19 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
     @Override
     public int getItemCount() {
         return paymentsList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
+        @BindView(R.id.tvDueDate)
+        TextView tvDueDate;
+        @BindView(R.id.tvPayNow)
+        TextView tvPayNow;
+
+        public MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 }

@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
-        android:name=".Multi_Dex"
+        android:name="com.example.shariqkhan.wfdsa.Singleton.AppSingleton"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/frontlogo"
@@ -31,7 +31,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

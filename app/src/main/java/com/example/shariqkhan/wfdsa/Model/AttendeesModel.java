@@ -7,26 +7,26 @@ package com.example.shariqkhan.wfdsa.Model;
 public class AttendeesModel {
     String id, name, description, imageURL;
 
-    public AttendeesModel(String id, String name, String description, String imageURL) {
-        this.id = id;
+    public AttendeesModel(String name) {
+        //    this.id = id;
         this.name = name;
-        this.description = description;
-        this.imageURL = imageURL;
+        //  this.description = description;
+        //   this.imageURL = imageURL;
     }
 
-    public String getId() {
-        return id;
-    }
+//  //  public String getId() {
+//        return id;
+//    }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public String getImageURL() {
+//        return imageURL;
+//    }
 }
