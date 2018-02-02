@@ -1108,6 +1108,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     GlobalClass.selected_event_date = obj.getString("start_date").substring(0, 10);
                     GlobalClass.selected_event_location = obj.getString("place");
+                    GlobalClass.selelcted_event_fees = obj.getString("fee");
+
 
                     tvDayTime.setText(obj.getString("place"));
                     heelo.setText((obj.getString("start_date").substring(0, 10)));

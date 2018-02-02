@@ -866,7 +866,13 @@ public class MainActivity extends AppCompatActivity
                         model.setDescription(obj.getString("announcement_message"));
                         model.setImage(obj.getString("upload_image"));
                         model.setDate(obj.getString("date"));
-                        arrayList2.add(model);
+                        String announce_for = obj.getString("announce_for");
+                        if (announce_for.contains(GlobalClass.member_role)) {
+                            arrayList2.add(model);
+                        } else if (announce_for.equals("Public")) {
+                            arrayList2.add(model);
+                        }
+
 
                     }
 

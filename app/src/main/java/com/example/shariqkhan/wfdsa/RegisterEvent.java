@@ -351,9 +351,6 @@ public class RegisterEvent extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
     public void sendData()
     {
@@ -381,6 +378,17 @@ public class RegisterEvent extends AppCompatActivity {
 
                                 dialog.getWindow().setLayout(lp.width, lp.height);
                                 dialog.setContentView(R.layout.thanking_activity);
+
+                                TextView event_name = (TextView) dialog.findViewById(R.id.event_name);
+                                event_name.setText(GlobalClass.selected_event_name);
+
+                                TextView event_location = (TextView) dialog.findViewById(R.id.event_location);
+                                event_location.setText(GlobalClass.selected_event_location);
+
+
+                                TextView event_date = (TextView) dialog.findViewById(R.id.event_date);
+                                event_date.setText(GlobalClass.selected_event_date);
+
                                 dialog.show();
                                 // Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
                                 //finish();
@@ -394,7 +402,8 @@ public class RegisterEvent extends AppCompatActivity {
                         }
 
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley_error" , error.getMessage() );
@@ -408,7 +417,7 @@ public class RegisterEvent extends AppCompatActivity {
 
                 params.put("api_secret", prefs.getString("api_secret", ""));
                 params.put("stripe_token", token_id);
-                params.put("amount", String.valueOf(500));
+                params.put("amount", String.valueOf(GlobalClass.selelcted_event_fees));
                 params.put("user_id", MainActivity.getId);
                 params.put("signin_type", LoginActivity.decider);
                 params.put("event_id" , GlobalClass.selelcted_event_id);

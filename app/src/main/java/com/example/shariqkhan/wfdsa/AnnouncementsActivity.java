@@ -129,7 +129,13 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         model.setDescription(obj.getString("announcement_message"));
                         model.setImage(obj.getString("upload_image"));
                         model.setDate(obj.getString("date"));
-                        arrayList.add(model);
+
+                        String announce_for = obj.getString("announce_for");
+                        if (announce_for.contains(GlobalClass.member_role)) {
+                            arrayList.add(model);
+                        } else if (announce_for.equals("Public")) {
+                            arrayList.add(model);
+                        }
 
 
                     }
