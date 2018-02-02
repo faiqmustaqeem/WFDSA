@@ -125,6 +125,13 @@ public class AllEventsActivity extends AppCompatActivity {
                         Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
                         i.putExtra("eventid", eventsModel.getId());
                         startActivity(i);
+
+                    } else if (eventsModel.getPersonal().equals("Public")) {
+                        Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
+                        i.putExtra("eventid", eventsModel.getId());
+                        startActivity(i);
+
+
                     } else {
                         Toast.makeText(AllEventsActivity.this, "You dont have access to this event!", Toast.LENGTH_SHORT).show();
 

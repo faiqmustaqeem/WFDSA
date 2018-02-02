@@ -55,10 +55,15 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
         if (MainActivity.DECIDER.equals("member")) {
 
             if (dataModel.getPersonal().contains(GlobalClass.member_role)) {
-                holder.lock.setVisibility(View.GONE);
+                holder.lock.setVisibility(View.GONE); // hide lock
+
+            } else if (dataModel.getPersonal().equals("Public")) {
+
+                holder.lock.setVisibility(View.GONE); // hide lock
+
 
             } else {
-                holder.lock.setVisibility(View.VISIBLE);
+                holder.lock.setVisibility(View.VISIBLE); // show lock
             }
 
 

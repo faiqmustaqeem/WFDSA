@@ -44,9 +44,9 @@ public class EventAttendeesDialog extends Dialog implements View.OnClickListener
     public Activity act;
     public Dialog d;
     ArrayList<AttendeesModel> attendeesList = new ArrayList<AttendeesModel>();
-
-    @BindView(R.id.tvRegister)
-    TextView tvRegister;
+    //
+//    @BindView(R.id.tvRegister)
+//    TextView tvRegister;
     @BindView(R.id.tvCancel)
     TextView tvCancel;
 
@@ -72,11 +72,7 @@ public class EventAttendeesDialog extends Dialog implements View.OnClickListener
         setContentView(R.layout.event_attendees_dialog);
         ButterKnife.bind(this);
         setCanceledOnTouchOutside(false);
-        if (GlobalClass.isAlreadyRegistered) {
-            tvRegister.setClickable(false);
-            tvRegister.setText("Already Registered");
 
-        }
 
         Window window = getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);

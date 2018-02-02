@@ -324,22 +324,35 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view, int position) {
 
                 EventsModel eventsModel = arrayList.get(position);
-
-
-                if (!MainActivity.DECIDER.equals("member")) {
-                    if (eventsModel.getPersonal().equals("member")) {
-                        Toast.makeText(MainActivity.this, "Members Access Only!", Toast.LENGTH_SHORT).show();
-
-                    } else {
+                Log.e("role", GlobalClass.member_role);
+                if (MainActivity.DECIDER.equals("member")) {
+                    if (eventsModel.getPersonal().contains(GlobalClass.member_role)) {
                         Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
                         i.putExtra("eventid", eventsModel.getId());
                         startActivity(i);
+                    } else if (eventsModel.getPersonal().equals("Public")) {
+                        Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
+                        i.putExtra("eventid", eventsModel.getId());
+                        startActivity(i);
+
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "You dont have access to this event!", Toast.LENGTH_SHORT).show();
+
                     }
                 } else {
-                    Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
-                    i.putExtra("eventid", eventsModel.getId());
-                    startActivity(i);
+                    if (eventsModel.getPersonal().equals("Public")) {
+                        Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
+                        i.putExtra("eventid", eventsModel.getId());
+                        startActivity(i);
+
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "Members Access Only!", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
+
 
             }
 

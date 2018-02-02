@@ -16,6 +16,9 @@ public class GlobalClass {
     public static String selelcted_event="";
     public static String selelcted_event_id="";
     public static String base_url="http://sastiride.com/";
+    public static String selected_event_name = "";
+    public static String selected_event_location = "";
+    public static String selected_event_date = "";
     public static String member_role = "";
     public static boolean isAlreadyRegistered = false;
 }

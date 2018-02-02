@@ -463,63 +463,67 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             public void onClick(View view) {
 
 
-                if (!isCheckedIn) {
-                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
-                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                if (GlobalClass.isAlreadyRegistered) {
+                    if (!isCheckedIn) {
+                        final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-                    dialog.getWindow().setLayout(lp.width, lp.height);
-                    dialog.setContentView(R.layout.checked_in_dialog);
+                        dialog.getWindow().setLayout(lp.width, lp.height);
+                        dialog.setContentView(R.layout.checked_in_dialog);
 
-                    // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
-                    TextView view1 = dialog.findViewById(R.id.Acceptance);
-                    TextView view2 = dialog.findViewById(R.id.Rejection);
-                    view2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    view1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Location startPoint = new Location("locationA");
-                            startPoint.setLatitude(currentLatitude);
-                            startPoint.setLongitude(currentLongitude);
-
-                            Location endPoint = new Location("locationA");
-                            endPoint.setLatitude(destinationlat);
-                            endPoint.setLongitude(destinationLng);
-
-                            double distance = startPoint.distanceTo(endPoint);
-
-                            if (distance < 1000) // person is near 1 km from event location
-                            {
+                        // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
+                        TextView view1 = dialog.findViewById(R.id.Acceptance);
+                        TextView view2 = dialog.findViewById(R.id.Rejection);
+                        view2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 dialog.dismiss();
-
-
-                                // check in api here
-                                setCheckedIn();
-
-
-                            } else {
-                                dialog.dismiss();
-                                Toast.makeText(SelectedEventActivity.this, "You are not at event location!", Toast.LENGTH_SHORT).show();
                             }
+                        });
+
+                        view1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Location startPoint = new Location("locationA");
+                                startPoint.setLatitude(currentLatitude);
+                                startPoint.setLongitude(currentLongitude);
+
+                                Location endPoint = new Location("locationA");
+                                endPoint.setLatitude(destinationlat);
+                                endPoint.setLongitude(destinationLng);
+
+                                double distance = startPoint.distanceTo(endPoint);
+
+                                if (distance < 1000) // person is near 1 km from event location
+                                {
+                                    dialog.dismiss();
 
 
-                        }
-                    });
+                                    // check in api here
+                                    setCheckedIn();
 
 
-                    dialog.show();
+                                } else {
+                                    dialog.dismiss();
+                                    Toast.makeText(SelectedEventActivity.this, "You are not at event location!", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                        });
+
+
+                        dialog.show();
+                    } else {
+
+                        Toast.makeText(SelectedEventActivity.this, "You have already checked in!", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-
-                    Toast.makeText(SelectedEventActivity.this, "You have already checked in!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -923,40 +927,43 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                     Log.e("id", idKeep);
                                     Log.e("answer", choice_array[i]);
 
-                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
-                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                                    Task3 task3 = new Task3();
+                                    task3.execute();
 
-                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                                    dialog.getWindow().setLayout(lp.width, lp.height);
-                                    dialog.setContentView(R.layout.remarks_dialog);
-
-                                    EditText editText = dialog.findViewById(R.id.etPassword);
-                                    remark = editText.getText().toString();
-                                    TextView cancel = dialog.findViewById(R.id.tvCancel);
-                                    TextView submit = dialog.findViewById(R.id.tvSubmit);
-
-                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    submit.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                            Task3 task3 = new Task3();
-                                            task3.execute();
-
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    dialog.show();
-
+//                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
+//                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 //
+//                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                                    dialog.getWindow().setLayout(lp.width, lp.height);
+//                                    dialog.setContentView(R.layout.remarks_dialog);
+//
+//                                    EditText editText = dialog.findViewById(R.id.etPassword);
+//                                    remark = editText.getText().toString();
+//                                    TextView cancel = dialog.findViewById(R.id.tvCancel);
+//                                    TextView submit = dialog.findViewById(R.id.tvSubmit);
+//
+//                                    cancel.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View view) {
+//                                            dialog.dismiss();
+//                                        }
+//                                    });
+//                                    submit.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View view) {
+//
+//                                            Task3 task3 = new Task3();
+//                                            task3.execute();
+//
+//                                            dialog.dismiss();
+//                                        }
+//                                    });
+//                                    dialog.show();
+//
+////
 
 
                                     return true;
@@ -967,67 +974,66 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                             .show();
 
 
-                } else {
-
-
-                    new LovelyChoiceDialog(SelectedEventActivity.this)
-                            .setTopColorRes(R.color.colorPrimary)
-                            .setTitle(pollQuestion)
-                            .setItemsMultiChoice(choice_array, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
-                                @Override
-                                public void onItemsSelected(List<Integer> positions, List<String> items) {
-                                    for (int i = 0; i < items.size(); i++) {
-
-                                        final String findItByText[] = new String[items.size()];
-                                        findItbyId = new String[positions.size()];
-                                        findItByText[i] = items.get(i);
-
-                                    }
-                                    for (int f = 0; f < positions.size(); f++) {
-
-                                        findItbyId[f] = idKeepTrack[f];
-                                        Log.e("findItById", findItbyId[f]);
-                                    }
-
-                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
-                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
-                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                                    dialog.getWindow().setLayout(lp.width, lp.height);
-                                    dialog.setContentView(R.layout.remarks_dialog);
-
-                                    EditText editText = dialog.findViewById(R.id.etPassword);
-                                    remark = editText.getText().toString();
-                                    TextView cancel = dialog.findViewById(R.id.tvCancel);
-                                    TextView submit = dialog.findViewById(R.id.tvSubmit);
-
-                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    submit.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                            Task4 task4 = new Task4();
-                                            task4.execute();
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    dialog.show();
-                                }
-                            })
-                            .setConfirmButtonText("Confirm")
-                            .show();
-
                 }
-
-
+// else {
+//
+//
+//                    new LovelyChoiceDialog(SelectedEventActivity.this)
+//                            .setTopColorRes(R.color.colorPrimary)
+//                            .setTitle(pollQuestion)
+//                            .setItemsMultiChoice(choice_array, new LovelyChoiceDialog.OnItemsSelectedListener<String>() {
+//                                @Override
+//                                public void onItemsSelected(List<Integer> positions, List<String> items) {
+//                                    for (int i = 0; i < items.size(); i++) {
+//
+//                                        final String findItByText[] = new String[items.size()];
+//                                        findItbyId = new String[positions.size()];
+//                                        findItByText[i] = items.get(i);
+//
+//                                    }
+//                                    for (int f = 0; f < positions.size(); f++) {
+//
+//                                        findItbyId[f] = idKeepTrack[f];
+//                                        Log.e("findItById", findItbyId[f]);
+//                                    }
+//
+////                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
+////                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+////
+////                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+////                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+////                                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+////
+////                                    dialog.getWindow().setLayout(lp.width, lp.height);
+////                                    dialog.setContentView(R.layout.remarks_dialog);
+////
+////                                    EditText editText = dialog.findViewById(R.id.etPassword);
+////                                    remark = editText.getText().toString();
+////                                    TextView cancel = dialog.findViewById(R.id.tvCancel);
+////                                    TextView submit = dialog.findViewById(R.id.tvSubmit);
+////
+////                                    cancel.setOnClickListener(new View.OnClickListener() {
+////                                        @Override
+////                                        public void onClick(View view) {
+////                                            dialog.dismiss();
+////                                        }
+////                                    });
+////                                    submit.setOnClickListener(new View.OnClickListener() {
+////                                        @Override
+////                                        public void onClick(View view) {
+////
+////                                            Task4 task4 = new Task4();
+////                                            task4.execute();
+////                                            dialog.dismiss();
+////                                        }
+////                                    });
+////                                    dialog.show();
+//                                }
+//                            })
+//                            .setConfirmButtonText("Confirm")
+//                            .show();
+//
+//                }
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
@@ -1086,6 +1092,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     JSONObject obj = rolesArray.getJSONObject(0);
                     tvAgenda.setText(obj.getString("title"));
+                    GlobalClass.selected_event_name = obj.getString("title");
 
                     eventNameToPass = tvAgenda.getText().toString();
 
@@ -1099,6 +1106,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     Log.e("start", startEventTime);
                     Log.e("end", endEventTime);
 
+                    GlobalClass.selected_event_date = obj.getString("start_date").substring(0, 10);
+                    GlobalClass.selected_event_location = obj.getString("place");
 
                     tvDayTime.setText(obj.getString("place"));
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
@@ -1124,6 +1133,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     if (is_registered.equals("0")) {
                         Log.e("is_registered", is_registered + "");
+                        GlobalClass.isAlreadyRegistered = false;
                     } else if (is_registered.equals("1")) {
                         Log.e("is_registered", is_registered + "");
                         tvRegister.setText("You are Registered for this Event");
@@ -1216,7 +1226,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("user_id", MainActivity.getId));
             parameters.add(new BasicNameValuePair("poll_id", pollId));
-            parameters.add(new BasicNameValuePair("remark", remark));
+//            parameters.add(new BasicNameValuePair("remark", remark));
             parameters.add(new BasicNameValuePair("poll_answer_id", idKeep));
             parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
 
@@ -1288,6 +1298,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    // for multiple choice selection which is removed from requirement
     private class Task4 extends AsyncTask<String, Void, String> {
         String stream = null;
         ProgressDialog progressDialog;
@@ -1313,7 +1324,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("user_id", MainActivity.getId));
             parameters.add(new BasicNameValuePair("poll_id", pollId));
-            parameters.add(new BasicNameValuePair("remark", remark));
+//            parameters.add(new BasicNameValuePair("remark", remark));
             for (int i = 0; i < findItbyId.length; i++) {
                 pollAnswerId += findItbyId[i] + ",";
             }
