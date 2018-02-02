@@ -389,7 +389,7 @@ android:background="@drawable/earth"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
             android:src="@drawable/xshare"
-            android:tint="@color/lightGray" />
+            android:tint="@color/black" />
 
         <ImageView
             android:id="@+id/ivAttendees"
@@ -399,7 +399,7 @@ android:background="@drawable/earth"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
             android:src="@drawable/xpeople"
-            android:tint="@color/lightGray" />
+            android:tint="@color/black" />
 
         <ImageView
             android:id="@+id/ivDiscussion"
@@ -409,8 +409,7 @@ android:background="@drawable/earth"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
           android:src="@drawable/xcomments"
-            android:tint="@color/lightGray"
-           />
+            android:tint="@color/black" />
 
         <ImageView
             android:id="@+id/ivGallery"
@@ -420,7 +419,7 @@ android:background="@drawable/earth"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
             android:src="@drawable/xpicture"
-            android:tint="@color/lightGray" />
+            android:tint="@color/black" />
 
         <ImageView
             android:id="@+id/ivLocation"
@@ -429,9 +428,8 @@ android:background="@drawable/earth"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
-
             android:src="@drawable/xcheck"
-            android:tint="@color/lightGray" />
+            android:tint="@color/black" />
 
     </LinearLayout>
 

@@ -63,7 +63,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -160,6 +162,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     ImageView likesView;
     TextView tvLikeQty;
     String signintype;
+    SupportMapFragment mapFragment;
     private BottomNavigationViewEx bottomNavigationViewEx;
     private ProgressDialog progressDialog;
     private String textonFb;
@@ -167,7 +170,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     private LocationRequest mLocationRequest;
     private double currentLatitude;
     private double currentLongitude;
-
 
     @Override
     protected void onResume() {
@@ -219,6 +221,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         pollResponseUrl = pollResponseUrl + "event_id=" + id;
 
         ButterKnife.bind(this);
+
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
 
         SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -394,52 +398,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     timeInMiliStart = d1.getTime();
                     timeInMiliEnd = d2.getTime();
-//
-//                    Log.e("timeStartMili", String.valueOf(timeInMiliStart));
-//                    Log.e("timeEndMili", String.valueOf(timeInMiliEnd));
-//
-//
-//                    different = d2.getTime() - d1.getTime();
-//                    difference = different;
-//                    Log.e("Difference", String.valueOf(different));
-//
-//                    long secondsInMilli = 1000;
-//                    long minutesInMilli = secondsInMilli * 60;
-//                    long hoursInMilli = minutesInMilli * 60;
-//                    long daysInMilli = hoursInMilli * 24;
-//
-//                    Log.e("seconds", String.valueOf(secondsInMilli));
-//                    Log.e("seconds", String.valueOf(minutesInMilli));
-//                    Log.e("seconds", String.valueOf(hoursInMilli));
-//                    Log.e("seconds", String.valueOf(daysInMilli));
-//
-//
-//                    elapsedDays = different / daysInMilli;
-//                    different = different % daysInMilli;
-//
-//                    elapsedHours = different / hoursInMilli;
-//                    different = different % hoursInMilli;
-//
-//                    elapsedMinutes = different / minutesInMilli;
-//                    different = different % minutesInMilli;
-//
-//                    elapsedSeconds = different / secondsInMilli;
-//
-//
-//                    Log.e("elDay", String.valueOf(elapsedDays));
-//                    Log.e("elHours", String.valueOf(elapsedHours));
-//                    Log.e("elMinutes", String.valueOf(elapsedMinutes));
-//                    Log.e("elSeconds", String.valueOf(elapsedSeconds));
+
 
                 } catch (ParseException e) {
                     Log.e("ParseException", e.getMessage());
                 }
 
-
-//
-//                Log.e("startTime", startEventTime);
-//                Log.e("endTime", endEventTime);
-//                Log.e("calendarGetTimeInstance", String.valueOf(cal.getTimeInMillis()));
                 Calendar cal = Calendar.getInstance();
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
@@ -464,13 +428,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         mTitle.setText(GlobalClass.selelcted_event);
         image = (ImageView) findViewById(R.id.ivBack);
 
-//        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom_nav_bar);
-//        bottomNavigationViewEx.enableAnimation(false);
-//        bottomNavigationViewEx.enableItemShiftingMode(false);
-//        bottomNavigationViewEx.enableShiftingMode(false);
-//        bottomNavigationViewEx.setTextVisibility(false);
-
-        // textView17 = (TextView) findViewById(R.id.textView17);
         address = (TextView) findViewById(R.id.address);
         tvCityCountry = (TextView) findViewById(R.id.tvCityCountry);
 
@@ -505,6 +462,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
+
                 if (!isCheckedIn) {
                     final Dialog dialog = new Dialog(SelectedEventActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -525,29 +483,32 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                             dialog.dismiss();
                         }
                     });
+
                     view1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Location startPoint = new Location("locationA");
+                            startPoint.setLatitude(currentLatitude);
+                            startPoint.setLongitude(currentLongitude);
 
-                            if (currentLatitude == destinationlat && currentLongitude == destinationLng) {
+                            Location endPoint = new Location("locationA");
+                            endPoint.setLatitude(destinationlat);
+                            endPoint.setLongitude(destinationLng);
+
+                            double distance = startPoint.distanceTo(endPoint);
+
+                            if (distance < 1000) // person is near 1 km from event location
+                            {
                                 dialog.dismiss();
-                                Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
-                                checkedIn = true;
-
-                                StringRequest req = new StringRequest(Request.Method.GET, "", new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
 
 
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
+                                // check in api here
+                                setCheckedIn();
 
-                                    }
-                                });
+
                             } else {
-                                Toast.makeText(SelectedEventActivity.this, "You are not on the event location!", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                                Toast.makeText(SelectedEventActivity.this, "You are not at event location!", Toast.LENGTH_SHORT).show();
                             }
 
 
@@ -557,7 +518,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     dialog.show();
                 } else {
-                    Toast.makeText(SelectedEventActivity.this, "You are already checked in!", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(SelectedEventActivity.this, "You have already checked in!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -565,55 +527,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ivgallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                GridView gridView;
-//                EventGalleryGVadapter gridAdapter;
-//                ArrayList<EventGalleryModel> imagesList = new ArrayList<EventGalleryModel>();
-//                ImageView imageView;
-//                FloatingActionButton floatingActionButton;
-//                Dialog dialog = new Dialog(SelectedEventActivity.this);
-//                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//
-//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-//
-//                dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//                dialog.setContentView(R.layout.event_gallery_dialog);
-//
-//                gridView = (GridView) dialog.findViewById(R.id.gridView);
-//                imageView = (ImageView) dialog.findViewById(R.id.close);
-//
-//                imagesList.add(new EventGalleryModel("1", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
-//                imagesList.add(new EventGalleryModel("2", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
-//                imagesList.add(new EventGalleryModel("3", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
-//                imagesList.add(new EventGalleryModel("4", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
-//                imagesList.add(new EventGalleryModel("5", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
-//                imagesList.add(new EventGalleryModel("6", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
-//                imagesList.add(new EventGalleryModel("7", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
-//                imagesList.add(new EventGalleryModel("8", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
-//                imagesList.add(new EventGalleryModel("9", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
-//
-//                gridAdapter = new EventGalleryGVadapter(SelectedEventActivity.this, R.layout.event_gallery_item, imagesList);
-//                gridView.setAdapter(gridAdapter);
-//
-//                floatingActionButton = (FloatingActionButton)dialog.findViewById(R.id.fabAddImage);
-//
-//                floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                        intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
-////**These following line is the important one!
-//                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-//                        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), 1);
-//                    }
-//                });
-//
-//
-//                dialog.show();
 
-//                EventGalleryDialog dialog = new EventGalleryDialog(SelectedEventActivity.this, id);
-//                dialog.show();
 
                 Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
                 overridePendingTransition(0, 0);
@@ -630,145 +544,19 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 overridePendingTransition(0, 0);
                 intent.putExtra("Event_id", id);
                 startActivity(intent);
-//                EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
-//                d.show();
+
             }
         });
-        //NavViewHelper.enableNavigation(SelectedEventActivity.this, bottomNavigationViewEx);
 
-//
-//        bottomNavigationViewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//
-//                switch (item.getItemId()) {
-//                    case R.id.share:
-//
-//                        if (llShare.getVisibility() == View.GONE) {
-//                            llShare.setVisibility(View.VISIBLE);
-//                            tvRegister.setEnabled(false);
-//                            llShare.startAnimation(shareSlideUp);
-//
-//                        } else {
-//                            llShare.startAnimation(shareSlideDown);
-//                            tvRegister.setEnabled(true);
-//                        }
-//                        break;
-//
-//                    case R.id.check:
-//
-//                        final Dialog dialog = new Dialog(SelectedEventActivity.this);
-//                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//
-//                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                        dialog.getWindow().setLayout(lp.width, lp.height);
-//                        dialog.setContentView(R.layout.checked_in_dialog);
-//
-//                        // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
-//                        TextView view1 = dialog.findViewById(R.id.Acceptance);
-//                        TextView view2 = dialog.findViewById(R.id.Rejection);
-//                        view2.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        view1.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                dialog.dismiss();
-//                                Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//
-//
-//                        dialog.show();
-//
-//                        break;
-//
-//                    case R.id.discussion:
-//
-//                        EventDiscussionDialog d = new EventDiscussionDialog(SelectedEventActivity.this);
-//                        d.show();
-//                        break;
-//
-//                    case R.id.gallery:
-//
-//                        EventGalleryDialog eventGalleryDialog = new EventGalleryDialog(SelectedEventActivity.this);
-//                        eventGalleryDialog.show();
-//                        break;
-//
-//                    case R.id.people:
-//                        EventAttendeesDialog attendeesDialog = new EventAttendeesDialog(SelectedEventActivity.this);
-//                        attendeesDialog.show();
-//                        break;
-//
-//
-//                }
-//
-//                return false;
-//            }
-//        });
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent i = new Intent(SelectedEventActivity.this, MainActivity.class);
-//                startActivity(i);
-        /*Removing bug*/
-
                 finish();
             }
         });
 
 
-//        location = (ImageView) findViewById(R.id.ivLocation);
-//        location.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//
-//                ivDiscussion.setImageResource(R.drawable.ic_discussion);
-//                ivAttendess.setImageResource(R.drawable.ic_attendees);
-//                ivGallery.setImageResource(R.drawable.ic_gallery);
-//                location.setImageResource(R.drawable.ic_checked_bluee);
-//                ivShare.setImageResource(R.drawable.ic_share);
-//                //  location.setIma
-//                final Dialog dialog = new Dialog(SelectedEventActivity.this);
-//                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//
-//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                dialog.getWindow().setLayout(lp.width, lp.height);
-//                dialog.setContentView(R.layout.checked_in_dialog);
-//
-//                // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
-//                TextView view1 = dialog.findViewById(R.id.Acceptance);
-//                TextView view2 = dialog.findViewById(R.id.Rejection);
-//                view2.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                view1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                        Toast.makeText(SelectedEventActivity.this, "Successfully checked in!", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//
-//                dialog.show();
-//            }
-//        });
 
         likesView = (ImageView) findViewById(R.id.ivLike);
         tvLikeQty = (TextView) findViewById(R.id.tvLikesQty);
@@ -879,11 +667,11 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         myGoogleMap = googleMap;
         myGoogleMap.getUiSettings().setMapToolbarEnabled(false);
-        LatLng dsaLocation = new LatLng(38.903210, -77.038123);
+        LatLng dsaLocation = new LatLng(destinationlat, destinationLng);
 
         googleMap.addMarker(new MarkerOptions()
                 .position(dsaLocation)
-                .title("Direct Selling Association"));
+                .title(locationToSend));
         myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(dsaLocation, 14.0f));
     }
 
@@ -973,7 +761,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             currentLongitude = location.getLongitude();
 
             Log.e("current LatLng", currentLatitude + " " + currentLongitude);
-            Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
+            //  Toast.makeText(this, currentLatitude + " WORKS " + currentLongitude + "", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1009,6 +797,62 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public void onLocationChanged(Location location) {
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
+    }
+
+    void setCheckedIn() {
+        StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/apis/Event/Checked_in",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject job = new JSONObject(response);
+                            JSONObject result = job.getJSONObject("result");
+                            String status = result.getString("status");
+
+
+                            if (status.equals("success")) {
+
+                                String res = result.getString("response");
+                                if (res.equals("User Checked In Successfully.")) {
+                                    checkedIn = true;
+                                    Toast.makeText(SelectedEventActivity.this, "You have successfully Checked in", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(SelectedEventActivity.this, "Checked in failed", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            } else {
+
+                                // finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("ErrorMessage", e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley_error", error.networkResponse.statusCode + "");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("user_id", MainActivity.getId);
+                params.put("signin_type", LoginActivity.decider);
+                params.put("event_id", GlobalClass.selelcted_event_id);
+
+                Log.e("params", params.toString());
+
+                return params;
+            }
+        };
+
+        AppSingleton.getInstance().addToRequestQueue(request);
     }
 
 
@@ -1266,9 +1110,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     tvAgendaDescription.setText(agenda);
                     // AttendeesID = obj.getString("attendees_id");
 
-                    isLikeable = obj.getString("is_like");
-                    if (isLikeable.equals(null)) {
-                        Log.e("islike", "null");
+                    isLikeable = String.valueOf(obj.getInt("is_like"));
+                    if (isLikeable.equals("0")) {
+                        Log.e("islike", "0");
 
                     } else if (isLikeable.equals("1")) {
                         Log.e("islike", "null");
@@ -1276,23 +1120,38 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
                         likesView.setClickable(false);
                     }
+                    String is_registered = String.valueOf(obj.getInt("is_registered"));
 
+                    if (is_registered.equals("0")) {
+                        Log.e("is_registered", is_registered + "");
+                    } else if (is_registered.equals("1")) {
+                        Log.e("is_registered", is_registered + "");
+                        tvRegister.setText("You are Registered for this Event");
+                        tvRegister.setClickable(false);
+                        GlobalClass.isAlreadyRegistered = true;
+                    }
 
-//                    if (obj.getString("checked_in").equals("1")) {
-//                        isCheckedIn = true;
-//                    }else
-//                        {
-//                            isCheckedIn = false;
-//                        }
+                    String is_checked_in = String.valueOf(obj.getInt("is_checked_in"));
+                    if (is_checked_in.equals("1")) {
+                        isCheckedIn = true;
+                        ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+//                        ivcheck.setClickable(false);
+                    } else if (is_checked_in.equals("0")) {
+                        isCheckedIn = false;
+                    }
 
                     destinationlat = Double.parseDouble(obj.getString("latitude"));
                     destinationLng = Double.parseDouble(obj.getString("longitude"));
 
+
                     locationToSend = obj.getString("place") + " " + obj.getString("venue");
 
 
+                    mapFragment.getMapAsync(SelectedEventActivity.this);
+
                     Eventname = obj.getString("title");
                     tvCityCountry.setText(obj.getString("venue"));
+
 
                     textToPost = tvAgenda.getText().toString()
                             + " event will be held on \n" + startEventTime.substring(0, 11) + " in " + obj.getString("venue")
@@ -1305,6 +1164,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                             + " will be speaker." + " \n";
                 }
                 progressDialog.dismiss();
+
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
@@ -1350,7 +1210,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Add_PollAnswer?");
+            HttpPost post = new HttpPost(GlobalClass.base_url + "wfdsa/apis/Event/Add_PollAnswer");
             Log.e("Must", "Must");
 
             List<NameValuePair> parameters = new ArrayList<>();
@@ -1358,7 +1218,6 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             parameters.add(new BasicNameValuePair("poll_id", pollId));
             parameters.add(new BasicNameValuePair("remark", remark));
             parameters.add(new BasicNameValuePair("poll_answer_id", idKeep));
-
             parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
 
             StringBuilder buffer = new StringBuilder();
@@ -1373,8 +1232,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 String Line = "";
 
                 while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
+                    // Log.e("reader", Line);
+                    // Log.e("buffer", buffer.toString());
                     buffer.append(Line);
 
                 }
@@ -1458,7 +1317,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             for (int i = 0; i < findItbyId.length; i++) {
                 pollAnswerId += findItbyId[i] + ",";
             }
-            parameters.add(new BasicNameValuePair("poll_answer_id", pollAnswerId.substring(0, pollAnswerId.length() - 1)));
+            String answer = pollAnswerId.substring(0, pollAnswerId.length() - 2);
+            Log.e("answer", answer);
+            parameters.add(new BasicNameValuePair("poll_answer_id", answer));
             parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
 
             StringBuilder buffer = new StringBuilder();

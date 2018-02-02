@@ -72,6 +72,11 @@ public class EventAttendeesDialog extends Dialog implements View.OnClickListener
         setContentView(R.layout.event_attendees_dialog);
         ButterKnife.bind(this);
         setCanceledOnTouchOutside(false);
+        if (GlobalClass.isAlreadyRegistered) {
+            tvRegister.setClickable(false);
+            tvRegister.setText("Already Registered");
+
+        }
 
         Window window = getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);

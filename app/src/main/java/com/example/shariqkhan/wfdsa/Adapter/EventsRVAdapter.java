@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.AnnouncementsActivity;
+import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.R;
@@ -30,6 +31,61 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
     public EventsRVAdapter(Context context, ArrayList<EventsModel> eventsModelArrayList) {
         this.eventsModelArrayList = eventsModelArrayList;
         this.context = context;
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.events_rv_item, parent, false);
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        EventsModel dataModel = eventsModelArrayList.get(position);
+        holder.tvTitle.setText(dataModel.getEventTitle());
+        holder.tvDayTime.setText(dataModel.getTime());
+        holder.tvCityCountry.setText(dataModel.getVenueCity());
+        if (holder.tvCityCountry.getText().equals(""))
+            holder.tvCityCountry.setText("Paris");
+        holder.tvDay.setText(dataModel.getDay());
+        holder.tvMonth.setText(dataModel.getMonth());
+        holder.tvYear.setText(dataModel.getYear());
+
+
+        if (MainActivity.DECIDER.equals("member")) {
+
+            if (dataModel.getPersonal().contains(GlobalClass.member_role)) {
+                holder.lock.setVisibility(View.GONE);
+
+            } else {
+                holder.lock.setVisibility(View.VISIBLE);
+            }
+
+
+        } else { // condition what to show to non member
+            if (dataModel.getPersonal().equals("Public")) {
+                holder.lock.setVisibility(View.GONE);
+                holder.itemView.setClickable(true);
+            } else {
+                holder.lock.setVisibility(View.VISIBLE);
+                holder.itemView.setClickable(false);
+            }
+
+        }
+
+        // holder.tvYear.setText(dataModel.getYear());
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent( context, AnnouncementsActivity.class);
+//                context.startActivity(intent);
+//            }
+//        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return eventsModelArrayList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -60,45 +116,5 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
 
 
         }
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.events_rv_item, parent, false);
-        return new MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        EventsModel dataModel = eventsModelArrayList.get(position);
-        holder.tvTitle.setText(dataModel.getEventTitle());
-        holder.tvDayTime.setText(dataModel.getTime());
-        holder.tvCityCountry.setText(dataModel.getVenueCity());
-        if (holder.tvCityCountry.getText().equals(""))
-            holder.tvCityCountry.setText("Paris");
-        holder.tvDay.setText(dataModel.getDay());
-        holder.tvMonth.setText(dataModel.getMonth());
-        holder.tvYear.setText(dataModel.getYear());
-        if (!MainActivity.DECIDER.equals("member")) {
-            if (dataModel.getPersonal().equals("member")) {
-                holder.lock.setVisibility(View.VISIBLE);
-            }
-        } else {
-            holder.lock.setVisibility(View.GONE);
-        }
-
-        // holder.tvYear.setText(dataModel.getYear());
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent( context, AnnouncementsActivity.class);
-//                context.startActivity(intent);
-//            }
-//        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return eventsModelArrayList.size();
     }
 }

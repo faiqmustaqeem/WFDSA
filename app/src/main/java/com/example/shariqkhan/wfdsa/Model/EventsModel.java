@@ -33,7 +33,6 @@ public class EventsModel {
         this.year = year;
         this.time = time;
         this.personal = personal;
-
     }
 
     public String getImageUrl() {
@@ -56,71 +55,73 @@ public class EventsModel {
         return id;
     }
 
-    public String getEventTitle() {
-        return eventTitle;
-    }
-
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
-    public String getVenueCountry() {
-        return venueCountry;
-    }
-
-    public String getVenueCity() {
-        return venueCity;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
     }
 
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
     }
 
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
+    }
+
+    public String getVenueCountry() {
+        return venueCountry;
     }
 
     public void setVenueCountry(String venueCountry) {
         this.venueCountry = venueCountry;
     }
 
+    public String getVenueCity() {
+        return venueCity;
+    }
+
     public void setVenueCity(String venueCity) {
         this.venueCity = venueCity;
+    }
+
+    public String getDay() {
+        return day;
     }
 
     public void setDay(String day) {
         this.day = day;
     }
 
+    public String getMonth() {
+        return month;
+    }
+
     public void setMonth(String month) {
         this.month = month;
+    }
+
+    public String getYear() {
+        return year;
     }
 
     public void setYear(String year) {
         this.year = year;
     }
 
+    public String getTime() {
+        return time;
+    }
+
     public void setTime(String time) {
         this.time = time;
     }
+
+
 }

@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity
         DECIDER = prefs.getString("type", "");
         stype = prefs.getString("stype", "");
         getId = prefs.getString("deciderId", "");
+        GlobalClass.member_role = prefs.getString("role", "");
+        Log.e("role", GlobalClass.member_role);
 
 
         imageUrl = prefs.getString("image", "");
@@ -579,8 +581,7 @@ public class MainActivity extends AppCompatActivity
 
             HttpPost post = new HttpPost(GlobalClass.base_url + "wfdsa/apis/Event/Events_Notification");
             Log.e("Must", "Must");
-//
-//
+
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("token", refreshedToken));
 //            parameters.add(new BasicNameValuePair("last_name", lastName));
@@ -610,8 +611,8 @@ public class MainActivity extends AppCompatActivity
                 String Line = "";
 
                 while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
+//                    Log.e("reader", Line);
+//                  Log.e("buffer", buffer.toString());
                     buffer.append(Line);
 
                 }
@@ -769,9 +770,9 @@ public class MainActivity extends AppCompatActivity
                             String sub = job.getString("start_date");
 
 
-//                            String filter = sub.substring(8, 10);
+                            String filter = sub.substring(8, 10);
 
-                  //          model.setDay(filter);
+                            model.setDay(filter);
 
                             model.setMonth(job.getString("start_date").substring(5, 8));
                             model.setYear(job.getString("start_date").substring(0, 4));

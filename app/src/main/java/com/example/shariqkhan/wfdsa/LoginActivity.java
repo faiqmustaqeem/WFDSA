@@ -49,6 +49,8 @@ import static com.example.shariqkhan.wfdsa.SplashActivity.fetchEvents;
 
 
 public class LoginActivity extends AppCompatActivity {
+    public static String BASE_URL = GlobalClass.base_url + "wfdsa/api/login";
+    public static String decider = "1";
     @BindView(R.id.ivWFDSALogo)
     ImageView ivWFDSALogo;
     @BindView(R.id.tvMember)
@@ -71,24 +73,16 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvMemberSignIn;
     @BindView(R.id.tvNonMemberSignIn)
     TextView tvNonMemberSignIn;
-
     @BindView(R.id.etEmail)
             EditText etNonMemberEmail;
-
     @BindView(R.id.etNonMemberPassword)
     EditText etNonMemberPassowrd;
-
-
     TextInputLayout etMemberEmail;
     TextInputLayout etMemberPass;
     ImageView ivBack;
     String getEmail;
     String getPassword;
     android.app.ActionBar actionbar;
-
-    public static String BASE_URL = GlobalClass.base_url+"wfdsa/api/login";
-
-    public static String decider = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,6 +291,7 @@ public class LoginActivity extends AppCompatActivity {
                         String last_name = user_data.getString("last_name");
                         String password = user_data.getString("password");
                         String phNo;
+                        String role = "";
 
                         if(user_data.getString("signin_type").equals("2"))
                         {
@@ -306,16 +301,16 @@ public class LoginActivity extends AppCompatActivity {
                         else if(user_data.getString("signin_type").equals("1"))
                         {
                             phNo   = user_data.getString("cell");
+                            role = user_data.getString("role");
+                        } else {
+                            phNo = "";
                         }
-                        else
-                            phNo="";
-
                       //  String up_image = user_data.getString("upload_image");
 
 
                         Log.e("email", email);
                         SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-
+                        editor.putString("role", role);
                         editor.putString("api_secret", get_api_secret);
                         editor.putString("deciderId", getId);
                         editor.putString("email", email);
@@ -348,7 +343,7 @@ public class LoginActivity extends AppCompatActivity {
                    // etMemberEmail.getEditText().setText("");
                    // etMemberPass.getEditText().setText("");
                     progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Error !!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
                 }
 
 

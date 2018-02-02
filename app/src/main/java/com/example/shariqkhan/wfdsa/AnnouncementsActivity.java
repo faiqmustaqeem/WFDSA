@@ -33,11 +33,10 @@ import butterknife.ButterKnife;
 
 
 public class AnnouncementsActivity extends AppCompatActivity {
+    public static String URL = GlobalClass.base_url + "wfdsa/apis/Announcement/Announcement";
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
     AnnouncementsRVAdapter announcementsRVAdapter;
-
-    public static String URL = GlobalClass.base_url+"wfdsa/apis/Announcement/Announcement";
     ArrayList<AnnouncementsModel> arrayList = new ArrayList<>();
     ProgressDialog progressDialog;
 
@@ -67,7 +66,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
         announcementsRVAdapter = new AnnouncementsRVAdapter(this, arrayList);
         RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
         rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
-        rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
+        //  rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
         rvAnnouncements.setAdapter(announcementsRVAdapter);
 
 
