@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -131,10 +134,41 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         model.setDate(obj.getString("date"));
 
                         String announce_for = obj.getString("announce_for");
-                        if (announce_for.contains(GlobalClass.member_role)) {
-                            arrayList.add(model);
-                        } else if (announce_for.equals("Public")) {
-                            arrayList.add(model);
+                        if (MainActivity.DECIDER.equals("member")) {
+                            Boolean conditionSatisfied = false;
+                            if (GlobalClass.member_role.contains(",")) {
+                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                                if (splitted_roles != null) {
+                                    for (int j = 0; j < splitted_roles.size(); j++) {
+                                        if (announce_for.contains(splitted_roles.get(j).toString())) {
+                                            conditionSatisfied = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            if (conditionSatisfied == true) // multiple roles
+                            {
+                                arrayList.add(model);
+                            } else if (announce_for.contains(GlobalClass.member_role)) {
+                                arrayList.add(model);
+
+                            } else if (announce_for.equals("Public")) {
+                                arrayList.add(model);
+                            } else {
+                                // dont add
+                            }
+                        } else {
+                            if (announce_for.equals("Public")) {
+                                arrayList.add(model);
+                            } else {
+                                // dont add
+                            }
+
+
                         }
 
 

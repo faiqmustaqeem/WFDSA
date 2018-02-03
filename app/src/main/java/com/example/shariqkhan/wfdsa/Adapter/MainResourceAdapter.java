@@ -59,17 +59,11 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
     holder.VIEW.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (model.getResource_memeber().equals("Mmeber"))
-            {
-                Toast.makeText(con, "Members Access Only!", Toast.LENGTH_SHORT).show();
-            }else
-                {
-
-                    Intent intent = new Intent(con, MyResourcesActivity.class);
+            Intent intent = new Intent(con, MyResourcesActivity.class);
                     GlobalClass.selected_resource=model.getTitle();
                     intent.putExtra("RoleName",model.getResource_id());
                     con.startActivity(intent);
-                }
+
         }
     });
 

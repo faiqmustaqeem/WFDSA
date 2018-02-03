@@ -16,6 +16,8 @@ import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,10 +55,27 @@ public class EventsRVAdapter extends RecyclerView.Adapter<EventsRVAdapter.MyView
 
 
         if (MainActivity.DECIDER.equals("member")) {
+            Boolean conditionSatisfied = false;
+            if (GlobalClass.member_role.contains(",")) {
+                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
 
-            if (dataModel.getPersonal().contains(GlobalClass.member_role)) {
+                if (splitted_roles != null) {
+                    for (int i = 0; i < splitted_roles.size(); i++) {
+                        if (dataModel.getPersonal().contains(splitted_roles.get(i).toString())) {
+                            conditionSatisfied = true;
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            if (conditionSatisfied == true) // multiple roles
+            {
                 holder.lock.setVisibility(View.GONE); // hide lock
-
+            } else if (dataModel.getPersonal().contains(GlobalClass.member_role)) // single role
+            {
+                holder.lock.setVisibility(View.GONE); // hide lock
             } else if (dataModel.getPersonal().equals("Public")) {
 
                 holder.lock.setVisibility(View.GONE); // hide lock

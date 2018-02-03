@@ -22,4 +22,7 @@ public class GlobalClass {
     public static String selected_event_date = "";
     public static String member_role = "";
     public static boolean isAlreadyRegistered = false;
+    public static ArrayList<Long> list_downloads = new ArrayList<>();
+    public static String download_file_name = "";
+
 }

@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -121,7 +122,28 @@ public class AllEventsActivity extends AppCompatActivity {
 
                 Log.e("role", GlobalClass.member_role);
                 if (MainActivity.DECIDER.equals("member")) {
-                    if (eventsModel.getPersonal().contains(GlobalClass.member_role)) {
+
+                    Boolean conditionSatisfied = false;
+                    if (GlobalClass.member_role.contains(",")) {
+                        List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                        if (splitted_roles != null) {
+                            for (int i = 0; i < splitted_roles.size(); i++) {
+                                if (eventsModel.getPersonal().contains(splitted_roles.get(i).toString())) {
+                                    conditionSatisfied = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (conditionSatisfied == true) // multiple roles
+                    {
+                        Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
+                        i.putExtra("eventid", eventsModel.getId());
+                        startActivity(i);
+                    } else if (eventsModel.getPersonal().contains(GlobalClass.member_role)) {
                         Intent i = new Intent(AllEventsActivity.this, SelectedEventActivity.class);
                         i.putExtra("eventid", eventsModel.getId());
                         startActivity(i);

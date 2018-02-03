@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -532,12 +533,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
-
-                Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
-                overridePendingTransition(0, 0);
-                intent.putExtra("Event_id", id);
-                startActivity(intent);
-
+                if (GlobalClass.isAlreadyRegistered) {
+                    Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
+                    overridePendingTransition(0, 0);
+                    intent.putExtra("Event_id", id);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_LONG).show();
+                }
 
             }
         });

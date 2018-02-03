@@ -279,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         JSONObject user_data = result.getJSONObject("user_data");
 
+                        Log.e("user_data", user_data.toString());
                         if (LoginActivity.decider.equals("2")) {
                             getId = user_data.getString("non_member_id");
                         } else {

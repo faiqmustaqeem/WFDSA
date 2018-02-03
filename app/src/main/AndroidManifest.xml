@@ -7,16 +7,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">
-
-    </uses-permission>
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">
-    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.example.shariqkhan.wfdsa.Singleton.AppSingleton"
+        android:name=".Singleton.AppSingleton"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/frontlogo"
@@ -31,19 +28,20 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id">
-
-        </meta-data>
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+            android:value="@string/facebook_app_id"></meta-data>
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/frontlogo" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
@@ -51,11 +49,7 @@
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider1207533079382899"
-            android:exported="true"
-            >
-
-        </provider>
-
+            android:exported="true"></provider>
 
         <activity
             android:name=".SplashActivity"
@@ -66,45 +60,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".BlankActivity">
-
-        </activity>
+        <activity android:name=".BlankActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Dialog.EventDiscussionDialog"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".MainResources"
             android:screenOrientation="portrait" />
         <activity
             android:name=".GalleryActivityMine"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".Demo">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Demo"></activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".ThankingActivity">
-
-        </activity>
+        <activity android:name=".ThankingActivity"></activity>
         <activity
             android:name=".UserGuideActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MemberActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RegisterEvent">
-
-
-        </activity>
+        <activity android:name=".RegisterEvent"></activity>
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait" />
@@ -137,9 +117,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SelectedEventActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
@@ -163,12 +141,13 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".FirebaseMessagingServe">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".Singleton.NoInternetactivity"></activity>
     </application>
 
 </manifest>

@@ -32,10 +32,12 @@ import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
+import com.example.shariqkhan.wfdsa.Adapter.MainResourceAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.ResourcesRVadapter;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
+import com.example.shariqkhan.wfdsa.Model.MainResourceModel;
 import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
 import com.example.shariqkhan.wfdsa.custom.ResourcesGroup;
 import com.example.shariqkhan.wfdsa.custom.ResourcesSubItems;
@@ -62,6 +64,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity
     static String phoneNo;
     public ArrayList<EventsModel> arrayList = new ArrayList<>();
     public ArrayList<AnnouncementsModel> arrayList2 = new ArrayList<>();
+    public ArrayList<MainResourceModel> arrayListResoutces = new ArrayList<>();
     ImageView ivSignOut;
     ImageView ivSettings;
     @BindView(R.id.ivImage)
@@ -99,6 +103,8 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.rvEvents)
     RecyclerView rvEvents;
     String[] titlesArray;
+    String[] resource_permission;
+    String[] resources_id;
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
     @BindView(R.id.tvViewAllAnnouncements)
@@ -107,12 +113,15 @@ public class MainActivity extends AppCompatActivity
     TextView tvViewAllEvents;
     @BindView(R.id.tvViewAllResources)
     TextView tvViewAllResources;
-    @BindView(R.id.tvAdvocacy)
-    TextView tvAdvocacy;
-    @BindView(R.id.tvAssociationService)
-    TextView tvAssociationService;
-    @BindView(R.id.tvGlobalRegulatory)
-    TextView tvGlobalRegulatory;
+//    @BindView(R.id.tvAdvocacy)
+//    TextView tvAdvocacy;
+//    @BindView(R.id.tvAssociationService)
+//    TextView tvAssociationService;
+//    @BindView(R.id.tvGlobalRegulatory)
+//    TextView tvGlobalRegulatory;
+
+    @BindView(R.id.rvResources)
+    RecyclerView rvRespurces;
     EventsRVAdapter eventsRVAdapter;
     AnnouncementsRVAdapter announcementsRVAdapter;
     CircleImageView ivUserPic;
@@ -338,7 +347,6 @@ public class MainActivity extends AppCompatActivity
 
                     } else {
                         Toast.makeText(MainActivity.this, "You dont have access to this event!", Toast.LENGTH_SHORT).show();
-
                     }
                 } else {
                     if (eventsModel.getPersonal().equals("Public")) {
@@ -410,7 +418,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @OnClick({R.id.ivImage, R.id.tvViewAllAnnouncements, R.id.tvViewAllEvents, R.id.tvViewAllResources, R.id.tvAdvocacy, R.id.tvAssociationService, R.id.tvGlobalRegulatory})
+    @OnClick({R.id.ivImage, R.id.tvViewAllAnnouncements, R.id.tvViewAllEvents, R.id.tvViewAllResources})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivImage:
@@ -425,9 +433,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i2);
                 break;
             case R.id.tvViewAllResources:
-            case R.id.tvAdvocacy:
-            case R.id.tvAssociationService:
-            case R.id.tvGlobalRegulatory:
                 Intent i3 = new Intent(this, MainResources.class);
                 startActivity(i3);
                 break;
@@ -740,8 +745,8 @@ public class MainActivity extends AppCompatActivity
                 String Line = "";
 
                 while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
+                    //   Log.e("reader", Line);
+                    //  Log.e("buffer", buffer.toString());
                     buffer.append(Line);
 
                 }
@@ -867,13 +872,44 @@ public class MainActivity extends AppCompatActivity
                         model.setImage(obj.getString("upload_image"));
                         model.setDate(obj.getString("date"));
                         String announce_for = obj.getString("announce_for");
-                        if (announce_for.contains(GlobalClass.member_role)) {
-                            arrayList2.add(model);
-                        } else if (announce_for.equals("Public")) {
-                            arrayList2.add(model);
+
+                        if (MainActivity.DECIDER.equals("member")) {
+
+                            Boolean conditionSatisfied = false;
+                            if (GlobalClass.member_role.contains(",")) {
+                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                                if (splitted_roles != null) {
+                                    for (int j = 0; j < splitted_roles.size(); j++) {
+                                        if (announce_for.contains(splitted_roles.get(j).toString())) {
+                                            conditionSatisfied = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            if (conditionSatisfied == true) // multiple roles
+                            {
+                                arrayList2.add(model);
+                            } else if (announce_for.contains(GlobalClass.member_role)) {
+                                arrayList2.add(model);
+
+                            } else if (announce_for.equals("Public")) {
+                                arrayList2.add(model);
+                            } else {
+                                // dont add
+                            }
+                        } else {
+                            if (announce_for.equals("Public")) {
+                                arrayList2.add(model);
+                            } else {
+                                // dont add
+                            }
+
+
                         }
-
-
                     }
 
                     announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, arrayList2);
@@ -886,10 +922,6 @@ public class MainActivity extends AppCompatActivity
                 }
 
 
-//                } else {
-//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
 
             } catch (JSONException e) {
                 Log.e("Error", e.getMessage());
@@ -939,83 +971,81 @@ public class MainActivity extends AppCompatActivity
                     //    resourcesGroupList = new ArrayList<>(resourcesData.length());
 
 
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
-                    titlesArray = new String[resourcesData.length()];
-                    //   Toast.makeText(MainActivity.this, String.valueOf(resourcesData.length()), Toast.LENGTH_SHORT).show();
+//                    //   roleArray = new String[rolesArray.length()];
+//                    // String idArray[] = new String[rolesArray.length()];
+//                    titlesArray = new String[resourcesData.length()];
+//                    resources_id=new String[resourcesData.length()];
+//                    //   Toast.makeText(MainActivity.this, String.valueOf(resourcesData.length()), Toast.LENGTH_SHORT).show();
+//                    for (int i = 0; i < resourcesData.length(); i++) {
+//
+//                        JSONObject job = resourcesData.getJSONObject(i);
+//
+//
+//                        titlesArray[i] = job.getString("title_2");
+//                        resources_id[i] =job.getString("resources_id");
+//
+//
+//                    }
                     for (int i = 0; i < resourcesData.length(); i++) {
-
                         JSONObject job = resourcesData.getJSONObject(i);
-                        titlesArray[i] = job.getString("title_2");
+                        MainResourceModel model = new MainResourceModel();
+                        model.setResource_id(job.getString("resources_id"));
+                        model.setTitle(job.getString("title_2"));
+                        model.setResource_memeber(job.getString("resource_member"));
+
+                        String resource_member = job.getString("resource_member");
+                        if (MainActivity.DECIDER.equals("member")) {
+
+                            Boolean conditionSatisfied = false;
+                            if (GlobalClass.member_role.contains(",")) {
+                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                                if (splitted_roles != null) {
+                                    for (int j = 0; j < splitted_roles.size(); j++) {
+                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
+                                            conditionSatisfied = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            if (conditionSatisfied == true) // multiple roles
+                            {
+                                arrayListResoutces.add(model);
+
+                            } else if (resource_member.contains(GlobalClass.member_role)) {
+                                arrayListResoutces.add(model);
+
+                            } else if (resource_member.equals("Public")) {
+                                arrayListResoutces.add(model);
+                            } else {
+                                // dont add
+                            }
+                        } else {
+                            if (resource_member.equals("Public")) {
+                                arrayListResoutces.add(model);
+                            } else {
+                                // dont add
+                            }
 
 
-                    }
-
-                }
-
-
-                try {
-                    tvAdvocacy.setText(titlesArray[0]);
-                    if (tvAdvocacy.getText().toString().contains("Word")) {
-                        tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.word, 0, 0, 0);
-                    } else if (tvAdvocacy.getText().toString().contains("Pdf")) {
-                        tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.pdf, 0, 0, 0);
-                    }else if (tvAdvocacy.getText().toString().contains("Excel"))
-                    {
-                        tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.excel, 0, 0, 0);
-                    }else
-                        {
-                            tvAdvocacy.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
                         }
-                } catch (Exception e) {
 
-                    tvAdvocacy.setVisibility(View.GONE);
-                }
-
-                try {
-                    tvAssociationService.setText(titlesArray[1]);
-
-                    if (tvAssociationService.getText().toString().contains("Word")) {
-                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.word, 0, 0, 0);
-                    } else if (tvAssociationService.getText().toString().contains("Pdf")) {
-                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.pdf, 0, 0, 0);
-                    }else if (tvAssociationService.getText().toString().contains("Excel"))
-                    {
-                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.excel, 0, 0, 0);
-                    }else
-                    {
-                        tvAssociationService.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
                     }
-                } catch (Exception e) {
 
-                    tvAssociationService.setVisibility(View.GONE);
-                }
-                try {
-                    tvGlobalRegulatory.setText(titlesArray[2]);
+                    MainResourceAdapter adapter = new MainResourceAdapter(arrayListResoutces, MainActivity.this);
+
+                    rvRespurces.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    rvRespurces.setAdapter(adapter);
 
 
-                    if (tvGlobalRegulatory.getText().toString().contains("Word")) {
-                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.word, 0, 0, 0);
-                    } else if (tvGlobalRegulatory.getText().toString().contains("Pdf")) {
-                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.pdf, 0, 0, 0);
-                    }else if (tvGlobalRegulatory.getText().toString().contains("Excel"))
-                    {
-                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.excel, 0, 0, 0);
-                    }else
-                    {
-                        tvGlobalRegulatory.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
-                    }
-                } catch (Exception e) {
-
-                    tvGlobalRegulatory.setVisibility(View.GONE);
                 }
 
 
                 PGdialog.dismiss();
-//                } else {
-//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
+
 
             } catch (JSONException e) {
                 Log.e("Error", e.getMessage());

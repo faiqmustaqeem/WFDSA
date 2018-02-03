@@ -36,18 +36,14 @@ import butterknife.ButterKnife;
 import static com.example.shariqkhan.wfdsa.GlobalClass.selected_resource;
 
 public class MyResourcesActivity extends AppCompatActivity {
+    public ResourcesRVadapter adapter;
     ImageView ivBack;
-
     @BindView(R.id.rvResources)
     RecyclerView rvResources;
     ProgressDialog dialog;
     List<ResourcesGroup> resourcesGroupList;
-
     String BASE_URL = GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource_file?";
-
     String resourceId;
-
-    public ResourcesRVadapter adapter;
     List<ResourcesSubItems> resourcesSubItemsList;
 
     @Override
@@ -95,13 +91,6 @@ public class MyResourcesActivity extends AppCompatActivity {
 
     }
 
-    public List<ResourcesGroup> getAllResources() {
-        return Arrays.asList(
-                new ResourcesGroup("1", "Advocacy", resourcesSubItemsList),
-                new ResourcesGroup("2", "Association Service", resourcesSubItemsList),
-                new ResourcesGroup("3", "Global Regulatory", resourcesSubItemsList)
-        );
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -120,7 +109,6 @@ public class MyResourcesActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            //  String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
             Log.e("url", BASE_URL);
 
@@ -161,6 +149,7 @@ public class MyResourcesActivity extends AppCompatActivity {
                             JSONObject fileObj = FilesArray.getJSONObject(j);
                             String file_id = fileObj.getString("file_name");
                             String path = fileObj.getString("file");
+
 
                             resourcesSubItemsList.add(new ResourcesSubItems(file_id, path));
                         }

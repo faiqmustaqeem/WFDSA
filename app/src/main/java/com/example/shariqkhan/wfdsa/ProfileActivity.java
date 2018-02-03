@@ -70,6 +70,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final int GALLERY_CONSTANT = 1;
+    public static boolean canEdit = false;
+    public static Uri uri;
+    public static String path;
+    static String newFirstName;
+    static String newLastName;
+    static String newEmail;
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
     @BindView(R.id.ivBack)
@@ -86,21 +93,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     EditText etEmail;
     @BindView(R.id.etMobileNumber)
     EditText etMobileNumber;
-
-    public static final int GALLERY_CONSTANT = 1;
-
     ProfileEditPermissionDialog d;
-    public static boolean canEdit = false;
-    static String newFirstName;
-    static String newLastName;
-    static String newEmail;
-    public static Uri uri;
     Bitmap bmp;
-
     StorageReference storageRef;
-
     String BASE_URL = GlobalClass.base_url+"wfdsa/apis/member/Edit_member";
-    public static String path;
+
+    private static String getPicture(Bitmap bmp) {
+        String picture = "";
+
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 50, stream);
+//                itemImage.compress(Bitmap.CompressFormat.PNG, 60, stream);
+        byte[] image = stream.toByteArray();
+//                System.out.println("byte array:" + image);
+
+        String base64 = Base64.encodeToString(image, 0);
+
+        picture = base64;
+
+
+//                    ,{\"path\":\"title\",\"detail\":\"dddd\"}]"
+
+        return picture;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +135,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         storageRef = FirebaseStorage.getInstance().getReference();
 
 
-        Picasso.with(this).load(MainActivity.imageUrl).into(profile_image);
+//        Picasso.with(this).load(MainActivity.imageUrl).into(profile_image);
 
+        if (!MainActivity.imageUrl.equals("")) {
+            Picasso.with(this)
+                    .load(MainActivity.imageUrl)
+                    .placeholder(R.drawable.ic_profile_pic)
+                    .error(R.drawable.ic_profile_pic)
+                    .into(profile_image);
+        }
 
         etEmail.setText(MainActivity.getEmail);
         etLastName.setText(MainActivity.getLastName);
@@ -183,7 +206,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-
 
     private void makeFieldsEditable() {
         etFirstName.setEnabled(true);
@@ -377,6 +399,82 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+//        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.e("HelloWorld", "HeloWorld");
+//                    JSONObject job = jsonObject.getJSONObject("result");
+//                    if (job.getString("response").equals("success")) {
+//
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    Log.e("HelloWorld", "HeloWorld");
+//                        SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+//                        edit.putString("first_name", etFirstName.getText().toString());
+//                        edit.putString("last_name", etLastName.getText().toString());
+//                        edit.putString("contact_no", etMobileNumber.getText().toString());
+//                        edit.putString("profile_image", path);
+//
+//
+//
+//                        edit.apply();
+//
+//
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Log.e("Exception", e.getMessage());
+//                }
+//
+//                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+//                startActivity(intent);
+//                finish();
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("first_name", etFirstName.getText().toString());
+//                params.put("last_name", etLastName.getText().toString());
+//                params.put("cell", etMobileNumber.getText().toString());
+//                params.put("id", MainActivity.getId);
+//                params.put("image", path);
+//                return params;
+//            }
+//        };
+//        MySingleton.getInstance(ProfileActivity.this).addToRequestQueue(request);
+
+    public boolean isValidEmail(String emailStr) {
+        final Pattern VALID_EMAIL_ADDRESS_REGEX =
+                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+
+    }
+
+    private String convertTOString(Bitmap bmp) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream);
+        byte[] imgBytes = byteArrayOutputStream.toByteArray();
+        //StringBuilder builder = new StringBuilder();
+        return (Base64.encodeToString(imgBytes, Base64.DEFAULT));
+        //return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     class Task extends AsyncTask<String, Void, String> {
         String stream = null;
@@ -512,105 +610,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             progressDialog.dismiss();
         }
     }
-
-//        StringRequest request = new StringRequest(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Log.e("HelloWorld", "HeloWorld");
-//                    JSONObject job = jsonObject.getJSONObject("result");
-//                    if (job.getString("response").equals("success")) {
-//
-//                try {
-//                    JSONObject jsonObject = new JSONObject(response);
-//                    Log.e("HelloWorld", "HeloWorld");
-//                        SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-//                        edit.putString("first_name", etFirstName.getText().toString());
-//                        edit.putString("last_name", etLastName.getText().toString());
-//                        edit.putString("contact_no", etMobileNumber.getText().toString());
-//                        edit.putString("profile_image", path);
-//
-//
-//
-//                        edit.apply();
-//
-//
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Log.e("Exception", e.getMessage());
-//                }
-//
-//                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("first_name", etFirstName.getText().toString());
-//                params.put("last_name", etLastName.getText().toString());
-//                params.put("cell", etMobileNumber.getText().toString());
-//                params.put("id", MainActivity.getId);
-//                params.put("image", path);
-//                return params;
-//            }
-//        };
-//        MySingleton.getInstance(ProfileActivity.this).addToRequestQueue(request);
-
-
-    public boolean isValidEmail(String emailStr) {
-        final Pattern VALID_EMAIL_ADDRESS_REGEX =
-                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.find();
-
-    }
-
-    private String convertTOString(Bitmap bmp) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream);
-        byte[] imgBytes = byteArrayOutputStream.toByteArray();
-        //StringBuilder builder = new StringBuilder();
-        return (Base64.encodeToString(imgBytes, Base64.DEFAULT));
-        //return Base64.encodeToString(imgBytes, Base64.DEFAULT);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private static String getPicture(Bitmap bmp) {
-        String picture = "";
-
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 50, stream);
-//                itemImage.compress(Bitmap.CompressFormat.PNG, 60, stream);
-        byte[] image = stream.toByteArray();
-//                System.out.println("byte array:" + image);
-
-        String base64 = Base64.encodeToString(image, 0);
-
-        picture = base64;
-
-
-//                    ,{\"path\":\"title\",\"detail\":\"dddd\"}]"
-
-        return picture;
-    }
-
 
         class Task10 extends AsyncTask<String, Void, String> {
             String stream = null;

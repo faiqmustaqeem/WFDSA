@@ -1,14 +1,21 @@
 package com.example.shariqkhan.wfdsa.Adapter;
 
 import android.app.DownloadManager;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.shariqkhan.wfdsa.GlobalClass;
+import com.example.shariqkhan.wfdsa.MainActivity;
+import com.example.shariqkhan.wfdsa.MainResources;
 import com.example.shariqkhan.wfdsa.R;
 import com.example.shariqkhan.wfdsa.custom.ResourceGroupViewHolder;
 import com.example.shariqkhan.wfdsa.custom.ResourceItemViewHolder;
@@ -17,6 +24,7 @@ import com.example.shariqkhan.wfdsa.custom.ResourcesSubItems;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,10 +34,12 @@ import java.util.List;
 public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGroupViewHolder, ResourceItemViewHolder> {
     Context context;
 
+
     public ResourcesRVadapter(Context context, List<? extends ExpandableGroup> groups) {
         super(groups);
         this.context = context;
     }
+
 
     @Override
     public ResourceGroupViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
@@ -64,17 +74,23 @@ public class ResourcesRVadapter extends ExpandableRecyclerViewAdapter<ResourceGr
         } else {
             holder.image.setImageResource(R.drawable.fileother);
         }
-        holder.tvTitle.setOnClickListener(new View.OnClickListener() {
+        GlobalClass.download_file_name = subItem.getId();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
                 Toast.makeText(context, "Downloading!!", Toast.LENGTH_SHORT).show();
-                Uri uri = Uri.parse(subItem.getTitle());
+                Uri uri = Uri.parse(subItem.getTitle().replaceAll("\\s", ""));
                 Log.e("sub", subItem.getTitle());
                 DownloadManager.Request request = new DownloadManager.Request(uri);
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 Long refer = manager.enqueue(request);
+
+                GlobalClass.list_downloads.add(refer);
+
+
+
             }
         });
 

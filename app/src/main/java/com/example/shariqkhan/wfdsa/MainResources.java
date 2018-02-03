@@ -1,10 +1,17 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.DownloadManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Codiansoft on 1/2/2018.
@@ -43,6 +52,7 @@ public class MainResources extends AppCompatActivity {
     ArrayList<MainResourceModel> arrayList = new ArrayList<>();
 
     TextView txt;
+    BroadcastReceiver onComplete;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +75,54 @@ public class MainResources extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Task5 task = new Task5();
         task.execute();
+
+        onComplete = new BroadcastReceiver() {
+
+            public void onReceive(Context ctxt, Intent intent) {
+
+                // get the refid from the download manager
+                long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+// remove it from our list
+                GlobalClass.list_downloads.remove(referenceId);
+
+// if list is empty means all downloads completed
+                if (GlobalClass.list_downloads.isEmpty()) {
+
+// show a notification
+                    Log.e("INSIDE", "" + referenceId);
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(MainResources.this)
+                                    .setSmallIcon(R.drawable.frontlogo)
+                                    .setContentTitle(GlobalClass.download_file_name)
+                                    .setContentText("Download completed");
+
+
+                    PendingIntent contentIntent = PendingIntent.getActivity(MainResources.this, 0,
+                            new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS), PendingIntent.FLAG_UPDATE_CURRENT);
+                    mBuilder.setContentIntent(contentIntent);
+
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(455, mBuilder.build());
+
+
+                }
+
+            }
+        };
+
+        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+
+    @Override
+    protected void onDestroy() {
+
+
+        super.onDestroy();
+
+        unregisterReceiver(onComplete);
+
+
     }
 
     private class Task5 extends AsyncTask<Object, Object, String> {
@@ -111,12 +169,45 @@ public class MainResources extends AppCompatActivity {
                         model.setTitle(job.getString("title_2"));
                         model.setResource_memeber(job.getString("resource_member"));
 
-                        arrayList.add(model);
-//
-//                        filesArray[i] = job.getString("title_2");
-//                        idArray[i] = job.getString("resources_id");
-//                        typeArray[i] = job.getString("resource_member");
-                        //         titlesArray[i] = job.getString("title");
+
+                        String resource_member = job.getString("resource_member");
+                        if (MainActivity.DECIDER.equals("member")) {
+
+                            Boolean conditionSatisfied = false;
+                            if (GlobalClass.member_role.contains(",")) {
+                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                                if (splitted_roles != null) {
+                                    for (int j = 0; j < splitted_roles.size(); j++) {
+                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
+                                            conditionSatisfied = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            if (conditionSatisfied == true) // multiple roles
+                            {
+                                arrayList.add(model);
+                            } else if (resource_member.contains(GlobalClass.member_role)) {
+                                arrayList.add(model);
+
+                            } else if (resource_member.equals("Public")) {
+                                arrayList.add(model);
+                            } else {
+                                // dont add
+                            }
+                        } else {
+                            if (resource_member.equals("Public")) {
+                                arrayList.add(model);
+                            } else {
+                                // dont add
+                            }
+
+
+                        }
 
                     }
 
@@ -188,6 +279,8 @@ public class MainResources extends AppCompatActivity {
             // PGdialog.show();
 
         }
+
     }
+
 
 }
