@@ -299,13 +299,11 @@ public class MainActivity extends AppCompatActivity
         ivSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.DECIDER.equals("member")) {
-                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+
+                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
                     finish();
-                } else {
-                    Toast.makeText(MainActivity.this, "Only members can edit profiles!", Toast.LENGTH_LONG).show();
-                }
+
 
             }
         });
