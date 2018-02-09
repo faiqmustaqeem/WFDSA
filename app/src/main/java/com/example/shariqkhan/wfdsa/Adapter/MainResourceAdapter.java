@@ -60,8 +60,9 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(con, MyResourcesActivity.class);
-                    GlobalClass.selected_resource=model.getTitle();
-                    intent.putExtra("RoleName",model.getResource_id());
+            GlobalClass.selected_resource = model.getParent_name();
+            intent.putExtra("category_id", model.getResource_id());
+            intent.putExtra("parent_name", model.getParent_name());
                     con.startActivity(intent);
 
         }

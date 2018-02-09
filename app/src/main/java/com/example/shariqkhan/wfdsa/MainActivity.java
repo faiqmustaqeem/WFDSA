@@ -66,6 +66,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity
 
 
 //
+
 
 
         prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -768,7 +770,12 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
+            LinearLayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
 
+            rvEvents.setLayoutManager(mEventLayoutManager);
+            rvEvents.setItemAnimator(new DefaultItemAnimator());
+            rvEvents.setAdapter(eventsRVAdapter);
             JSONObject jsonobj;
             if (s != null) {
                 try {
@@ -783,36 +790,48 @@ public class MainActivity extends AppCompatActivity
 
 
                         JSONArray data = result.getJSONArray("data");
-                        for (int i = 0; i < 1; i++) {
-                            EventsModel model = new EventsModel();
-                            JSONObject job = data.getJSONObject(i);
-                            model.setId(job.getString("event_id"));
-                            model.setEventTitle(job.getString("title"));
-                            model.setVenueCity(job.getString("place"));
 
-                            String sub = job.getString("start_date");
+                        for (int i = 0; i < data.length(); i++) {
+                            if (i == data.length() - 1) {
+                                EventsModel model = new EventsModel();
+                                JSONObject job = data.getJSONObject(i);
+                                model.setId(job.getString("event_id"));
+                                model.setEventTitle(job.getString("title"));
+                                model.setVenueCity(job.getString("place"));
 
-
-                            String filter = sub.substring(8, 10);
-
-                            model.setDay(filter);
-
-                            model.setMonth(job.getString("start_date").substring(5, 8));
-                            model.setYear(job.getString("start_date").substring(0, 4));
-                            model.setTime(job.getString("start_date"));
-                            //   model.setImageUrl(job.getString("upload_image"));
-                            model.setPersonal(job.getString("permission"));
+                                String sub = job.getString("start_date");
 
 
-                            arrayList.add(model);
+                                String filter = sub.substring(8, 10);
+
+                                model.setDay(filter);
+
+                                model.setMonth(job.getString("start_date").substring(5, 8));
+                                model.setYear(job.getString("start_date").substring(0, 4));
+                                model.setTime(job.getString("start_date"));
+                                //   model.setImageUrl(job.getString("upload_image"));
+                                model.setPersonal(job.getString("permission"));
+
+
+                                arrayList.add(model);
+                            }
                         }
                         if(arrayList.size() > 0) {
-                            eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
-                            RecyclerView.LayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
 
-                            rvEvents.setLayoutManager(mEventLayoutManager);
-                            rvEvents.setItemAnimator(new DefaultItemAnimator());
-                            rvEvents.setAdapter(eventsRVAdapter);
+                            Log.e("list", arrayList.get(0).getEventTitle());
+
+
+                            // EventsModel model=arrayList.remove(arrayList.size()-1);
+                            //  arrayList.add(0,model);
+                            //  Collections.reverse(arrayList);
+                            eventsRVAdapter.notifyDataSetChanged();
+                            Log.e("list", arrayList.get(arrayList.size() - 1).getEventTitle());
+//                            eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
+//                            LinearLayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
+//
+//                            rvEvents.setLayoutManager(mEventLayoutManager);
+//                            rvEvents.setItemAnimator(new DefaultItemAnimator());
+//                            rvEvents.setAdapter(eventsRVAdapter);
                         }
 
 
@@ -869,7 +888,7 @@ public class MainActivity extends AppCompatActivity
                     //   roleArray = new String[rolesArray.length()];
                     // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < 1; i++) {
+                    for (int i = 0; i < rolesArray.length(); i++) {
                         AnnouncementsModel model = new AnnouncementsModel();
                         JSONObject obj = rolesArray.getJSONObject(i);
                         model.setId(obj.getString("announcement_id"));
@@ -918,12 +937,14 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
 
-                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, arrayList2);
+                    ArrayList<AnnouncementsModel> an_list = new ArrayList<>();
+                    an_list.add(arrayList2.get(arrayList2.size() - 1));
+                    // Collections.reverse(arrayList2);
+                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, an_list);
                     RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
                     rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
                     rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
                     rvAnnouncements.setAdapter(announcementsRVAdapter);
-
 
                 }
 
@@ -954,7 +975,8 @@ public class MainActivity extends AppCompatActivity
 
             //  Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
 
-            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
+//            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
+            String response = getHttpData.getData(GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_ctg");
 
             return response;
         }
@@ -995,56 +1017,58 @@ public class MainActivity extends AppCompatActivity
                     for (int i = 0; i < resourcesData.length(); i++) {
                         JSONObject job = resourcesData.getJSONObject(i);
                         MainResourceModel model = new MainResourceModel();
-                        model.setResource_id(job.getString("resources_id"));
-                        model.setTitle(job.getString("title_2"));
-                        model.setResource_memeber(job.getString("resource_member"));
-                        model.setParent_name(job.getString("parent_category_name"));
+                        model.setResource_id(job.getString("categories_id"));
+                        // model.setTitle(job.getString("title_2"));
+                        //  model.setResource_memeber(job.getString("resource_member"));
+                        model.setParent_name(job.getString("name"));
+
+                        arrayListResoutces.add(model);
 
 
-                        String resource_member = job.getString("resource_member");
-                        if (MainActivity.DECIDER.equals("member")) {
-
-                            Boolean conditionSatisfied = false;
-                            if (GlobalClass.member_role.contains(",")) {
-                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
-
-                                if (splitted_roles != null) {
-                                    for (int j = 0; j < splitted_roles.size(); j++) {
-                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
-                                            conditionSatisfied = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            if (conditionSatisfied == true) // multiple roles
-                            {
-                                arrayListResoutces.add(model);
-
-                            } else if (resource_member.contains(GlobalClass.member_role)) {
-                                arrayListResoutces.add(model);
-
-                            } else if (resource_member.equals("Public")) {
-                                arrayListResoutces.add(model);
-                            } else {
-                                // dont add
-                            }
-                        } else {
-                            if (resource_member.equals("Public")) {
-                                arrayListResoutces.add(model);
-                            } else {
-                                // dont add
-                            }
-
-
-                        }
+//                        String resource_member = job.getString("resource_member");
+//                        if (MainActivity.DECIDER.equals("member")) {
+//
+//                            Boolean conditionSatisfied = false;
+//                            if (GlobalClass.member_role.contains(",")) {
+//                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+//
+//                                if (splitted_roles != null) {
+//                                    for (int j = 0; j < splitted_roles.size(); j++) {
+//                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
+//                                            conditionSatisfied = true;
+//                                            break;
+//                                        }
+//                                    }
+//                                }
+//
+//                            }
+//
+//                            if (conditionSatisfied == true) // multiple roles
+//                            {
+//                                arrayListResoutces.add(model);
+//
+//                            } else if (resource_member.contains(GlobalClass.member_role)) {
+//                                arrayListResoutces.add(model);
+//
+//                            } else if (resource_member.equals("Public")) {
+//                                arrayListResoutces.add(model);
+//                            } else {
+//                                // dont add
+//                            }
+//                        } else {
+//                            if (resource_member.equals("Public")) {
+//                                arrayListResoutces.add(model);
+//                            } else {
+//                                // dont add
+//                            }
+//
+//
+//                        }
 
                     }
 
+                    Collections.reverse(arrayListResoutces);
                     MainResourceAdapter adapter = new MainResourceAdapter(arrayListResoutces, MainActivity.this);
-
                     rvRespurces.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     rvRespurces.setAdapter(adapter);
 

@@ -123,8 +123,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 fetchEvents();
                 fetchAnnouncements();
-                Task task = new Task();
-                task.execute();
+//                Task task = new Task();
+//                task.execute();
+                login();
 
 
                 //                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
@@ -187,8 +188,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 fetchEvents();
                 fetchAnnouncements();
-                Task task = new Task();
-                task.execute();
+//                Task task = new Task();
+//                task.execute();
+                login();
 
                 break;
 
@@ -327,7 +329,7 @@ public class LoginActivity extends AppCompatActivity {
 //
 //
                 params.put("email", getEmail);
-                params.put("passowrd", getPassword);
+                params.put("password", getPassword);
                 params.put("signin_type", LoginActivity.decider);
                 String refreshedToken = FirebaseInstanceId.getInstance().getToken();
                 params.put("device_token", refreshedToken);

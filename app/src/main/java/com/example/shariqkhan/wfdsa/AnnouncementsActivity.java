@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -173,7 +174,9 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
 
                     }
-                    if(arrayList.size()>0)
+                    if(arrayList.size()>0) {
+                        Collections.reverse(arrayList);
+                    }
                     announcementsRVAdapter.notifyDataSetChanged();
 
                 }

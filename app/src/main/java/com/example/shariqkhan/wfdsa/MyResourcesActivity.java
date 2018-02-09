@@ -42,8 +42,9 @@ public class MyResourcesActivity extends AppCompatActivity {
     RecyclerView rvResources;
     ProgressDialog dialog;
     List<ResourcesGroup> resourcesGroupList;
-    String BASE_URL = GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource_file?";
+    String BASE_URL = GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_by_ctg?";
     String resourceId;
+    String parentName;
     List<ResourcesSubItems> resourcesSubItemsList;
 
     @Override
@@ -52,15 +53,16 @@ public class MyResourcesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_resources);
         ButterKnife.bind(this);
 
-        resourceId = getIntent().getStringExtra("RoleName");
+        resourceId = getIntent().getStringExtra("category_id");
+        parentName = getIntent().getStringExtra("parent_name");
 
-        BASE_URL = BASE_URL + "resources_id=" + resourceId;
+        BASE_URL = BASE_URL + "category_id=" + resourceId;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText(selected_resource);
+        mTitle.setText(GlobalClass.selected_resource);
 
 
         Task task = new Task();
@@ -132,30 +134,80 @@ public class MyResourcesActivity extends AppCompatActivity {
                 if (getstatus.equals("success")) {
                     JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    resourcesGroupList = new ArrayList<>(resourcesData.length());
-
-
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
-
+                    resourcesGroupList = new ArrayList<>();
+//
+//
+//                    //   roleArray = new String[rolesArray.length()];
+//                    // String idArray[] = new String[rolesArray.length()];
+//
+//                    for (int i = 0; i < resourcesData.length(); i++) {
+//                        JSONObject job = resourcesData.getJSONObject(i);
+//
+//
+//
+//                            resourcesSubItemsList.add(new ResourcesSubItems(file_id, path));
+//
+//                        resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), title, resourcesSubItemsList));
+//
+//                    }
                     for (int i = 0; i < resourcesData.length(); i++) {
-                        JSONObject job = resourcesData.getJSONObject(i);
-
-                       // String id = job.getString("id");
-                        String title = job.getString("Schemes");
-                        JSONArray FilesArray = job.getJSONArray("subscheme");
-                        resourcesSubItemsList = new ArrayList<>(FilesArray.length());
-                        for (int j = 0; j < FilesArray.length(); j++) {
-                            JSONObject fileObj = FilesArray.getJSONObject(j);
-                            String file_id = fileObj.getString("file_name");
-                            String path = fileObj.getString("file");
+                        resourcesSubItemsList = new ArrayList<>();
+                        JSONObject obj = resourcesData.getJSONObject(i);
+                        String title = obj.getString("title_2");
+                        String path = obj.getString("upload_file");
+                        String file_id = obj.getString("resources_id");
+                        String name = obj.getString("name");
 
 
-                            resourcesSubItemsList.add(new ResourcesSubItems(file_id, path));
+                        String resource_member = obj.getString("resource_member");
+                        if (MainActivity.DECIDER.equals("member")) {
+
+                            Boolean conditionSatisfied = false;
+                            if (GlobalClass.member_role.contains(",")) {
+                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                                if (splitted_roles != null) {
+                                    for (int j = 0; j < splitted_roles.size(); j++) {
+                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
+                                            conditionSatisfied = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            if (conditionSatisfied == true) // multiple roles
+                            {
+                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+
+                            } else if (resource_member.contains(GlobalClass.member_role)) {
+                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+
+
+                            } else if (resource_member.equals("Public")) {
+                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+
+                            } else {
+                                // dont add
+                            }
+                        } else {
+                            if (resource_member.equals("Public")) {
+                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+
+                            } else {
+                                // dont add
+                            }
+
+
                         }
-                        resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), title, resourcesSubItemsList));
 
                     }
+
                     if( resourcesGroupList.size()>0) {
                         adapter = new ResourcesRVadapter(MyResourcesActivity.this, resourcesGroupList);
                         rvResources.setLayoutManager(new LinearLayoutManager(MyResourcesActivity.this));

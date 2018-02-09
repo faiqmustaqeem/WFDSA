@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -132,9 +133,11 @@ public class MainResources extends AppCompatActivity {
 
             //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-            Log.e("url", GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
 
-            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
+//
+            String response = getHttpData.getData(GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_ctg");
+            Log.e("url", GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_ctg");
+
 
             return response;
         }
@@ -165,58 +168,61 @@ public class MainResources extends AppCompatActivity {
                     for (int i = 0; i < resourcesData.length(); i++) {
                         JSONObject job = resourcesData.getJSONObject(i);
                         MainResourceModel model = new MainResourceModel();
-                        model.setResource_id(job.getString("resources_id"));
-                        model.setTitle(job.getString("title_2"));
-                        model.setResource_memeber(job.getString("resource_member"));
-                        model.setParent_name(job.getString("parent_category_name"));
+                        model.setResource_id(job.getString("categories_id"));
+                        // model.setTitle(job.getString("title_2"));
+                        //model.setResource_memeber(job.getString("resource_member"));
+                        model.setParent_name(job.getString("name"));
+
+                        arrayList.add(model);
 
 
-                        String resource_member = job.getString("resource_member");
-                        if (MainActivity.DECIDER.equals("member")) {
-
-                            Boolean conditionSatisfied = false;
-                            if (GlobalClass.member_role.contains(",")) {
-                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
-
-                                if (splitted_roles != null) {
-                                    for (int j = 0; j < splitted_roles.size(); j++) {
-                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
-                                            conditionSatisfied = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            if (conditionSatisfied == true) // multiple roles
-                            {
-                                arrayList.add(model);
-                            } else if (resource_member.contains(GlobalClass.member_role)) {
-                                arrayList.add(model);
-
-                            } else if (resource_member.equals("Public")) {
-                                arrayList.add(model);
-                            } else {
-                                // dont add
-                            }
-                        } else {
-                            if (resource_member.equals("Public")) {
-                                arrayList.add(model);
-                            } else {
-                                // dont add
-                            }
-
-
-                        }
+//                        String resource_member = job.getString("resource_member");
+//                        if (MainActivity.DECIDER.equals("member")) {
+//
+//                            Boolean conditionSatisfied = false;
+//                            if (GlobalClass.member_role.contains(",")) {
+//                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+//
+//                                if (splitted_roles != null) {
+//                                    for (int j = 0; j < splitted_roles.size(); j++) {
+//                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
+//                                            conditionSatisfied = true;
+//                                            break;
+//                                        }
+//                                    }
+//                                }
+//
+//                            }
+//
+//                            if (conditionSatisfied == true) // multiple roles
+//                            {
+//                                arrayList.add(model);
+//                            } else if (resource_member.contains(GlobalClass.member_role)) {
+//                                arrayList.add(model);
+//
+//                            } else if (resource_member.equals("Public")) {
+//                                arrayList.add(model);
+//                            } else {
+//                                // dont add
+//                            }
+//                        } else {
+//                            if (resource_member.equals("Public")) {
+//                                arrayList.add(model);
+//                            } else {
+//                                // dont add
+//                            }
+//
+//
+//                        }
 
                     }
+                    if (arrayList.size() > 0) {
+                        Collections.reverse(arrayList);
+                        MainResourceAdapter adapter = new MainResourceAdapter(arrayList, MainResources.this);
 
-                    MainResourceAdapter adapter = new MainResourceAdapter(arrayList, MainResources.this);
-
-                    list.setLayoutManager(new LinearLayoutManager(MainResources.this));
-                    list.setAdapter(adapter);
-
+                        list.setLayoutManager(new LinearLayoutManager(MainResources.this));
+                        list.setAdapter(adapter);
+                    }
 
                 }
 

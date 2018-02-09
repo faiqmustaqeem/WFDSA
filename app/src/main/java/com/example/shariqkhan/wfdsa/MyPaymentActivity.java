@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -238,7 +239,7 @@ public class MyPaymentActivity extends AppCompatActivity {
                         paymentsList.add(model);
 
                     }
-
+                    Collections.reverse(paymentsList);
                     arrayListSave = new ArrayList<>(paymentsList);
                     paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
                     RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());

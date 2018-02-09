@@ -40,6 +40,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -350,6 +351,7 @@ public class AllEventsActivity extends AppCompatActivity {
                             arrayList.add(model);
                         }
                         if(arrayList.size()>0)
+                            Collections.reverse(arrayList);
                         eventsRVAdapter.notifyDataSetChanged();
 
                     } else {

@@ -61,6 +61,11 @@ public class CEOActivity extends AppCompatActivity {
         URL = getIntent().getStringExtra("url");
 
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        txt = (TextView) toolbar.findViewById(R.id.tollbarText);
+        txt.setText(roleName + " Members");
+
         roleName = roleName.replace(' ', '_');
         URL = URL + "role_id=" + roleName;
         Log.e("url_new" , URL);
@@ -71,10 +76,6 @@ public class CEOActivity extends AppCompatActivity {
         listOfMembers.setLayoutManager(layoutManager);
 
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        txt = (TextView) toolbar.findViewById(R.id.tollbarText);
-        txt.setText(roleName+" Members");
 
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
