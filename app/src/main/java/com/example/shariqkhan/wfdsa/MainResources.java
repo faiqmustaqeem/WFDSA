@@ -168,6 +168,7 @@ public class MainResources extends AppCompatActivity {
                         model.setResource_id(job.getString("resources_id"));
                         model.setTitle(job.getString("title_2"));
                         model.setResource_memeber(job.getString("resource_member"));
+                        model.setParent_name(job.getString("parent_category_name"));
 
 
                         String resource_member = job.getString("resource_member");

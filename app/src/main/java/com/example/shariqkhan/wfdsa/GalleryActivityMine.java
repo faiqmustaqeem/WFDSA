@@ -264,7 +264,10 @@ public class GalleryActivityMine extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         Log.e("Ok", jsonObject.toString());
+
                         dialog.dismiss();
+
+                        Log.e("image_upload_response", jsonObject.toString());
 
                         Toast.makeText(getApplication(), "Images Uploaded Successfully", Toast.LENGTH_SHORT).show();
                         finish();
@@ -340,7 +343,6 @@ public class GalleryActivityMine extends AppCompatActivity {
                         JSONObject obj = jsonArray.getJSONObject(i);
                         EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
                         imagesList.add(model);
-
                     }
 
                     gridAdapter = new EventGalleryGVadapter(GalleryActivityMine.this, R.layout.event_gallery_item, imagesList);

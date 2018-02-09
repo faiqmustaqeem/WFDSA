@@ -69,25 +69,21 @@ import static com.example.shariqkhan.wfdsa.LoginActivity.BASE_URL;
 
 
 public class SignUpActivity extends AppCompatActivity {
+    public String BASE_URL = GlobalClass.base_url + "wfdsa/api/register";
     ImageView ivBack;
-
     @BindView(R.id.tvTermsAndConditions)
     TextView tvTermsAndConditions;
     @BindView(R.id.spCountry)
     Spinner spCountry;
-
     @BindView(R.id.cbAcceptTerms)
     CheckBox cbAcceptTerms;
-
     TextInputLayout tilFirstName;
     TextInputLayout tilLastName;
     TextInputLayout tilContactNum;
     TextInputLayout tilEmail;
     TextInputLayout tilPassword;
     TextInputLayout tilConfirmPassword;
-
     TextView tvSignUp;
-
     String firstName;
     String lastName;
     String contactNum;
@@ -95,15 +91,9 @@ public class SignUpActivity extends AppCompatActivity {
     String password;
     ProgressDialog dialog;
     String confirmPassword;
-
-
     LoginButton tvNonMemberFBSignIn;
-
     CallbackManager callbackManager;
-
     String getItem;
-    public String BASE_URL = GlobalClass.base_url+"wfdsa/api/register";
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -164,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                         // Toast.makeText(SignUpActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
-                        LoginActivity.decider = "2";
+                        LoginActivity.decider = "1";
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -325,6 +315,32 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    private void printKeyhash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.example.shariqkhan.wfdsa", PackageManager.GET_SIGNATURES);
+            for (Signature sign : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(sign.toByteArray());
+                Log.e("Hash-key", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+
+            }
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean isValidEmail(String emailStr) {
+        final Pattern VALID_EMAIL_ADDRESS_REGEX =
+                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
+
     private class Task extends AsyncTask<String, Void, String> {
         String stream = null;
         ProgressDialog progressDialog;
@@ -452,7 +468,8 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putString("type", "nonmember");
                         editor.putString("stype", "nonmember");
                         editor.apply();
-                        LoginActivity.decider = "2";
+
+                        LoginActivity.decider = "1";
 
                         Toast.makeText(SignUpActivity.this, "Sucessfully created !", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
@@ -486,32 +503,6 @@ public class SignUpActivity extends AppCompatActivity {
 
             progressDialog.dismiss();
         }
-    }
-
-    private void printKeyhash() {
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.example.shariqkhan.wfdsa", PackageManager.GET_SIGNATURES);
-            for (Signature sign : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(sign.toByteArray());
-                Log.e("Hash-key", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-
-
-            }
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public boolean isValidEmail(String emailStr) {
-        final Pattern VALID_EMAIL_ADDRESS_REGEX =
-                Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.find();
     }
 
 }

@@ -8,6 +8,7 @@ public class MainResourceModel {
     public String title;
     public String resource_id;
     public String resource_memeber;
+    private String parent_name;
 
     public MainResourceModel() {
     }
@@ -34,5 +35,13 @@ public class MainResourceModel {
 
     public void setResource_memeber(String resource_memeber) {
         this.resource_memeber = resource_memeber;
+    }
+
+    public String getParent_name() {
+        return parent_name;
+    }
+
+    public void setParent_name(String parent_name) {
+        this.parent_name = parent_name;
     }
 }

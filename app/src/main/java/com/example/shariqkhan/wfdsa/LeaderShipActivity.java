@@ -27,12 +27,10 @@ import java.util.ArrayList;
  */
 
 public class LeaderShipActivity extends AppCompatActivity {
+    public static String URL = GlobalClass.base_url + "wfdsa/apis/Member/Leadership";
     public ListView listOfMembers;
-
     Toolbar toolbar;
     ProgressDialog progressDialog;
-
-    public static String URL = GlobalClass.base_url+"wfdsa/apis/Member/Leadership";
     String roleArray[];
     String Array[] = {"Ceo Council", "Operational Group", "Board of Delegates", "Association Advisory Council"};
     String idArray[];
@@ -131,7 +129,7 @@ public class LeaderShipActivity extends AppCompatActivity {
                             Intent intent = new Intent(LeaderShipActivity.this, CEOActivity.class);
                             intent.putExtra("RoleName", roleId);
                             intent.putExtra("Name", roleName);
-                            intent.putExtra("url", GlobalClass.base_url + "wfdsa/apis/Member/Leadership_byRole?");
+                            intent.putExtra("url", GlobalClass.base_url + "wfdsa/roster/get_role_members?");
 
                             startActivity(intent);
 

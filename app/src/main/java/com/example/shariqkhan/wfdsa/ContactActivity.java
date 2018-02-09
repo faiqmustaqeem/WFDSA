@@ -256,6 +256,41 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         return true;
     }
 
+    public void callPhoneNumber() {
+        try {
+            if (Build.VERSION.SDK_INT > 22) {
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+
+                    ActivityCompat.requestPermissions(ContactActivity.this, new String[]{android.Manifest.permission.CALL_PHONE}, 101);
+                    return;
+                }
+
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + phNo));
+                startActivity(callIntent);
+
+            } else {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + phNo));
+                startActivity(callIntent);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 101) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                callPhoneNumber();
+            } else {
+                Log.e("NotGranted", "Permission not Granted");
+            }
+        }
+    }
+
     private class Task extends AsyncTask<Object, Object, String> {
 
         @Override
@@ -331,43 +366,6 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    public void callPhoneNumber() {
-        try {
-            if (Build.VERSION.SDK_INT > 22) {
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-
-                    ActivityCompat.requestPermissions(ContactActivity.this, new String[]{android.Manifest.permission.CALL_PHONE}, 101);
-
-                    return;
-                }
-
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + phNo));
-                startActivity(callIntent);
-
-            } else {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + phNo));
-                startActivity(callIntent);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == 101) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                callPhoneNumber();
-            } else {
-                Log.e("NotGranted", "Permission not Granted");
-            }
-        }
-    }
-
     private class TaskToSend extends AsyncTask<Object, Object, String> {
         String stream = null;
         ProgressDialog progressDialog;
@@ -431,8 +429,8 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
                 String Line = "";
 
                 while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
+                    // Log.e("reader", Line);
+                    // Log.e("buffer", buffer.toString());
                     buffer.append(Line);
 
                 }
@@ -442,6 +440,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
                 Log.e("Error", o.getMessage());
 
             }
+
             return buffer.toString();
         }
 
@@ -454,6 +453,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
             if (s != null) {
                 try {
                     jsonobj = new JSONObject(s);
+
                     Log.e("JSON", s);
 
 

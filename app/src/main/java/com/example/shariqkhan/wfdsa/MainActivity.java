@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -356,6 +357,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     } else {
+
                         Toast.makeText(MainActivity.this, "Members Access Only!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -390,6 +392,7 @@ public class MainActivity extends AppCompatActivity
                 .url(GlobalClass.base_url+"wfdsa/apis/Event/Events_Notification")
                 .post(body)
                 .build();
+
 
         try {
             client.newCall(request).execute();
@@ -519,8 +522,10 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, CommiteesActivity.class);
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(MainActivity.this, BlankActivity.class);
-                startActivity(intent);
+
+                Toast.makeText(MainActivity.this, "Only Memebers can see Committees", Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(MainActivity.this, BlankActivity.class);
+                //startActivity(intent);
             }
 
         }
@@ -804,6 +809,7 @@ public class MainActivity extends AppCompatActivity
                         if(arrayList.size() > 0) {
                             eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
                             RecyclerView.LayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
+
                             rvEvents.setLayoutManager(mEventLayoutManager);
                             rvEvents.setItemAnimator(new DefaultItemAnimator());
                             rvEvents.setAdapter(eventsRVAdapter);
@@ -992,6 +998,8 @@ public class MainActivity extends AppCompatActivity
                         model.setResource_id(job.getString("resources_id"));
                         model.setTitle(job.getString("title_2"));
                         model.setResource_memeber(job.getString("resource_member"));
+                        model.setParent_name(job.getString("parent_category_name"));
+
 
                         String resource_member = job.getString("resource_member");
                         if (MainActivity.DECIDER.equals("member")) {

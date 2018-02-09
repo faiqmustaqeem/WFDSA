@@ -1,5 +1,6 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,13 +16,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +47,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -150,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 editor.apply();
 
                 break;
+
             case R.id.tvNonMember:
                 decider = "2";
                 llMember.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
@@ -163,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                 edit.apply();
 
                 break;
+
             case R.id.tvNonMemberSignUp:
                 Intent signUpIntent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(signUpIntent);
@@ -178,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                 task.execute();
 
                 break;
+
             case R.id.tvMemberForgetPassword:
             case R.id.tvNonMemberForgetPassword:
                 Intent forgotPasswordIntent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
@@ -185,6 +199,147 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
                 break;
         }
+    }
+
+    public void login() {
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setTitle("Logging In");
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/api/login",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+//
+
+                        if (s != null) {
+                            try {
+                                Log.e("login", s);
+                                JSONObject jsonobj = new JSONObject(s);
+                                Log.e("JSON", s);
+
+
+                                Log.e("login", "2");
+
+                                JSONObject result = jsonobj.getJSONObject("result");
+                                String checkResult = result.getString("status");
+
+                                Log.e("login", "3");
+
+                                String getId;
+                                if (checkResult.equals("success")) {
+
+                                    Log.e("insidepost", checkResult);
+                                    String get_api_secret = result.getString("api_secret");
+
+                                    JSONObject user_data = result.getJSONObject("user_data");
+
+                                    Log.e("user_data", user_data.toString());
+                                    if (LoginActivity.decider.equals("2")) {
+                                        getId = user_data.getString("non_member_id");
+                                    } else {
+                                        getId = user_data.getString("member_id");
+                                    }
+
+                                    String email = user_data.getString("email");
+                                    String country = user_data.getString("country");
+                                    String first_name = user_data.getString("first_name");
+                                    String last_name = user_data.getString("last_name");
+                                    String password = user_data.getString("password");
+                                    String phNo;
+                                    String role = "";
+
+                                    if (user_data.getString("signin_type").equals("2")) {
+                                        phNo = user_data.getString("contact_no");
+                                    } else if (user_data.getString("signin_type").equals("1")) {
+                                        phNo = user_data.getString("cell");
+                                        role = user_data.getString("role");
+                                    } else {
+                                        phNo = "";
+                                    }
+                                    //  String up_image = user_data.getString("upload_image");
+
+
+                                    Log.e("email", email);
+                                    SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+                                    editor.putString("role", role);
+                                    editor.putString("api_secret", get_api_secret);
+                                    editor.putString("deciderId", getId);
+                                    editor.putString("email", email);
+                                    editor.putString("country", country);
+                                    editor.putString("first_name", first_name);
+                                    editor.putString("last_name", last_name);
+                                    editor.putString("password", password);
+                                    editor.putString("contact_no", phNo);
+                                    //editor.putString("type", "member");
+                                    editor.putString("stype", "member");
+
+                                    // editor.putString("image", up_image);
+                                    editor.apply();
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
+                                    //    etMemberEmail.getEditText().setText("");
+                                    //  etMemberPass.getEditText().setText("");
+
+                                    progressDialog.dismiss();
+                                }
+
+
+                            } catch (JSONException e) {
+                                Log.e("Error", e.getMessage());
+                                // etMemberEmail.getEditText().setText("");
+                                // etMemberPass.getEditText().setText("");
+                                progressDialog.dismiss();
+                                Toast.makeText(LoginActivity.this, "Invalid Credentials!!", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+
+                        progressDialog.dismiss();
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley_error", error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+
+//                parameters.add(new BasicNameValuePair("email", getEmail));
+//                parameters.add(new BasicNameValuePair("password", getPassword));
+//                parameters.add(new BasicNameValuePair("signin_type", LoginActivity.decider));
+//                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+//                parameters.add(new BasicNameValuePair("device_token", refreshedToken));
+//
+//
+                params.put("email", getEmail);
+                params.put("passowrd", getPassword);
+                params.put("signin_type", LoginActivity.decider);
+                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                params.put("device_token", refreshedToken);
+
+
+                Log.e("params", params.toString());
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(LoginActivity.this).add(request);
+
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,7 +374,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
             HttpPost post = new HttpPost(BASE_URL);
-            Log.e("Must", "Must");
+            Log.e("url", BASE_URL);
 
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("email", getEmail));
@@ -243,8 +398,8 @@ public class LoginActivity extends AppCompatActivity {
                 String Line = "";
 
                 while ((Line = reader.readLine()) != null) {
-                    Log.e("reader", Line);
-                    Log.e("buffer", buffer.toString());
+                    // Log.e("reader", Line);
+                    // Log.e("buffer", buffer.toString());
                     buffer.append(Line);
 
                 }
@@ -262,15 +417,21 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            JSONObject jsonobj;
+
             if (s != null) {
                 try {
-                    jsonobj = new JSONObject(s);
+                    Log.e("login", s);
+                    JSONObject jsonobj = new JSONObject(s);
                     Log.e("JSON", s);
 
 
+                    Log.e("login", "2");
+
                     JSONObject result = jsonobj.getJSONObject("result");
                     String checkResult = result.getString("status");
+
+                    Log.e("login", "3");
+
                     String getId;
                     if (checkResult.equals("success")) {
 
@@ -297,7 +458,6 @@ public class LoginActivity extends AppCompatActivity {
                         if(user_data.getString("signin_type").equals("2"))
                         {
                             phNo   = user_data.getString("contact_no");
-
                         }
                         else if(user_data.getString("signin_type").equals("1"))
                         {

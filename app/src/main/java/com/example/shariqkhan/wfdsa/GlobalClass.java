@@ -16,7 +16,7 @@ public class GlobalClass {
     public static String selelcted_event="";
     public static String selelcted_event_id="";
     public static String selelcted_event_fees = "";
-    public static String base_url="http://sastiride.com/";
+    public static String base_url = "http://sastiride.com/wfdsa3/";
     public static String selected_event_name = "";
     public static String selected_event_location = "";
     public static String selected_event_date = "";

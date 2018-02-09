@@ -54,11 +54,15 @@ public class CEOActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ceo_activity);
         sendRole = getIntent().getStringExtra("RoleName");
+
+
         roleName = getIntent().getStringExtra("Name");
 
         URL = getIntent().getStringExtra("url");
 
-        URL = URL + "role_id=" + sendRole;
+
+        roleName = roleName.replace(' ', '_');
+        URL = URL + "role_id=" + roleName;
         Log.e("url_new" , URL);
 
         listOfMembers = (RecyclerView) findViewById(R.id.memberList);
@@ -123,15 +127,14 @@ public class CEOActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(s);
 
 
+                String resultObj = jsonObject.getString("success");
+                String getstatus = jsonObject.getString("msg");
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
-
-                if (getstatus.equals("success")) {
+                if (getstatus.startsWith("Members List is generating")) {
                     Log.e("SuccessFull", "Inside");
                     Log.e("CEO" , s);
 
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
+                    JSONArray rolesArray = jsonObject.getJSONArray("record");
                     //   roleArray = new String[rolesArray.length()];
                     // String idArray[] = new String[rolesArray.length()];
 
@@ -145,8 +148,8 @@ public class CEOActivity extends AppCompatActivity {
                         model.setMemberEmail(obj.getString("email"));
                         model.setMemberFax(obj.getString("fax"));
                         model.setCountry(obj.getString("name"));
-                        model.setFirstname(obj.getString("first_name"));
-                        model.setLastname(obj.getString("last_name"));
+                        model.setFirstname(obj.getString("member_name"));
+                        model.setLastname("");
                         model.setTitle(obj.getString("title"));
                         model.setDesignation(obj.getString("designation"));
                         model.setWfdsa_title(obj.getString("wfdsa_title"));
@@ -158,6 +161,7 @@ public class CEOActivity extends AppCompatActivity {
                         arrayList.add(model);
 
                     }
+
                     adapter = new CEOAdapter(arrayList, CEOActivity.this);
                     listOfMembers.setAdapter(adapter);
 
@@ -182,6 +186,7 @@ public class CEOActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+
             super.onPreExecute();
             dialog = new ProgressDialog(CEOActivity.this);
             dialog.setTitle("Fetching Information");

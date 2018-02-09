@@ -272,7 +272,7 @@ public class RegisterEvent extends AppCompatActivity {
                             card,
                             new TokenCallback() {
                                 public void onSuccess(final Token token) {
-                                    dialog.dismiss();
+
 //                                    Log.e("StripeToken", token.getId());
 //                                    Log.e("PureToken", token.toString());
                                     SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -362,12 +362,17 @@ public class RegisterEvent extends AppCompatActivity {
                         try {
 
 
+                            dialog.dismiss();
+
                             JSONObject job = new JSONObject(response);
                             JSONObject result = job.getJSONObject("result");
                             String res = result.getString("response");
                             Log.e("response" , res);
 
                             if (res.equals("Payment Successfully Paid")) {
+
+
+                                GlobalClass.isAlreadyRegistered = true;
 
                                 Dialog dialog = new Dialog(RegisterEvent.this);
                                 dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

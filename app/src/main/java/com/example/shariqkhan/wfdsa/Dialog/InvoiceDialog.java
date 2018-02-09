@@ -47,6 +47,7 @@ import butterknife.ButterKnife;
 public class InvoiceDialog extends Dialog {
     public Activity act;
     public Dialog d;
+    public String URL = GlobalClass.base_url + "wfdsa/apis/Invoice/InvoiceDetail?";
     ArrayList<InvoiceModel> discussionList = new ArrayList<InvoiceModel>();
     ImageView imageView;
     String invoice_id;
@@ -54,10 +55,6 @@ public class InvoiceDialog extends Dialog {
     TextView Duedate;
     ProgressDialog progressDialog;
     TextView totalAmount;
-
-    public String URL = GlobalClass.base_url+"wfdsa/apis/Invoice/InvoiceDetail?";
-
-
     @BindView(R.id.rvAttendees)
     RecyclerView rvComments;
     InvoiceAdapter discussionRVAdapter;
@@ -92,10 +89,28 @@ public class InvoiceDialog extends Dialog {
 
         Title = findViewById(R.id.invoiceTitle);
         Duedate = findViewById(R.id.invoiceDate);
-totalAmount = findViewById(R.id.totlAmount);
+        totalAmount = findViewById(R.id.totlAmount);
 //        initUI();
         Task task = new Task();
         task.execute();
+
+    }
+
+    private void initUI() {
+        discussionRVAdapter = new InvoiceAdapter(act, discussionList);
+        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
+        rvComments.setLayoutManager(mAnnouncementLayoutManager);
+        rvComments.setItemAnimator(new DefaultItemAnimator());
+
+
+//        discussionList.add(new DiscussionModel("1", "Person A", "Entrepreneur", "", "I have been waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
+//        discussionList.add(new DiscussionModel("2", "Person b", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
+//        discussionList.add(new DiscussionModel("3", "Person c", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
+//        discussionList.add(new DiscussionModel("4", "Person d", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
+//        discussionList.add(new DiscussionModel("5", "Person e", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
+//        discussionList.add(new DiscussionModel("6", "Person f", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
+
+        rvComments.setAdapter(discussionRVAdapter);
 
     }
 
@@ -130,7 +145,7 @@ totalAmount = findViewById(R.id.totlAmount);
                   JSONObject object = resultObj.getJSONObject("data");
                     totalAmount.setText(object.getString("amount"));
                     Title.setText(object.getString("title"));
-                    Duedate.setText(object.getString("name"));
+                    // Duedate.setText(object.getString("name"));
 
                     JSONArray rolesArray = object.getJSONArray("item");
 
@@ -140,8 +155,8 @@ totalAmount = findViewById(R.id.totlAmount);
                         JSONObject obj = rolesArray.getJSONObject(i);
 
                         model.setPrice(obj.getString("amount"));
-                        model.setName(obj.getString("name"));
-                        model.setQuantity("5");
+                        //  model.setName(obj.getString("name"));
+//                        model.setQuantity("5");
                         discussionList.add(model);
                     }
                     discussionRVAdapter = new InvoiceAdapter(act, discussionList);
@@ -176,24 +191,6 @@ totalAmount = findViewById(R.id.totlAmount);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
         }
-    }
-
-    private void initUI() {
-        discussionRVAdapter = new InvoiceAdapter(act, discussionList);
-        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
-        rvComments.setLayoutManager(mAnnouncementLayoutManager);
-        rvComments.setItemAnimator(new DefaultItemAnimator());
-
-
-//        discussionList.add(new DiscussionModel("1", "Person A", "Entrepreneur", "", "I have been waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-//        discussionList.add(new DiscussionModel("2", "Person b", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-//        discussionList.add(new DiscussionModel("3", "Person c", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-//        discussionList.add(new DiscussionModel("4", "Person d", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-//        discussionList.add(new DiscussionModel("5", "Person e", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-//        discussionList.add(new DiscussionModel("6", "Person f", "Entrepreneur", "", "Me was waiting for this to happen for a long time", "31-11-2017", "6:30AM"));
-
-        rvComments.setAdapter(discussionRVAdapter);
-
     }
 
 

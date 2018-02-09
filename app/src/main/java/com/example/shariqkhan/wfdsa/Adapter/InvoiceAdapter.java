@@ -34,30 +34,6 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.MyViewHo
         this.context = context;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.invoicename)
-        TextView tvname;
-
-
-
-        @BindView(R.id.invoicequantity)
-        TextView tvqty;
-
-
-        @BindView(R.id.incvoiceprice)
-        TextView tvprice;
-
-
-
-
-
-
-        public MyViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_of_invoice, parent, false);
@@ -73,12 +49,31 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.MyViewHo
 
         holder.tvprice.setText(dataModel.getPrice());
         holder.tvname.setText(dataModel.getName());
-        holder.tvqty.setText(dataModel.getQuantity());
+        // holder.tvqty.setText(dataModel.getQuantity());
 
     }
 
     @Override
     public int getItemCount() {
         return announcementsList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.invoicename)
+        TextView tvname;
+
+
+//        @BindView(R.id.invoicequantity)
+//        TextView tvqty;
+
+
+        @BindView(R.id.incvoiceprice)
+        TextView tvprice;
+
+
+        public MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 }

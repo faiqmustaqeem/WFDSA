@@ -176,6 +176,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
+        if (GlobalClass.isAlreadyRegistered) {
+            tvRegister.setText("You are Registered for this Event");
+            tvRegister.setClickable(false);
+        }
     }
 
     @Override
@@ -231,7 +235,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         {
             signintype = "2";
         }else{
-            signintype = "1"; // non member
+            signintype = "1";
         }
 
         address = (TextView) findViewById(R.id.address);
@@ -363,6 +367,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
 
         tvRegister = (TextView) findViewById(R.id.tvRegister);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 // Remove default title text
@@ -805,6 +811,15 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
     }
+//    @Override
+//    public void onRestart() {
+//        super.onRestart();
+//        //When BACK BUTTON is pressed, the activity on the stack is restarted
+//        //Do what you want on the refresh procedure here
+//
+//        Task task = new Task();
+//        task.execute();
+//    }
 
     void setCheckedIn() {
         StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/apis/Event/Checked_in",
@@ -822,6 +837,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                                 String res = result.getString("response");
                                 if (res.equals("User Checked In Successfully.")) {
+                                    isCheckedIn = true;
                                     checkedIn = true;
                                     Toast.makeText(SelectedEventActivity.this, "You have successfully Checked in", Toast.LENGTH_SHORT).show();
                                 } else {

@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 
 public class MyPaymentActivity extends AppCompatActivity {
 
+    public static String filterableString = "";
     @BindView(R.id.rvPayments)
     RecyclerView rvPayments;
     PaymentsRVAdapter paymentsRVAdapter;
@@ -42,7 +43,6 @@ public class MyPaymentActivity extends AppCompatActivity {
     ImageView image;
     ArrayList<PaymentModel> paymentsList = new ArrayList<PaymentModel>();
     ArrayList<PaymentModel> arrayListSave;
-    public static String filterableString = "";
     ProgressDialog progressDialog;
 
     @Override
@@ -154,22 +154,22 @@ public class MyPaymentActivity extends AppCompatActivity {
     }
 
     private void fetchMyPayments() {
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
-        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("paid", "12/12/2017", "Annual Payment", "5000"));
+//        paymentsList.add(new PaymentModel("unpaid", "12/12/2017", "Annual Payment", "5000"));
 //        paymentsList.add(new PaymentModel("1", "12/12/2017", "Annual Payment", "5000"));
 //        paymentsList.add(new PaymentModel("1", "12/12/2017", "Annual Payment", "5000"));
 //        paymentsList.add(new PaymentModel("1", "12/12/2017", "Annual Payment", "5000"));
@@ -238,6 +238,7 @@ public class MyPaymentActivity extends AppCompatActivity {
                         paymentsList.add(model);
 
                     }
+
                     arrayListSave = new ArrayList<>(paymentsList);
                     paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
                     RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());

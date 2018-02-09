@@ -45,7 +45,7 @@ public class MainResourceAdapter extends RecyclerView.Adapter<MainResourceAdapte
 
         final MainResourceModel model = arrayList.get(position);
 
-        holder.list_item.setText(model.getTitle());
+        holder.list_item.setText(model.getParent_name());
 //        if (holder.list_item.getText().toString().contains("Word"))
 //        {
 //            holder.leftImage.setImageResource(R.drawable.word);
