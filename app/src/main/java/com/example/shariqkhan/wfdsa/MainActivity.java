@@ -35,10 +35,12 @@ import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.MainResourceAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.ResourcesRVadapter;
+import com.example.shariqkhan.wfdsa.Adapter.TopThreeResourcesAdapter;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.Model.EventsModel;
 import com.example.shariqkhan.wfdsa.Model.MainResourceModel;
+import com.example.shariqkhan.wfdsa.Model.TopThreeModel;
 import com.example.shariqkhan.wfdsa.custom.RecyclerTouchListener;
 import com.example.shariqkhan.wfdsa.custom.ResourcesGroup;
 import com.example.shariqkhan.wfdsa.custom.ResourcesSubItems;
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity
     static String phoneNo;
     public ArrayList<EventsModel> arrayList = new ArrayList<>();
     public ArrayList<AnnouncementsModel> arrayList2 = new ArrayList<>();
-    public ArrayList<MainResourceModel> arrayListResoutces = new ArrayList<>();
+    public ArrayList<TopThreeModel> topThreeModelArrayList = new ArrayList<>();
     ImageView ivSignOut;
     ImageView ivSettings;
     @BindView(R.id.ivImage)
@@ -969,12 +971,8 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Object... voids) {
 
-            //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-            //  Log.e("url", "http://codiansoft.com/wfdsa/apis/Resources/Get_resource");
-
-//            String response = getHttpData.getData(GlobalClass.base_url+"wfdsa/apis/Resources/Get_resource");
-            String response = getHttpData.getData(GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_ctg");
+            String response = getHttpData.getData(GlobalClass.base_url + "wfdsa/apis/Resources/Get_three_resource");
 
             return response;
         }
@@ -989,84 +987,24 @@ public class MainActivity extends AppCompatActivity
 
 
                 JSONObject resultObj = jsonObject.getJSONObject("result");
+                Log.e("top_three", resultObj.toString());
                 String getstatus = resultObj.getString("status");
 
                 if (getstatus.equals("success")) {
                     JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    //    resourcesGroupList = new ArrayList<>(resourcesData.length());
-
-
-//                    //   roleArray = new String[rolesArray.length()];
-//                    // String idArray[] = new String[rolesArray.length()];
-//                    titlesArray = new String[resourcesData.length()];
-//                    resources_id=new String[resourcesData.length()];
-//                    //   Toast.makeText(MainActivity.this, String.valueOf(resourcesData.length()), Toast.LENGTH_SHORT).show();
-//                    for (int i = 0; i < resourcesData.length(); i++) {
-//
-//                        JSONObject job = resourcesData.getJSONObject(i);
-//
-//
-//                        titlesArray[i] = job.getString("title_2");
-//                        resources_id[i] =job.getString("resources_id");
-//
-//
-//                    }
                     for (int i = 0; i < resourcesData.length(); i++) {
                         JSONObject job = resourcesData.getJSONObject(i);
-                        MainResourceModel model = new MainResourceModel();
-                        model.setResource_id(job.getString("categories_id"));
-                        // model.setTitle(job.getString("title_2"));
-                        //  model.setResource_memeber(job.getString("resource_member"));
-                        model.setParent_name(job.getString("name"));
+                        TopThreeModel model = new TopThreeModel();
+                        model.setName(job.getString("title_2"));
+                        model.setPath(job.getString("upload_file"));
 
-                        arrayListResoutces.add(model);
-
-
-//                        String resource_member = job.getString("resource_member");
-//                        if (MainActivity.DECIDER.equals("member")) {
-//
-//                            Boolean conditionSatisfied = false;
-//                            if (GlobalClass.member_role.contains(",")) {
-//                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
-//
-//                                if (splitted_roles != null) {
-//                                    for (int j = 0; j < splitted_roles.size(); j++) {
-//                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
-//                                            conditionSatisfied = true;
-//                                            break;
-//                                        }
-//                                    }
-//                                }
-//
-//                            }
-//
-//                            if (conditionSatisfied == true) // multiple roles
-//                            {
-//                                arrayListResoutces.add(model);
-//
-//                            } else if (resource_member.contains(GlobalClass.member_role)) {
-//                                arrayListResoutces.add(model);
-//
-//                            } else if (resource_member.equals("Public")) {
-//                                arrayListResoutces.add(model);
-//                            } else {
-//                                // dont add
-//                            }
-//                        } else {
-//                            if (resource_member.equals("Public")) {
-//                                arrayListResoutces.add(model);
-//                            } else {
-//                                // dont add
-//                            }
-//
-//
-//                        }
+                        topThreeModelArrayList.add(model);
 
                     }
 
-                    Collections.reverse(arrayListResoutces);
-                    MainResourceAdapter adapter = new MainResourceAdapter(arrayListResoutces, MainActivity.this);
+
+                    TopThreeResourcesAdapter adapter = new TopThreeResourcesAdapter(topThreeModelArrayList, MainActivity.this);
                     rvRespurces.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     rvRespurces.setAdapter(adapter);
 
