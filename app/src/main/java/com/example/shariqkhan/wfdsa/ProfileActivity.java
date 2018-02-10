@@ -646,6 +646,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //
 //
                 List<NameValuePair> parameters = new ArrayList<>();
+                parameters.add(new BasicNameValuePair("signin_type", MainActivity.DECIDER));
                 parameters.add(new BasicNameValuePair("member_id", MainActivity.getId));
                 parameters.add(new BasicNameValuePair("password", ProfileEditPermissionDialog.password));
 

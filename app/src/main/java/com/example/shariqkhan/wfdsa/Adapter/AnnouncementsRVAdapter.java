@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
@@ -24,6 +25,8 @@ import butterknife.ButterKnife;
  */
 
 public class AnnouncementsRVAdapter extends RecyclerView.Adapter<AnnouncementsRVAdapter.MyViewHolder> {
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
     ArrayList<AnnouncementsModel> announcementsList;
     Context context;
 
@@ -32,27 +35,9 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<AnnouncementsRV
         this.context = context;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvTitle)
-        TextView tvTitle;
-
-        @BindView(R.id.ivImage)
-        ImageView ivImage;
-
-        @BindView(R.id.tvDate)
-        TextView tvDate;
-
-        @BindView(R.id.tvAnnouncementDescription)
-        TextView tvAnnouncementDescription;
-
-        public MyViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.announcements_rv_item, parent, false);
         return new MyViewHolder(itemView);
     }
@@ -74,5 +59,26 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<AnnouncementsRV
     @Override
     public int getItemCount() {
         return announcementsList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
+
+        @BindView(R.id.ivImage)
+        ImageView ivImage;
+
+        @BindView(R.id.tvDate)
+        TextView tvDate;
+
+        @BindView(R.id.tvAnnouncementDescription)
+        TextView tvAnnouncementDescription;
+
+        public MyViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+
     }
 }

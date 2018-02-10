@@ -151,60 +151,73 @@ public class MyResourcesActivity extends AppCompatActivity {
 //
 //                    }
                     for (int i = 0; i < resourcesData.length(); i++) {
-                        resourcesSubItemsList = new ArrayList<>();
+
                         JSONObject obj = resourcesData.getJSONObject(i);
-                        String title = obj.getString("title_2");
-                        String path = obj.getString("upload_file");
-                        String file_id = obj.getString("resources_id");
+//                        String title = obj.getString("title_2");
+//                        String path = obj.getString("upload_file");
+//                        String file_id = obj.getString("resources_id");
                         String name = obj.getString("name");
+                        JSONArray resources_array = obj.getJSONArray("resources");
 
 
-                        String resource_member = obj.getString("resource_member");
-                        if (MainActivity.DECIDER.equals("member")) {
+                        resourcesSubItemsList = new ArrayList<>();
 
-                            Boolean conditionSatisfied = false;
-                            if (GlobalClass.member_role.contains(",")) {
-                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+                        for (int index = 0; index < resources_array.length(); index++) {
 
-                                if (splitted_roles != null) {
-                                    for (int j = 0; j < splitted_roles.size(); j++) {
-                                        if (resource_member.contains(splitted_roles.get(j).toString())) {
-                                            conditionSatisfied = true;
-                                            break;
+                            JSONObject resource = resources_array.getJSONObject(index);
+
+                            String title = resource.getString("title_2");
+                            String path = resource.getString("upload_file");
+                            String file_id = resource.getString("resources_id");
+                            String resource_member = resource.getString("resource_member");
+
+
+                            if (MainActivity.DECIDER.equals("member")) {
+
+                                Boolean conditionSatisfied = false;
+                                if (GlobalClass.member_role.contains(",")) {
+                                    List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+
+                                    if (splitted_roles != null) {
+                                        for (int j = 0; j < splitted_roles.size(); j++) {
+                                            if (resource_member.contains(splitted_roles.get(j).toString())) {
+                                                conditionSatisfied = true;
+                                                break;
+                                            }
                                         }
                                     }
+
                                 }
 
-                            }
+                                if (conditionSatisfied == true) // multiple roles
+                                {
+                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
-                            if (conditionSatisfied == true) // multiple roles
-                            {
-                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
-                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
-
-                            } else if (resource_member.contains(GlobalClass.member_role)) {
-                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
-                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+                                } else if (resource_member.contains(GlobalClass.member_role)) {
+                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
 
-                            } else if (resource_member.equals("Public")) {
-                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
-                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+                                } else if (resource_member.equals("Public")) {
+                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
+                                } else {
+                                    // dont add
+                                }
                             } else {
-                                // dont add
-                            }
-                        } else {
-                            if (resource_member.equals("Public")) {
-                                resourcesSubItemsList.add(new ResourcesSubItems(title, path));
-                                resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+                                if (resource_member.equals("Public")) {
+                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
-                            } else {
-                                // dont add
-                            }
+                                } else {
+                                    // dont add
+                                }
 
+
+                            }
 
                         }
+
+                        resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+
 
                     }
 
