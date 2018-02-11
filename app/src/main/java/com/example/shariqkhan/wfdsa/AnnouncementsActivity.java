@@ -53,9 +53,10 @@ public class AnnouncementsActivity extends AppCompatActivity {
     int item = 0;
     int total_announcement;
     int total_pages;
+    int page=0;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
-    private EndlessRecyclerViewScrollListener scrollListener;
+ //   private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,55 +83,83 @@ public class AnnouncementsActivity extends AppCompatActivity {
         Task task = new Task();
         task.execute();
 
-        announcementsRVAdapter = new AnnouncementsRVAdapter(this, arrayListToShow);
-        LinearLayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
-        rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
-        //  rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
+        announcementsRVAdapter = new AnnouncementsRVAdapter(this, arrayListToShow,rvAnnouncements);
+//        LinearLayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
+//          rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
 
 
-        scrollListener = new EndlessRecyclerViewScrollListener(mAnnouncementLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                Log.e("page", page + "");
-                Log.e("total_announcement", total_announcement + "");
-                Log.e("total_pages", total_pages + "");
-                loadNextDataFromApi(page);
-            }
-        };
+//        scrollListener = new EndlessRecyclerViewScrollListener(mAnnouncementLayoutManager) {
+//            @Override
+//            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to the bottom of the list
+//                arrayListToShow.add(null);
+//                announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
+//
+//                Handler mHand = new Handler();
+//                mHand.postDelayed(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        // TODO Auto-generated method stub
+//                        //progressBar.setVisibility(View.GONE);
+//                        arrayListToShow.remove(arrayListToShow.size() - 1);
+//                        announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
+//                        Log.e("page", page + "");
+//                        Log.e("total_announcement", total_announcement + "");
+//                        Log.e("total_pages", total_pages + "");
+//                        loadNextDataFromApi(page);
+//                    }
+//                }, 2000);
+//
+//            }
+//        };
+//
+//
+//        rvAnnouncements.addOnScrollListener(scrollListener);
+      rvAnnouncements.setAdapter(announcementsRVAdapter);
 
+        announcementsRVAdapter.setOnLoadMoreListener(new AnnouncementsRVAdapter.OnLoadMoreListener() {
+                                                         @Override
 
-        rvAnnouncements.addOnScrollListener(scrollListener);
-        rvAnnouncements.setAdapter(announcementsRVAdapter);
+                                                         public void onLoadMore() {
+                                                             arrayListToShow.add(null);
+                                                             announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
+                Handler mHand = new Handler();
+                mHand.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        //progressBar.setVisibility(View.GONE);
+                        arrayListToShow.remove(arrayListToShow.size() - 1);
+                        announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
+                        Log.e("page", page + "");
+                        Log.e("total_announcement", total_announcement + "");
+                        Log.e("total_pages", total_pages + "");
+                        loadNextDataFromApi();
+
+                    }
+                }, 5000);
+                                                         }
+                                                     }
+        );
 
 
     }
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int page) {
+    public void loadNextDataFromApi() {
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
         //progressBar.setVisibility(View.VISIBLE);
-        final ProgressDialog progressDialog = new ProgressDialog(AnnouncementsActivity.this);
-        progressDialog.setTitle("Loading ");
-        progressDialog.setMessage("Please Wait");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        Handler mHand = new Handler();
-        mHand.postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                //progressBar.setVisibility(View.GONE);
-                progressDialog.dismiss();
-            }
-        }, 2000);
+
 
 
         if (page <= total_pages) {
@@ -154,6 +183,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
             item += added_now;
             announcementsRVAdapter.notifyDataSetChanged();
             page++;
+            announcementsRVAdapter.setLoaded();
         }
 
 
@@ -272,7 +302,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         }
                         item = 6;
                     }
-
+                   // page=1;
                     announcementsRVAdapter.notifyDataSetChanged();
 
                 }
@@ -303,86 +333,86 @@ public class AnnouncementsActivity extends AppCompatActivity {
         }
     }
 
-    public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
-        RecyclerView.LayoutManager mLayoutManager;
-        // The minimum amount of items to have below your current scroll position
-        // before loading more.
-        private int visibleThreshold = 6;
-        // The current offset index of data you have loaded
-        private int currentPage = 0;
-        // The total number of items in the dataset after the last load
-        private int previousTotalItemCount = 0;
-        // True if we are still waiting for the last set of data to load.
-        private boolean loading = true;
-        // Sets the starting page index
-        private int startingPageIndex = 0;
-
-        public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
-            this.mLayoutManager = layoutManager;
-        }
-
-
-        public int getLastVisibleItem(int[] lastVisibleItemPositions) {
-            int maxSize = 0;
-            for (int i = 0; i < lastVisibleItemPositions.length; i++) {
-                if (i == 0) {
-                    maxSize = lastVisibleItemPositions[i];
-                } else if (lastVisibleItemPositions[i] > maxSize) {
-                    maxSize = lastVisibleItemPositions[i];
-                }
-            }
-            return maxSize;
-        }
-
-        // This happens many times a second during a scroll, so be wary of the code you place here.
-        // We are given a few useful parameters to help us work out if we need to load some more data,
-        // but first we check if we are waiting for the previous load to finish.
-        @Override
-        public void onScrolled(RecyclerView view, int dx, int dy) {
-            int lastVisibleItemPosition = 0;
-            int totalItemCount = mLayoutManager.getItemCount();
-
-            lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-
-
-            // If the total item count is zero and the previous isn't, assume the
-            // list is invalidated and should be reset back to initial state
-            if (totalItemCount < previousTotalItemCount) {
-                this.currentPage = this.startingPageIndex;
-                this.previousTotalItemCount = totalItemCount;
-                if (totalItemCount == 0) {
-                    this.loading = true;
-                }
-            }
-            // If it’s still loading, we check to see if the dataset count has
-            // changed, if so we conclude it has finished loading and update the current page
-            // number and total item count.
-            if (loading && (totalItemCount > previousTotalItemCount)) {
-                loading = false;
-                previousTotalItemCount = totalItemCount;
-            }
-
-            // If it isn’t currently loading, we check to see if we have breached
-            // the visibleThreshold and need to reload more data.
-            // If we do need to reload some more data, we execute onLoadMore to fetch the data.
-            // threshold should reflect how many total columns there are too
-            if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-                currentPage++;
-                onLoadMore(currentPage, totalItemCount, view);
-                loading = true;
-            }
-        }
-
-        // Call this method whenever performing new searches
-        public void resetState() {
-            this.currentPage = this.startingPageIndex;
-            this.previousTotalItemCount = 0;
-            this.loading = true;
-        }
-
-        // Defines the process for actually loading more data based on page
-        public abstract void onLoadMore(int page, int totalItemsCount, RecyclerView view);
-
-    }
+//    public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
+//        RecyclerView.LayoutManager mLayoutManager;
+//        // The minimum amount of items to have below your current scroll position
+//        // before loading more.
+//        private int visibleThreshold = 6;
+//        // The current offset index of data you have loaded
+//        private int currentPage = 0;
+//        // The total number of items in the dataset after the last load
+//        private int previousTotalItemCount = 0;
+//        // True if we are still waiting for the last set of data to load.
+//        private boolean loading = true;
+//        // Sets the starting page index
+//        private int startingPageIndex = 0;
+//
+//        public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
+//            this.mLayoutManager = layoutManager;
+//        }
+//
+//
+//        public int getLastVisibleItem(int[] lastVisibleItemPositions) {
+//            int maxSize = 0;
+//            for (int i = 0; i < lastVisibleItemPositions.length; i++) {
+//                if (i == 0) {
+//                    maxSize = lastVisibleItemPositions[i];
+//                } else if (lastVisibleItemPositions[i] > maxSize) {
+//                    maxSize = lastVisibleItemPositions[i];
+//                }
+//            }
+//            return maxSize;
+//        }
+//
+//        // This happens many times a second during a scroll, so be wary of the code you place here.
+//        // We are given a few useful parameters to help us work out if we need to load some more data,
+//        // but first we check if we are waiting for the previous load to finish.
+//        @Override
+//        public void onScrolled(RecyclerView view, int dx, int dy) {
+//            int lastVisibleItemPosition = 0;
+//            int totalItemCount = mLayoutManager.getItemCount();
+//
+//            lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+//
+//
+//            // If the total item count is zero and the previous isn't, assume the
+//            // list is invalidated and should be reset back to initial state
+//            if (totalItemCount < previousTotalItemCount) {
+//                this.currentPage = this.startingPageIndex;
+//                this.previousTotalItemCount = totalItemCount;
+//                if (totalItemCount == 0) {
+//                    this.loading = true;
+//                }
+//            }
+//            // If it’s still loading, we check to see if the dataset count has
+//            // changed, if so we conclude it has finished loading and update the current page
+//            // number and total item count.
+//            if (loading && (totalItemCount > previousTotalItemCount)) {
+//                loading = false;
+//                previousTotalItemCount = totalItemCount;
+//            }
+//
+//            // If it isn’t currently loading, we check to see if we have breached
+//            // the visibleThreshold and need to reload more data.
+//            // If we do need to reload some more data, we execute onLoadMore to fetch the data.
+//            // threshold should reflect how many total columns there are too
+//            if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+//                currentPage++;
+//                onLoadMore(currentPage, totalItemCount, view);
+//                loading = true;
+//            }
+//        }
+//
+//        // Call this method whenever performing new searches
+//        public void resetState() {
+//            this.currentPage = this.startingPageIndex;
+//            this.previousTotalItemCount = 0;
+//            this.loading = true;
+//        }
+//
+//        // Defines the process for actually loading more data based on page
+//        public abstract void onLoadMore(int page, int totalItemsCount, RecyclerView view);
+//
+//    }
 
 }

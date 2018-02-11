@@ -940,10 +940,10 @@ public class MainActivity extends AppCompatActivity
                     ArrayList<AnnouncementsModel> an_list = new ArrayList<>();
                     an_list.add(arrayList2.get(arrayList2.size() - 1));
                     // Collections.reverse(arrayList2);
-                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, an_list);
-                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
-                    rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
+                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, an_list,rvAnnouncements);
+//                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
+//                    rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
+//                    rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
                     rvAnnouncements.setAdapter(announcementsRVAdapter);
 
                 }
