@@ -69,14 +69,11 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-    public interface OnLoadMoreListener {
-        void onLoadMore();
-    }
-
     @Override
     public int getItemViewType(int position) {
         return announcementsList.get(position)==null? VIEW_TYPE_LOADING: VIEW_TYPE_ITEM;
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
@@ -103,9 +100,14 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((MyViewHolder)holder).tvTitle.setText(dataModel.getTitle());
             ((MyViewHolder)holder).tvDate.setText(dataModel.getDate());
             ((MyViewHolder)holder).tvAnnouncementDescription.setText(dataModel.getDescription());
+
             try {
-                Log.e("imageUrl", dataModel.getImage());
-                Picasso.with(context).load(dataModel.getImage()).into(((MyViewHolder)holder).ivImage);
+                if (dataModel.getImage().endsWith(".jpg") || dataModel.getImage().endsWith(".png")) {
+                    Log.e("imageUrl", dataModel.getImage());
+                    Picasso.with(context).load(dataModel.getImage()).into(((MyViewHolder) holder).ivImage);
+                } else {
+                    ((MyViewHolder) holder).ivImage.setVisibility(View.GONE);
+                }
             } catch (IllegalArgumentException ie) {
                 ((MyViewHolder)holder).ivImage.setVisibility(View.GONE);
             }
@@ -118,6 +120,19 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public int getItemCount() {
         return announcementsList.size();
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -139,12 +154,5 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
 
-    }
-    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
-        public ProgressViewHolder(View v) {
-            super(v);
-            progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
-        }
     }
 }

@@ -105,6 +105,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
     @BindView(R.id.spinner)
     Spinner spinner;
     String selected_option;
+    String recent = "message";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +163,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         list.add("Membership Inquiry");
         list.add("General Inquiry");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         spinner.setAdapter(adapter);
 
 
@@ -184,6 +185,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLocation:
+                recent = "location";
                 ivLocation.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
                 ivCall.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 ivMessage.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -206,6 +208,23 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
+                        if (recent.equals("location")) {
+//                            recent="location";
+                            ivLocation.setBackgroundColor(ContextCompat.getColor(ContactActivity.this, android.R.color.darker_gray));
+                            ivCall.setBackgroundColor(ContextCompat.getColor(ContactActivity.this, R.color.colorPrimary));
+                            ivMessage.setBackgroundColor(ContextCompat.getColor(ContactActivity.this, R.color.colorPrimary));
+                            clLocation.setVisibility(View.VISIBLE);
+                            clCall.setVisibility(View.GONE);
+                            clMessage.setVisibility(View.GONE);
+                        } else if (recent.equals("message")) {
+//                            recent="message";
+                            ivMessage.setBackgroundColor(ContextCompat.getColor(ContactActivity.this, android.R.color.darker_gray));
+                            ivCall.setBackgroundColor(ContextCompat.getColor(ContactActivity.this, R.color.colorPrimary));
+                            ivLocation.setBackgroundColor(ContextCompat.getColor(ContactActivity.this, R.color.colorPrimary));
+                            clMessage.setVisibility(View.VISIBLE);
+                            clCall.setVisibility(View.GONE);
+                            clLocation.setVisibility(View.GONE);
+                        }
                     }
                 });
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
@@ -218,7 +237,9 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
                 alertDialog.show();
 
                 break;
+
             case R.id.ivMessage:
+                recent = "message";
                 ivMessage.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
                 ivCall.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 ivLocation.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -257,6 +278,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     public void callPhoneNumber() {
+
         try {
             if (Build.VERSION.SDK_INT > 22) {
                 if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {

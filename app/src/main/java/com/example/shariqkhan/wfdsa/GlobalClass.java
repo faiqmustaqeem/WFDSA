@@ -24,5 +24,6 @@ public class GlobalClass {
     public static boolean isAlreadyRegistered = false;
     public static ArrayList<Long> list_downloads = new ArrayList<>();
     public static String download_file_name = "";
+    public static String image_link = "";
 
 }

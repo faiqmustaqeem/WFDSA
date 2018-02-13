@@ -126,22 +126,24 @@ public class AnnouncementsActivity extends AppCompatActivity {
                                                          public void onLoadMore() {
                                                              arrayListToShow.add(null);
                                                              announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
-                Handler mHand = new Handler();
-                mHand.postDelayed(new Runnable() {
+                                                             if (page <= total_pages) {
+                                                                 Handler mHand = new Handler();
+                                                                 mHand.postDelayed(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        //progressBar.setVisibility(View.GONE);
-                        arrayListToShow.remove(arrayListToShow.size() - 1);
-                        announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
-                        Log.e("page", page + "");
-                        Log.e("total_announcement", total_announcement + "");
-                        Log.e("total_pages", total_pages + "");
-                        loadNextDataFromApi();
+                                                                     @Override
+                                                                     public void run() {
+                                                                         // TODO Auto-generated method stub
+                                                                         //progressBar.setVisibility(View.GONE);
+                                                                         arrayListToShow.remove(arrayListToShow.size() - 1);
+                                                                         announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
+                                                                         Log.e("page", page + "");
+                                                                         Log.e("total_announcement", total_announcement + "");
+                                                                         Log.e("total_pages", total_pages + "");
+                                                                         loadNextDataFromApi();
 
-                    }
-                }, 5000);
+                                                                     }
+                                                                 }, 1000);
+                                                             }
                                                          }
                                                      }
         );
@@ -171,7 +173,6 @@ public class AnnouncementsActivity extends AppCompatActivity {
                     arrayListToShow.add(arrayList.get(item + i));
                 }
                 added_now = remaining;
-
             } else {
                 for (int i = 0; i < 6; i++) {
                     arrayListToShow.add(arrayList.get(item + i));
@@ -242,6 +243,8 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         model.setDate(obj.getString("date"));
 
                         String announce_for = obj.getString("announce_for");
+
+                        if (obj.getString("status").equals("1")) {
                         if (MainActivity.DECIDER.equals("member")) {
                             Boolean conditionSatisfied = false;
                             if (GlobalClass.member_role.contains(",")) {
@@ -278,6 +281,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
 
                         }
+                        }
 
 
                     }
@@ -302,7 +306,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         }
                         item = 6;
                     }
-                   // page=1;
+                    page = 1;
                     announcementsRVAdapter.notifyDataSetChanged();
 
                 }

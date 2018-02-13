@@ -62,8 +62,11 @@ Context context;
        if (MainActivity.DECIDER.equals("member"))
         {
             holder.relative.setVisibility(View.VISIBLE);
+            Log.e("show", "show");
+
         } else {
             holder.relative.setVisibility(View.GONE);
+           Log.e("show", "show");
         }
         try{
             if(!member.getFlag_pic().equals(""))
@@ -120,9 +123,7 @@ Context context;
             email = (TextView) view.findViewById(R.id.emailproper);
             ph= (TextView) view.findViewById(R.id.phoneNumber);
             company_address = (TextView)view.findViewById(R.id.company_address);
-
             logoFront = (ImageView) view.findViewById(R.id.logo);
-
             flag = (ImageView) view.findViewById(R.id.flag);
             designation=(TextView)view.findViewById(R.id.designation);
 

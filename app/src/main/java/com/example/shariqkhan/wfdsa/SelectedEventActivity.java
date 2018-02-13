@@ -106,7 +106,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    public static boolean checkedIn = false;
+    //public static boolean checkedIn = false;
     public static String id;
     public static String pollResponseUrl = GlobalClass.base_url + "wfdsa/apis/Event/Get_Poll?";
     public String AttendeesID;
@@ -539,24 +539,39 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
-                if (GlobalClass.isAlreadyRegistered) {
+                if (GlobalClass.isAlreadyRegistered && isCheckedIn) {
                     Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
                     overridePendingTransition(0, 0);
                     intent.putExtra("Event_id", id);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_LONG).show();
+                    if (!GlobalClass.isAlreadyRegistered) {
+                        Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_LONG).show();
+                    } else if (!isCheckedIn) {
+                        Toast.makeText(SelectedEventActivity.this, "You are not checked in for this event !", Toast.LENGTH_LONG).show();
+
+                    }
+                    {
+                        Log.e("checked_in", isCheckedIn + "");
+                        Log.e("is_registered", GlobalClass.isAlreadyRegistered + "");
+                    }
+
                 }
+
 
             }
         });
         ivdiscussion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SelectedEventActivity.this, EventDiscussionDialog.class);
-                overridePendingTransition(0, 0);
-                intent.putExtra("Event_id", id);
-                startActivity(intent);
+                if (GlobalClass.isAlreadyRegistered) {
+                    Intent intent = new Intent(SelectedEventActivity.this, EventDiscussionDialog.class);
+                    overridePendingTransition(0, 0);
+                    intent.putExtra("Event_id", id);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -590,11 +605,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectedEventActivity.this, RegisterEvent.class);
-                intent.putExtra("name", eventNameToPass);
-                intent.putExtra("location", locationToSend);
-                startActivity(intent);
-
+                if (GlobalClass.selelcted_event_fees.equals("0")) {
+                    // register user without stripe
+                } else {
+                    Intent intent = new Intent(SelectedEventActivity.this, RegisterEvent.class);
+                    intent.putExtra("name", eventNameToPass);
+                    intent.putExtra("location", locationToSend);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -718,9 +736,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 break;
 
             case R.id.fabPolls:
-                Task2 task2 = new Task2();
-                task2.execute();
-
+                if (isCheckedIn) {
+                    Task2 task2 = new Task2();
+                    task2.execute();
+                } else {
+                    Toast.makeText(this, "Polls are only for checked in users !", Toast.LENGTH_LONG).show();
+                }
 
 //                EventPollsDialog pollsDialog = new EventPollsDialog(this);
 //                pollsDialog.show();
@@ -838,7 +859,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                 String res = result.getString("response");
                                 if (res.equals("User Checked In Successfully.")) {
                                     isCheckedIn = true;
-                                    checkedIn = true;
+                                    // checkedIn = true;
                                     Toast.makeText(SelectedEventActivity.this, "You have successfully Checked in", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(SelectedEventActivity.this, "Checked in failed", Toast.LENGTH_SHORT).show();
@@ -1127,6 +1148,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     GlobalClass.selected_event_date = obj.getString("start_date").substring(0, 10);
                     GlobalClass.selected_event_location = obj.getString("place");
+
                     GlobalClass.selelcted_event_fees = obj.getString("fee");
 
 
@@ -1140,21 +1162,24 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     tvAgendaDescription.setText(agenda);
                     // AttendeesID = obj.getString("attendees_id");
 
-                    isLikeable = String.valueOf(obj.getInt("is_like"));
+                    isLikeable = String.valueOf(obj.getString("is_like"));
                     if (isLikeable.equals("0")) {
                         Log.e("islike", "0");
 
                     } else if (isLikeable.equals("1")) {
-                        Log.e("islike", "null");
+                        Log.e("islike", "1");
                         // tvLikeQty.setText(String.valueOf(Integer.parseInt(tvLikeQty.getText().toString())+1));
                         likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
                         likesView.setClickable(false);
                     }
-                    String is_registered = String.valueOf(obj.getInt("is_registered"));
+                    String is_registered = String.valueOf(obj.getString("is_registered"));
 
                     if (is_registered.equals("0")) {
                         Log.e("is_registered", is_registered + "");
                         GlobalClass.isAlreadyRegistered = false;
+                        ivdiscussion.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        ivgallery.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
                     } else if (is_registered.equals("1")) {
                         Log.e("is_registered", is_registered + "");
                         tvRegister.setText("You are Registered for this Event");
@@ -1162,7 +1187,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         GlobalClass.isAlreadyRegistered = true;
                     }
 
-                    String is_checked_in = String.valueOf(obj.getInt("is_checked_in"));
+                    String is_checked_in = String.valueOf(obj.getString("is_checked_in"));
+                    Log.e("new_checked_in", is_checked_in);
                     if (is_checked_in.equals("1")) {
                         isCheckedIn = true;
                         ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);

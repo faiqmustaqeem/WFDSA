@@ -56,6 +56,8 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
         if (dataModel.type.equals("1")) {
             holder.tvDueDate.setText("");
             holder.tvPayNow.setText("PAID");
+        } else {
+            holder.tvPayNow.setText("UNPAID");
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

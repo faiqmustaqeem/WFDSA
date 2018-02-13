@@ -64,9 +64,9 @@ public class CEOActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         txt = (TextView) toolbar.findViewById(R.id.tollbarText);
-        txt.setText(roleName + " Members");
+        txt.setText(roleName);
 
-        roleName = roleName.replace(' ', '_');
+        roleName = roleName.replace(" ", "%20");
         URL = URL + "role_id=" + roleName;
         Log.e("url_new" , URL);
 

@@ -2,6 +2,7 @@ package com.example.shariqkhan.wfdsa.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.shariqkhan.wfdsa.FullScreenImageActivity;
+import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
 import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
@@ -46,8 +49,18 @@ public class EventGalleryGVadapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        EventGalleryModel item = data.get(position);
+        final EventGalleryModel item = data.get(position);
+
         Picasso.with(context).load(item.getImageURL()).into(holder.image);
+
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, FullScreenImageActivity.class);
+                GlobalClass.image_link = item.getImageURL();
+                context.startActivity(i);
+            }
+        });
         return row;
     }
 

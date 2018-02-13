@@ -520,16 +520,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nae_committees) {
-            if (MainActivity.DECIDER.equals("member")) {
+            {
                 Intent intent = new Intent(MainActivity.this, CommiteesActivity.class);
                 startActivity(intent);
-            } else {
-
-                Toast.makeText(MainActivity.this, "Only Memebers can see Committees", Toast.LENGTH_LONG).show();
-                //Intent intent = new Intent(MainActivity.this, BlankActivity.class);
-                //startActivity(intent);
-            }
-
+        }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -802,12 +796,12 @@ public class MainActivity extends AppCompatActivity
                                 String sub = job.getString("start_date");
 
 
-                                String filter = sub.substring(8, 10);
+                                String filter = sub.substring(0, 2);
 
                                 model.setDay(filter);
 
-                                model.setMonth(job.getString("start_date").substring(5, 8));
-                                model.setYear(job.getString("start_date").substring(0, 4));
+                                model.setMonth(job.getString("start_date").substring(3, 6));
+                                model.setYear(job.getString("start_date").substring(6, 10));
                                 model.setTime(job.getString("start_date"));
                                 //   model.setImageUrl(job.getString("upload_image"));
                                 model.setPersonal(job.getString("permission"));
@@ -898,42 +892,44 @@ public class MainActivity extends AppCompatActivity
                         model.setDate(obj.getString("date"));
                         String announce_for = obj.getString("announce_for");
 
-                        if (MainActivity.DECIDER.equals("member")) {
+                        if (obj.getString("status").equals("1")) {
+                            if (MainActivity.DECIDER.equals("member")) {
 
-                            Boolean conditionSatisfied = false;
-                            if (GlobalClass.member_role.contains(",")) {
-                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+                                Boolean conditionSatisfied = false;
+                                if (GlobalClass.member_role.contains(",")) {
+                                    List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
 
-                                if (splitted_roles != null) {
-                                    for (int j = 0; j < splitted_roles.size(); j++) {
-                                        if (announce_for.contains(splitted_roles.get(j).toString())) {
-                                            conditionSatisfied = true;
-                                            break;
+                                    if (splitted_roles != null) {
+                                        for (int j = 0; j < splitted_roles.size(); j++) {
+                                            if (announce_for.contains(splitted_roles.get(j).toString())) {
+                                                conditionSatisfied = true;
+                                                break;
+                                            }
                                         }
                                     }
+
                                 }
 
-                            }
+                                if (conditionSatisfied == true) // multiple roles
+                                {
+                                    arrayList2.add(model);
+                                } else if (announce_for.contains(GlobalClass.member_role)) {
+                                    arrayList2.add(model);
 
-                            if (conditionSatisfied == true) // multiple roles
-                            {
-                                arrayList2.add(model);
-                            } else if (announce_for.contains(GlobalClass.member_role)) {
-                                arrayList2.add(model);
-
-                            } else if (announce_for.equals("Public")) {
-                                arrayList2.add(model);
+                                } else if (announce_for.equals("Public")) {
+                                    arrayList2.add(model);
+                                } else {
+                                    // dont add
+                                }
                             } else {
-                                // dont add
-                            }
-                        } else {
-                            if (announce_for.equals("Public")) {
-                                arrayList2.add(model);
-                            } else {
-                                // dont add
-                            }
+                                if (announce_for.equals("Public")) {
+                                    arrayList2.add(model);
+                                } else {
+                                    // dont add
+                                }
 
 
+                            }
                         }
                     }
 

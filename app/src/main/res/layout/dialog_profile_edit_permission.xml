@@ -3,34 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:background="@drawable/earth"
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="VERIFY ACCOUNT"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
         android:id="@+id/textView14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="VERIFY ACCOUNT"
         android:textStyle="bold"
-        android:padding="8dp"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="14dp"
+        android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"
         android:layout_marginStart="14dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="14dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:padding="8dp"
         android:layout_marginTop="0dp"
+        android:padding="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14">
 
         <EditText
@@ -46,31 +45,31 @@
         android:id="@+id/tvSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        android:text="Submit"
-        android:padding="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:textColor="@android:color/darker_gray"
-        android:clickable="false"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="20dp"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="7dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="false"
+        android:padding="12dp"
+        android:text="Submit"
+        android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
     <TextView
         android:id="@+id/tvCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        android:text="Cancel"
-        android:padding="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:textColor="@color/colorAccent"
-        android:clickable="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="7dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="12dp"
+        android:text="Cancel"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
 </android.support.constraint.ConstraintLayout>

@@ -80,24 +80,23 @@
                 android:id="@+id/experties"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="Financial Consultant"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
 
                 />
-            <TextView
 
+            <TextView
                 android:id="@+id/designation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_below="@id/experties"
                 android:text="CEO"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
-                android:layout_below="@id/experties"
                 />
 
             <TextView
@@ -134,7 +133,6 @@
                     android:layout_width="70dp"
                     android:layout_height="40dp"
                     android:scaleType="fitXY"
-
                     android:src="@drawable/ar" />
 
 
@@ -145,9 +143,9 @@
                 android:id="@+id/showOrHide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_below="@+id/countryLinear"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/phone"
@@ -201,9 +199,6 @@
                     android:layout_marginTop="5dp"
                     android:layout_toEndOf="@+id/email"
                     android:text="oliviaflame@gmail.com" />
-
-
-
 
             </RelativeLayout>
 

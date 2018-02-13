@@ -31,6 +31,7 @@
         />
 </LinearLayout>
     <LinearLayout
+        android:id="@+id/layout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout1"
@@ -60,6 +61,17 @@
             android:text="Event Date"
             android:textSize="18sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
+        android:text="Okay"
+        android:textColor="@android:color/white" />
 
 
 </RelativeLayout>

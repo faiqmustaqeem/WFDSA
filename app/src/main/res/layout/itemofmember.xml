@@ -8,10 +8,12 @@
     <RelativeLayout
         android:id="@+id/bioRelativeOne"
         android:layout_width="match_parent"
-        android:background="@drawable/linearoutline"
-        android:layout_margin="8dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mainll"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/linearoutline"
         android:padding="10dp">
 
 
@@ -32,9 +34,9 @@
             <ImageView
                 android:id="@+id/logo"
                 android:layout_width="130dp"
-                android:scaleType="centerInside"
                 android:layout_height="130dp"
                 android:layout_centerInParent="true"
+                android:scaleType="centerInside"
                 android:src="@drawable/czech" />
 <View
     android:layout_width="match_parent"
@@ -59,10 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:padding="5dp"
-                android:textColor="@color/colorPrimary"
                 android:text="Lorem Epsom dummy text "
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
 
                 />
@@ -70,12 +71,13 @@
             <TextView
                 android:id="@+id/company_address"
                 android:layout_width="wrap_content"
-                android:textColor="@color/colorPrimary"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/company_name"
+                android:layout_marginLeft="5dp"
                 android:layout_marginStart="4dp"
-                android:padding="5dp"
-                android:text="Lorem Epsom dummy text Lorem Epsom dummy text Lorem Epsom dummy text " />
+                android:layout_marginTop="5dp"
+                android:text="Lorem Epsom dummy text Lorem Epsom dummy text Lorem Epsom dummy text "
+                android:textColor="@color/colorPrimary" />
 
             <LinearLayout
                 android:id="@+id/nameLayout"
@@ -87,27 +89,25 @@
                 <TextView
                     android:id="@+id/Name_label"
                     android:layout_width="0dp"
-                    android:textColor="@color/colorPrimary"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0.6"
-                    android:padding="6dp"
-                    android:layout_marginLeft="3dp"
                     android:text="Name:"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
 
                     android:id="@+id/Name"
                     android:layout_width="0dp"
-                    android:textColor="@color/colorPrimary"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.4"
                     android:focusable="false"
-                    android:text="John Smith"
                     android:maxLines="1"
-                    android:padding="8dp"
+                    android:text="John Smith"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
 
@@ -118,19 +118,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nameLayout"
-                android:layout_marginStart="2dp"
                 android:weightSum="3">
 
                 <TextView
                     android:id="@+id/Phone_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0.63"
-                    android:padding="7dp"
-                    android:paddingEnd="-5dp"
                     android:text="Phone:"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -138,14 +136,14 @@
                     android:id="@+id/Phone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
+                    android:layout_marginLeft="-7dp"
                     android:layout_weight="2.3"
                     android:focusable="false"
-                    android:text="04322214217"
                     android:maxLines="1"
-                    android:layout_marginLeft="-7dp"
-                    android:padding="8dp"
+                    android:text="04322214217"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
 
@@ -162,11 +160,11 @@
                     android:id="@+id/Email_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0.6"
-                    android:padding="8dp"
                     android:text="Fax:"
-                    android:textColor="@color/colorPrimary"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -176,11 +174,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2.4"
                     android:focusable="false"
-                    android:textColor="@color/colorPrimary"
-                    android:text="04322214217"
                     android:maxLines="1"
-                    android:padding="8dp"
+                    android:text="04322214217"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
 
@@ -197,11 +194,11 @@
                     android:id="@+id/Fax_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0.6"
-                    android:padding="7dp"
                     android:text="Email:"
-                    android:textColor="@color/colorPrimary"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -211,11 +208,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2.4"
                     android:focusable="false"
-                    android:textColor="@color/colorPrimary"
-                    android:text="info@wfdsa.org"
                     android:maxLines="1"
-                    android:padding="8dp"
+                    android:text="info@wfdsa.org"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
 
@@ -232,11 +228,11 @@
                     android:id="@+id/Web_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0.6"
-                    android:padding="7dp"
                     android:text="Web:"
-                    android:textColor="@color/colorPrimary"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -246,11 +242,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2.4"
                     android:focusable="false"
-                    android:text="www.wfdsa.com"
-                    android:textColor="@color/colorPrimary"
                     android:maxLines="1"
-                    android:padding="8dp"
+                    android:text="www.wfdsa.com"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
 
@@ -267,12 +262,11 @@
                     android:id="@+id/country_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="0.7"
-                    android:layout_marginLeft="2dp"
-                    android:padding="5dp"
                     android:text="Country:"
-                    android:textColor="@color/colorPrimary"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
@@ -280,14 +274,13 @@
                     android:id="@+id/countruname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="-14dp"
                     android:layout_weight="2.4"
                     android:focusable="false"
-                    android:text="America"
-                    android:textColor="@color/colorPrimary"
                     android:maxLines="1"
-                    android:padding="8dp"
-                    android:layout_marginStart="-14dp"
+                    android:text="America"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
 

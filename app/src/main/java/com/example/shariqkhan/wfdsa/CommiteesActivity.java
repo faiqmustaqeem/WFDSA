@@ -33,10 +33,9 @@ public class CommiteesActivity extends AppCompatActivity {
 
     public ListView listOfMembers;
     Toolbar toolbar;
+    ProgressDialog progressDialog;
     private String[] roleArray;
     private String[] idArray;
-
-    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +132,7 @@ public class CommiteesActivity extends AppCompatActivity {
                             Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
                             intent.putExtra("RoleName", roleId);
                             intent.putExtra("Name", roleName);
-                            intent.putExtra("url", GlobalClass.base_url + "wfdsa/apis/Member/Committee_byRole?");
+                            intent.putExtra("url", GlobalClass.base_url + "wfdsa/roster/get_role_members?");
 
                             startActivity(intent);
 

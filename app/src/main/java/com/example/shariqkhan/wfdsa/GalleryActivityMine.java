@@ -275,7 +275,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("Error", volleyError.toString());
+                Log.e("Error", volleyError.getMessage());
                 Toast.makeText(getApplication(), volleyError.getMessage(), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 finish();

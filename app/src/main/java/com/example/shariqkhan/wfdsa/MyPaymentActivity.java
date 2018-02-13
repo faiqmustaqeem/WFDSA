@@ -232,9 +232,10 @@ public class MyPaymentActivity extends AppCompatActivity {
                         model.setId(obj.getString("payment_id"));
                         model.setInvoice_id(obj.getString("invoice_id"));
                         model.setDueDate(obj.getString("payment_date"));
+                        model.setTitle(obj.getString("title"));
                         model.setType(obj.getString("payment_status"));
                         model.setAmount(obj.getString("payment_amount"));
-                        model.setTitle("EVENT PAYMENT");
+                        // model.setTitle("EVENT PAYMENT");
 
                         paymentsList.add(model);
 

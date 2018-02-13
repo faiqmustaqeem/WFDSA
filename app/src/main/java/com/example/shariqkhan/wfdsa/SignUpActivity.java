@@ -154,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                         // Toast.makeText(SignUpActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
-                        LoginActivity.decider = "1";
+                        LoginActivity.decider = "2";
                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

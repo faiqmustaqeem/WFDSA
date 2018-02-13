@@ -5,8 +5,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
+
     >
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tool_bar"
@@ -18,13 +19,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textAllCaps="false"
             android:layout_gravity="center_horizontal"
             android:text="Register Event"
-            android:textColor="#fff" />
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textStyle="bold" />
 
     </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/earth" />
 
     <ScrollView
         android:id="@+id/mainScroll"
@@ -53,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:text="EVENT NAME"
                     android:textAllCaps="false"
-
+                    android:textStyle="bold"
                     />
 
                 <TextView
@@ -65,14 +71,26 @@
 
                     />
 
-                <TextView
-                    android:id="@+id/regfee"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="REGISTRATION FEES : $500.00"
-                    android:textAllCaps="false"
+                    android:orientation="horizontal">
 
-                    />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="REGISTRATION FEES : "
+                        android:textAllCaps="false" />
+
+                    <TextView
+                        android:id="@+id/regfee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$500.00"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
 
             </LinearLayout>
@@ -182,10 +200,10 @@
 
                     <TextView
                         android:id="@+id/exp"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CARD EXPIRY"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
 
                     <Spinner
@@ -229,7 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="Security Code(3 on back, 4 on front)"
+                        android:text="Security Code(3 on back, amex; 4 on front)"
                         android:textSize="12sp" />
 
                     <EditText
@@ -239,7 +257,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/simpleText"
                         android:hint="CVC CODE"
-                        android:inputType="textCapWords"
+                        android:inputType="number"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -305,7 +323,7 @@
                             android:layout_alignBottom="@+id/tilCardNumber"
                             android:layout_alignStart="@+id/tilCardNumber"
                             android:hint="ADDRESS"
-                            android:inputType="textCapWords"
+                            android:inputType="textLongMessage"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -331,7 +349,7 @@
                             android:layout_alignBottom="@+id/tilCardNumber"
                             android:layout_alignStart="@+id/tilCardNumber"
                             android:hint="CONTACT NUMBER"
-                            android:inputType="textCapWords"
+                            android:inputType="number"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -340,10 +358,10 @@
 
                     <TextView
                         android:id="@+id/COUNTRY"
-                        android:layout_marginStart="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tilContact"
+                        android:layout_marginStart="8dp"
                         android:text="COUNTRY"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
@@ -386,10 +404,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@+id/tilEmail"
+                        android:layout_marginBottom="20dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="20dp"
                         android:background="@color/colorPrimary"
                         android:text="Register"
                         android:textAllCaps="false"

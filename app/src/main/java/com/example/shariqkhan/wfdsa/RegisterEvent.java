@@ -2,6 +2,7 @@ package com.example.shariqkhan.wfdsa;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -374,7 +375,7 @@ public class RegisterEvent extends AppCompatActivity {
 
                                 GlobalClass.isAlreadyRegistered = true;
 
-                                Dialog dialog = new Dialog(RegisterEvent.this);
+                                final Dialog dialog = new Dialog(RegisterEvent.this);
                                 dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
                                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -390,11 +391,29 @@ public class RegisterEvent extends AppCompatActivity {
                                 TextView event_location = (TextView) dialog.findViewById(R.id.event_location);
                                 event_location.setText(GlobalClass.selected_event_location);
 
+                                Button button = (Button) dialog.findViewById(R.id.ok);
+
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
 
                                 TextView event_date = (TextView) dialog.findViewById(R.id.event_date);
                                 event_date.setText(GlobalClass.selected_event_date);
 
+                                dialog.setCanceledOnTouchOutside(false);
+
                                 dialog.show();
+
+                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialogInterface) {
+                                        finish();
+                                    }
+                                });
                                 // Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
                                 //finish();
                             } else {
@@ -432,7 +451,8 @@ public class RegisterEvent extends AppCompatActivity {
                 return params;
             }
         };
-       Volley.newRequestQueue(RegisterEvent.this).add(request);
+
+        Volley.newRequestQueue(RegisterEvent.this).add(request);
        // AppSingleton.getInstance().addToRequestQueue(request, "Payment");
     }
     public boolean checkFields() {
