@@ -26,6 +26,7 @@ import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
 import com.example.shariqkhan.wfdsa.Model.InvoiceModel;
 import com.example.shariqkhan.wfdsa.R;
+import com.example.shariqkhan.wfdsa.SelectedEventActivity;
 import com.google.android.gms.gcm.Task;
 
 import org.json.JSONArray;
@@ -45,6 +46,7 @@ import butterknife.ButterKnife;
  */
 
 public class EventGalleryDialog extends Dialog implements View.OnClickListener {
+    public static int MULTI_SELECT = 1;
     public Activity act;
     public Dialog d;
     ArrayList<EventGalleryModel> imagesList = new ArrayList<EventGalleryModel>();
@@ -54,10 +56,6 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
     ImageView imageView;
     ProgressDialog progressDialog;
     String id;
-
-    public static int MULTI_SELECT = 1;
-
-
     String URL = GlobalClass.base_url+"wfdsa/apis/Event/Gallery?";
 
     public EventGalleryDialog(Activity a, String id) {
@@ -87,7 +85,62 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
 
     }
 
+    private void initUI() {
+        gridView = (GridView) findViewById(R.id.gridView);
+        imageView = findViewById(R.id.close);
 
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fabAddImage);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
+//**These following line is the important one!
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                act.startActivityForResult(Intent.createChooser(intent, "Select Pictures"), MULTI_SELECT);
+            }
+        });
+
+
+//        if (MainActivity.DECIDER.equals("member")) {
+//            floatingActionButton.setVisibility(View.VISIBLE);
+//        } else {
+//            floatingActionButton.setVisibility(View.INVISIBLE);
+//        }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+    }
+
+//
+//
+//    private void fetchEventImages() {
+//        imagesList.add(new EventGalleryModel("1", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
+//        imagesList.add(new EventGalleryModel("2", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
+//        imagesList.add(new EventGalleryModel("3", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
+//        imagesList.add(new EventGalleryModel("4", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
+//        imagesList.add(new EventGalleryModel("5", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
+//        imagesList.add(new EventGalleryModel("6", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
+//        imagesList.add(new EventGalleryModel("7", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
+//        imagesList.add(new EventGalleryModel("8", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
+//        imagesList.add(new EventGalleryModel("9", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
+//
+//        gridAdapter = new EventGalleryGVadapter(act, R.layout.event_gallery_item, imagesList);
+//        gridView.setAdapter(gridAdapter);
+//    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tvSendComment:
+                break;
+        }
+    }
 
     private class Task extends AsyncTask<Object, Object, String> {
 
@@ -123,8 +176,25 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
-                        imagesList.add(model);
+
+                        boolean isRegistered = GlobalClass.isAlreadyRegistered;
+                        boolean isCheckedIn = SelectedEventActivity.isCheckedIn;
+                        String permission = obj.getString("permission");
+
+                        if (permission.equals("1")) {
+                            if (isRegistered && isCheckedIn) {
+                                EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
+                                imagesList.add(model);
+                            }
+                        } else if (permission.equals("0")) {
+                            if (isRegistered) {
+                                EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
+                                imagesList.add(model);
+                            }
+                        }
+
+
+
 
                     }
 
@@ -161,66 +231,6 @@ public class EventGalleryDialog extends Dialog implements View.OnClickListener {
             progressDialog.setMessage("Please Wait");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
-        }
-    }
-
-
-
-    private void fetchEventImages() {
-        imagesList.add(new EventGalleryModel("1", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
-        imagesList.add(new EventGalleryModel("2", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
-        imagesList.add(new EventGalleryModel("3", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
-        imagesList.add(new EventGalleryModel("4", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
-        imagesList.add(new EventGalleryModel("5", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
-        imagesList.add(new EventGalleryModel("6", "https://kawarthanow.com/wp-content/uploads/2016/03/pdi-meeting-mar4-01.jpg"));
-        imagesList.add(new EventGalleryModel("7", "https://www.lexisnexis.com/images/lncareers/img-professional-group.jpg"));
-        imagesList.add(new EventGalleryModel("8", "https://www.iaca.int/images/news/2013/Expert_Group_Meeting_I.jpg"));
-        imagesList.add(new EventGalleryModel("9", "http://birnbeckregenerationtrust.org.uk/images/web/publicmeetinggroup.jpg"));
-
-        gridAdapter = new EventGalleryGVadapter(act, R.layout.event_gallery_item, imagesList);
-        gridView.setAdapter(gridAdapter);
-    }
-
-    private void initUI() {
-        gridView = (GridView) findViewById(R.id.gridView);
-        imageView = findViewById(R.id.close);
-
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fabAddImage);
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
-//**These following line is the important one!
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-              act.startActivityForResult(Intent.createChooser(intent, "Select Pictures"), MULTI_SELECT);
-            }
-        });
-
-
-
-//        if (MainActivity.DECIDER.equals("member")) {
-//            floatingActionButton.setVisibility(View.VISIBLE);
-//        } else {
-//            floatingActionButton.setVisibility(View.INVISIBLE);
-//        }
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-    }
-
-
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tvSendComment:
-                break;
         }
     }
 

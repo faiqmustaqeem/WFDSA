@@ -109,9 +109,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     //public static boolean checkedIn = false;
     public static String id;
     public static String pollResponseUrl = GlobalClass.base_url + "wfdsa/apis/Event/Get_Poll?";
+    public static boolean isCheckedIn;
     public String AttendeesID;
     public String isLikeable;
-    public boolean isCheckedIn;
     public String Eventname;
     public String loc;
     public String URL = GlobalClass.base_url + "wfdsa/apis/Event/EventDetail?";
@@ -226,6 +226,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         pollResponseUrl = pollResponseUrl + "event_id=" + id;
 
         ButterKnife.bind(this);
+
+        GlobalClass.isAlreadyRegistered = false;
+        isCheckedIn = false;
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -539,22 +542,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
-                if (GlobalClass.isAlreadyRegistered && isCheckedIn) {
+                if (GlobalClass.isAlreadyRegistered) {
                     Intent intent = new Intent(SelectedEventActivity.this, GalleryActivityMine.class);
                     overridePendingTransition(0, 0);
                     intent.putExtra("Event_id", id);
                     startActivity(intent);
                 } else {
-                    if (!GlobalClass.isAlreadyRegistered) {
-                        Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_LONG).show();
-                    } else if (!isCheckedIn) {
-                        Toast.makeText(SelectedEventActivity.this, "You are not checked in for this event !", Toast.LENGTH_LONG).show();
 
-                    }
-                    {
-                        Log.e("checked_in", isCheckedIn + "");
-                        Log.e("is_registered", GlobalClass.isAlreadyRegistered + "");
-                    }
+                    Toast.makeText(SelectedEventActivity.this, "You are not registered for this event !", Toast.LENGTH_LONG).show();
 
                 }
 

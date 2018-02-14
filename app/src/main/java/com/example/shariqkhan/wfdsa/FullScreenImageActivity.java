@@ -4,8 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+
 
 public class FullScreenImageActivity extends AppCompatActivity {
 
@@ -18,6 +18,6 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
         image = (ImageView) findViewById(R.id.photo_view);
 
-        Picasso.with(this).load(GlobalClass.image_link).into(image);
+        Glide.with(this).load(GlobalClass.image_link).into(image);
     }
 }

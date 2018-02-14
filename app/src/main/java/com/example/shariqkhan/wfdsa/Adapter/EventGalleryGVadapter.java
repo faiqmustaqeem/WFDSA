@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.shariqkhan.wfdsa.FullScreenImageActivity;
 import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.Model.EventGalleryModel;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class EventGalleryGVadapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
-    private ArrayList<EventGalleryModel> data = new ArrayList<EventGalleryModel>();
+    private ArrayList<EventGalleryModel> data = new ArrayList<>();
 
     public EventGalleryGVadapter(Context context, int layoutResourceId, ArrayList<EventGalleryModel> data) {
         super(context, layoutResourceId, data);
@@ -51,7 +52,7 @@ public class EventGalleryGVadapter extends ArrayAdapter {
 
         final EventGalleryModel item = data.get(position);
 
-        Picasso.with(context).load(item.getImageURL()).into(holder.image);
+        Glide.with(context).load(item.getImageURL()).into(holder.image);
 
         row.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.MainResourceAdapter;
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity
 
 
         try {
-            Picasso.with(this).load(imageUrl).into(ivUserPic);
+            Glide.with(this).load(imageUrl).into(ivUserPic);
         } catch (Exception e) {
             ivUserPic.setImageResource(R.drawable.ic_user);
             Log.e("PicsetMessage", e.getMessage());
@@ -340,10 +341,12 @@ public class MainActivity extends AppCompatActivity
                 if (MainActivity.DECIDER.equals("member")) {
                     if (eventsModel.getPersonal().contains(GlobalClass.member_role)) {
                         Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
+                        Log.e("eventid", eventsModel.getId());
                         i.putExtra("eventid", eventsModel.getId());
                         startActivity(i);
                     } else if (eventsModel.getPersonal().equals("Public")) {
                         Intent i = new Intent(MainActivity.this, SelectedEventActivity.class);
+                        Log.e("eventid", eventsModel.getId());
                         i.putExtra("eventid", eventsModel.getId());
                         startActivity(i);
 
@@ -714,24 +717,7 @@ public class MainActivity extends AppCompatActivity
             HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Events");
             Log.e("Must", "Must");
 
-//
-//
-//            List<NameValuePair> parameters = new ArrayList<>();
-//            parameters.add(new BasicNameValuePair("first_name", firstName));
-//            parameters.add(new BasicNameValuePair("last_name", lastName));
-//            parameters.add(new BasicNameValuePair("email", email));
-//            parameters.add(new BasicNameValuePair("country", getItem));
-//            parameters.add(new BasicNameValuePair("contact", contactNum));
-//            parameters.add(new BasicNameValuePair("password", password));
-//            parameters.add(new BasicNameValuePair("confirm_password", confirmPassword));
-//
-//            Log.e("f", firstName);
-//            Log.e("l", lastName);
-//            Log.e("e", email);
-//            Log.e("c", getItem);
-//            Log.e("c", contactNum);
-//            Log.e("p", password);
-//            Log.e("c", confirmPassword);
+
 
 
             StringBuilder buffer = new StringBuilder();
@@ -784,7 +770,7 @@ public class MainActivity extends AppCompatActivity
 
 
                         JSONArray data = result.getJSONArray("data");
-
+                        arrayList.clear();
                         for (int i = 0; i < data.length(); i++) {
                             if (i == data.length() - 1) {
                                 EventsModel model = new EventsModel();
@@ -810,6 +796,7 @@ public class MainActivity extends AppCompatActivity
                                 arrayList.add(model);
                             }
                         }
+
                         if(arrayList.size() > 0) {
 
                             Log.e("list", arrayList.get(0).getEventTitle());

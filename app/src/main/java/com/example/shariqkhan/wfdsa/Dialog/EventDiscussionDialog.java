@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 
 //import com.example.shariqkhan.wfdsa.Adapter.DiscussionRVAdapter;
+import com.bumptech.glide.Glide;
 import com.example.shariqkhan.wfdsa.MainActivity;
 import com.example.shariqkhan.wfdsa.Model.DiscussionModel;
 import com.example.shariqkhan.wfdsa.Model.MessageModel;
@@ -380,7 +381,7 @@ public class EventDiscussionDialog extends AppCompatActivity {
                 tvComment.setText(model.getMessage());
                 pos = position;
                try{
-                   Picasso.with(act).load(model.getImageurl()).into(image);
+                   Glide.with(act).load(model.getImageurl()).into(image);
                }catch(Exception e)
                {
                    image.setImageResource(R.drawable.ic_profile_pic);

@@ -3,21 +3,17 @@ package com.example.shariqkhan.wfdsa;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.CEOAdapter;
-import com.example.shariqkhan.wfdsa.Adapter.MemberAdapter;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
-import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 
 import org.json.JSONArray;
@@ -25,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Codiansoft on 12/6/2017.
@@ -34,9 +31,11 @@ public class CEOActivity extends AppCompatActivity {
 
 
     public RecyclerView listOfMembers;
-    RecyclerView.Adapter adapter;
+    CEOAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<ModelMember> arrayList = new ArrayList<>();
+    ArrayList<ModelMember> arrayListToShow = new ArrayList<>();
+
     String sendRole;
     ProgressDialog dialog;
     String roleName;
@@ -48,6 +47,10 @@ public class CEOActivity extends AppCompatActivity {
 
 
     Toolbar toolbar;
+    int item = 0;
+    int total_members;
+    int total_pages;
+    int page = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,8 +75,9 @@ public class CEOActivity extends AppCompatActivity {
 
         listOfMembers = (RecyclerView) findViewById(R.id.memberList);
 
-        layoutManager = new LinearLayoutManager(this);
-        listOfMembers.setLayoutManager(layoutManager);
+        //layoutManager = new LinearLayoutManager(this);
+        //listOfMembers.setLayoutManager(layoutManager);
+
 
 
 
@@ -103,7 +107,76 @@ public class CEOActivity extends AppCompatActivity {
 
         Task2 task = new Task2();
         task.execute();
+
+        adapter = new CEOAdapter(arrayListToShow, CEOActivity.this, listOfMembers);
+        listOfMembers.setAdapter(adapter);
+
+        adapter.setOnLoadMoreListener(new CEOAdapter.OnLoadMoreListener() {
+                                          @Override
+
+                                          public void onLoadMore() {
+                                              arrayListToShow.add(null);
+                                              adapter.notifyItemInserted(arrayListToShow.size());
+                                              if (page <= total_pages) {
+                                                  Handler mHand = new Handler();
+                                                  mHand.postDelayed(new Runnable() {
+
+                                                      @Override
+                                                      public void run() {
+                                                          // TODO Auto-generated method stub
+                                                          //progressBar.setVisibility(View.GONE);
+                                                          arrayListToShow.remove(arrayListToShow.size() - 1);
+                                                          adapter.notifyItemRemoved(arrayListToShow.size());
+                                                          Log.e("page", page + "");
+                                                          Log.e("total_members", total_members + "");
+                                                          Log.e("total_pages", total_pages + "");
+                                                          loadNextDataFromApi();
+
+                                                      }
+                                                  }, 1000);
+                                              }
+                                          }
+                                      }
+        );
+
     }
+
+    public void loadNextDataFromApi() {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
+        //progressBar.setVisibility(View.VISIBLE);
+
+
+        if (page <= total_pages) {
+            int remaining = total_members - item;
+            int added_now = 0;
+
+            if (remaining < 6) {
+                for (int i = 0; i < remaining; i++) {
+                    arrayListToShow.add(arrayList.get(item + i));
+                }
+                added_now = remaining;
+            } else {
+                for (int i = 0; i < 6; i++) {
+                    arrayListToShow.add(arrayList.get(item + i));
+                }
+                added_now = 6;
+
+            }
+
+            item += added_now;
+            adapter.notifyDataSetChanged();
+            page++;
+            adapter.setLoaded();
+        }
+
+
+    }
+
+
 
     private class Task2 extends AsyncTask<Object, Object, String> {
 
@@ -162,9 +235,29 @@ public class CEOActivity extends AppCompatActivity {
                         arrayList.add(model);
 
                     }
+                    total_members = arrayList.size();
 
-                    adapter = new CEOAdapter(arrayList, CEOActivity.this);
-                    listOfMembers.setAdapter(adapter);
+                    if (total_members % 6 == 0) {
+                        total_pages = total_members / 6;
+                    } else {
+                        total_pages = (total_members / 6) + 1;
+                    }
+                    if (total_members > 0) {
+
+                        Collections.reverse(arrayList);
+                    }
+                    if (total_members <= 6) {
+                        arrayListToShow.addAll(arrayList);
+                        item = total_members;
+                    } else {
+                        for (int k = 0; k < 6; k++) {
+                            arrayListToShow.add(arrayList.get(k));
+
+                        }
+                        item = 6;
+                    }
+                    page = 1;
+                    adapter.notifyDataSetChanged();
 
                 }
                 dialog.dismiss();

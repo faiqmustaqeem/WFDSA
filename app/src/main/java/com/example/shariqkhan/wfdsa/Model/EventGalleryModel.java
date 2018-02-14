@@ -5,11 +5,14 @@ package com.example.shariqkhan.wfdsa.Model;
  */
 
 public class EventGalleryModel {
-    String id, imageURL;
+    String id;
+    private String imageURL;
+
 
     public EventGalleryModel(String id, String imageURL) {
         this.id = id;
-        this.imageURL = imageURL;
+        this.setImageURL(imageURL);
+
     }
 
     public EventGalleryModel() {
@@ -23,4 +26,9 @@ public class EventGalleryModel {
     public String getImageURL() {
         return imageURL;
     }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
  */
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> {
+
 
 
     ArrayList<ModelMember> arrayList = new ArrayList<>();
@@ -49,8 +51,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         holder.compnayName.setText(member.getCompanyName());
         holder.countryName.setText(member.getCountry());
 
-        Picasso.with(context).load(member.getCompany_logo()).into(holder.logoFront);
-        Picasso.with(context).load(member.getFlag_pic()).into(holder.logoTopLeft);
+        Glide.with(context).load(member.getCompany_logo()).into(holder.logoFront);
+        Glide.with(context).load(member.getFlag_pic()).into(holder.logoTopLeft);
 
 
     }

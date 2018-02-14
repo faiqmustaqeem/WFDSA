@@ -54,8 +54,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
     int total_announcement;
     int total_pages;
     int page=0;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
+
  //   private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
@@ -84,40 +83,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
         task.execute();
 
         announcementsRVAdapter = new AnnouncementsRVAdapter(this, arrayListToShow,rvAnnouncements);
-//        LinearLayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
-//          rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
 
-
-//        scrollListener = new EndlessRecyclerViewScrollListener(mAnnouncementLayoutManager) {
-//            @Override
-//            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
-//                // Triggered only when new data needs to be appended to the list
-//                // Add whatever code is needed to append new items to the bottom of the list
-//                arrayListToShow.add(null);
-//                announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
-//
-//                Handler mHand = new Handler();
-//                mHand.postDelayed(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        // TODO Auto-generated method stub
-//                        //progressBar.setVisibility(View.GONE);
-//                        arrayListToShow.remove(arrayListToShow.size() - 1);
-//                        announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
-//                        Log.e("page", page + "");
-//                        Log.e("total_announcement", total_announcement + "");
-//                        Log.e("total_pages", total_pages + "");
-//                        loadNextDataFromApi(page);
-//                    }
-//                }, 2000);
-//
-//            }
-//        };
-//
-//
-//        rvAnnouncements.addOnScrollListener(scrollListener);
       rvAnnouncements.setAdapter(announcementsRVAdapter);
 
         announcementsRVAdapter.setOnLoadMoreListener(new AnnouncementsRVAdapter.OnLoadMoreListener() {
@@ -137,7 +103,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
                                                                          arrayListToShow.remove(arrayListToShow.size() - 1);
                                                                          announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
                                                                          Log.e("page", page + "");
-                                                                         Log.e("total_announcement", total_announcement + "");
+                                                                         Log.e("total_members", total_announcement + "");
                                                                          Log.e("total_pages", total_pages + "");
                                                                          loadNextDataFromApi();
 

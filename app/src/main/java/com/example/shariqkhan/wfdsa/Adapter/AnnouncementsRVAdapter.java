@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
@@ -104,7 +105,7 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             try {
                 if (dataModel.getImage().endsWith(".jpg") || dataModel.getImage().endsWith(".png")) {
                     Log.e("imageUrl", dataModel.getImage());
-                    Picasso.with(context).load(dataModel.getImage()).into(((MyViewHolder) holder).ivImage);
+                    Glide.with(context).load(dataModel.getImage()).into(((MyViewHolder) holder).ivImage);
                 } else {
                     ((MyViewHolder) holder).ivImage.setVisibility(View.GONE);
                 }
