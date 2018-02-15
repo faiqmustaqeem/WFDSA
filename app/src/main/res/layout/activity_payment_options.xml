@@ -4,10 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
-    >
-
-
+    tools:context="com.example.shariqkhan.wfdsa.PaymentOptions">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -29,17 +26,13 @@
             android:textStyle="bold" />
 
 
-
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvPayments"
-
+    <ListView
+        android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-  >
-    </android.support.v7.widget.RecyclerView>
+        android:layout_below="@id/toolbar"></ListView>
 
 
 </RelativeLayout>

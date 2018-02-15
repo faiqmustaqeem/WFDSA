@@ -1,5 +1,9 @@
 package com.example.shariqkhan.wfdsa.Adapter;
 
+/**
+ * Created by CodianSoft on 15/02/2018.
+ */
+
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +20,7 @@ import android.widget.Toast;
 import com.example.shariqkhan.wfdsa.Dialog.InvoiceDialog;
 import com.example.shariqkhan.wfdsa.Dialog.PaymentDialog;
 import com.example.shariqkhan.wfdsa.Model.PaymentModel;
+import com.example.shariqkhan.wfdsa.MyInvoices;
 import com.example.shariqkhan.wfdsa.MyPaymentActivity;
 import com.example.shariqkhan.wfdsa.R;
 
@@ -28,11 +33,11 @@ import butterknife.ButterKnife;
  * Created by Codiansoft on 10/26/2017.
  */
 
-public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.MyViewHolder> {
-    MyPaymentActivity context;
+public class MyInvoicesAdapter extends RecyclerView.Adapter<MyInvoicesAdapter.MyViewHolder> {
+    MyInvoices context;
     ArrayList<PaymentModel> paymentsList;
 
-    public PaymentsRVAdapter(MyPaymentActivity context, ArrayList<PaymentModel> paymentsList) {
+    public MyInvoicesAdapter(MyInvoices context, ArrayList<PaymentModel> paymentsList) {
         this.context = context;
         this.paymentsList = paymentsList;
     }
@@ -45,21 +50,22 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        PaymentModel dataModel = paymentsList.get(position);
+        final PaymentModel dataModel = paymentsList.get(position);
         final String sendInvoice = dataModel.getInvoice_id();
         Log.e("invoice_id", sendInvoice);
 
         holder.tvTitle.setText(dataModel.getTitle());
         holder.tvDueDate.setText("Due Date " + dataModel.getDueDate());
-        holder.tvPayNow.setText("PAY NOW\n$" + dataModel.getAmount());
+        // holder.tvPayNow.setText("PAY NOW\n$" + dataModel.getAmount());
 
         if (dataModel.type.equals("1")) {
             holder.tvDueDate.setText("");
             holder.tvPayNow.setText("PAID");
+        } else {
+            // holder.tvPayNow.setText("UNPAID");
+            holder.tvPayNow.setText("PAY NOW\n$" + dataModel.getAmount());
+
         }
-//        else {
-//            holder.tvPayNow.setText("UNPAID");
-//        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,11 +96,10 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
             public void onClick(View view) {
                 if (holder.tvPayNow.getText().equals("PAID")) {
                     Toast.makeText(context, "YOU ALREADY PAID FOR THIS!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Dialog d = new PaymentDialog(context, dataModel.getTitle(), dataModel.getAmount(), dataModel.getInvoice_id());
+                    d.show();
                 }
-                //else {
-//                    Dialog d = new PaymentDialog(context);
-//                    d.show();
-//                }
             }
         });
     }

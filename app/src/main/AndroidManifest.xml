@@ -148,7 +148,9 @@
         </service>
 
         <activity android:name=".Singleton.NoInternetactivity" />
-        <activity android:name=".FullScreenImageActivity"></activity>
+        <activity android:name=".FullScreenImageActivity" />
+        <activity android:name=".PaymentOptions" />
+        <activity android:name=".MyInvoices"></activity>
     </application>
 
 </manifest>

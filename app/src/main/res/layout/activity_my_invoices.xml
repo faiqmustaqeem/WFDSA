@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
-    >
-
+    android:background="@drawable/earth">
 
 
     <android.support.v7.widget.Toolbar
@@ -22,13 +20,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:text="My Payments"
+            android:text="My Invoices"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="17sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/filter"
+            android:layout_width="25dp"
+            android:layout_height="28dp"
+            android:layout_gravity="end|top"
+            android:layout_marginEnd="12dp"
 
+            android:src="@drawable/icons8filter"
+
+            />
 
     </android.support.v7.widget.Toolbar>
 
@@ -37,9 +44,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-  >
-    </android.support.v7.widget.RecyclerView>
+        android:layout_below="@+id/toolbar"></android.support.v7.widget.RecyclerView>
 
 
 </RelativeLayout>

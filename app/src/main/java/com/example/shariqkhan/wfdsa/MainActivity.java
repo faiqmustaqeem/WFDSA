@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity
             Intent resourcesIntent = new Intent(MainActivity.this, MainResources.class);
             MainActivity.this.startActivity(resourcesIntent);
         } else if (id == R.id.nav_my_payment) {
-            Intent paymentIntent = new Intent(MainActivity.this, MyPaymentActivity.class);
+            Intent paymentIntent = new Intent(MainActivity.this, PaymentOptions.class);
             MainActivity.this.startActivity(paymentIntent);
 
         } else if (id == R.id.nav_announcement) {

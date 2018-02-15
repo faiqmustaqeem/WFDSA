@@ -23,5 +23,8 @@
     <string name="twitter_app_key">	g4yUYGhiE926fUxvtD7RhNZys</string>
     <string name="twitter_key_secret">jaH1XbHNFZGPMAF0Lxvn66B0SmMZt8r5xyqcNuGc31cOozpJCK</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

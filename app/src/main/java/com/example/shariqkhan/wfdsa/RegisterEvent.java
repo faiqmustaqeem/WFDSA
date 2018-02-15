@@ -199,6 +199,7 @@ public class RegisterEvent extends AppCompatActivity {
 
             }
         });
+
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, months);
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, countries);
 
@@ -304,51 +305,6 @@ public class RegisterEvent extends AppCompatActivity {
                             }
                     );
 
-
-//                tilAddress.getEditText().setText("");
-//                tilFirstName.getEditText().setText("");
-//                tilContact.getEditText().setText("");
-//                tilEmailEdit.getEditText().setText("");
-//                tilCardNumber.getEditText().setText("");
-//                cvcnoedit.setText("");
-
-//                    if (!tilAddressEdit.getText().toString().equals("") && !tilFirstNameEdit.getText().toString().equals("") && !tilContactEdit.getText().toString().equals("")
-//                            && !tilCardNumberEdit.getText().toString().equals("") && !tilEmailEditedt.getText().toString().equals("") && !cvcnoedit.getText().toString().equals("")) {
-//
-//                        Dialog dialog = new Dialog(RegisterEvent.this);
-//                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//
-//                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                        dialog.getWindow().setLayout(lp.width, lp.height);
-//                        dialog.setContentView(R.layout.thanking_activity);
-//                        dialog.show();
-//                        Log.e("addr", addr);
-//                        Log.e("fname", fname);
-//                        Log.e("contact", contact);
-//                        Log.e("email", email);
-//                        Log.e("cardno", cardno);
-//                        Log.e("year", year);
-//                        Log.e("month", month);
-//                        Log.e("country", countryName);
-//                        clearFields();
-//
-//
-//                    } else {
-//                        Log.e("addr", addr);
-//                        Log.e("fname", fname);
-//                        Log.e("contact", contact);
-//                        Log.e("email", email);
-//                        Log.e("cardno", cardno);
-//                        Log.e("year", year);
-//                        Log.e("month", month);
-//                        Log.e("country", countryName);
-//
-//
-//                        Toast.makeText(RegisterEvent.this, "Fill all the fields first!", Toast.LENGTH_SHORT).show();
-//                    }
                 }
             }
         });
@@ -361,7 +317,6 @@ public class RegisterEvent extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         try {
-
 
                             dialog.dismiss();
 

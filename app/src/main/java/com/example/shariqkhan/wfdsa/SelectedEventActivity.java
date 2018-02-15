@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -42,6 +43,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -538,6 +540,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
             }
         });
+
         ivgallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -602,7 +605,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             public void onClick(View v) {
                 if (GlobalClass.selelcted_event_fees.equals("0")) {
                     // register user without stripe
+                    sendData();
+
                 } else {
+
                     Intent intent = new Intent(SelectedEventActivity.this, RegisterEvent.class);
                     intent.putExtra("name", eventNameToPass);
                     intent.putExtra("location", locationToSend);
@@ -627,6 +633,113 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
             }
         });
+    }
+
+    public void sendData() {
+
+        final ProgressDialog progressDialog = new ProgressDialog(SelectedEventActivity.this);
+        progressDialog.setTitle("Payment in progress");
+        progressDialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/apis/Payment/payment_verification_noAmount",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+                            progressDialog.dismiss();
+
+                            JSONObject job = new JSONObject(response);
+                            JSONObject result = job.getJSONObject("result");
+                            String res = result.getString("response");
+                            Log.e("response", res);
+
+                            if (res.equals("Successfully Registered")) {
+                                tvRegister.setText("You are Registered for this Event");
+                                tvRegister.setClickable(false);
+                                GlobalClass.isAlreadyRegistered = true;
+
+                                final Dialog dialog = new Dialog(SelectedEventActivity.this);
+                                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                                dialog.getWindow().setLayout(lp.width, lp.height);
+                                dialog.setContentView(R.layout.thanking_activity);
+
+                                TextView event_name = (TextView) dialog.findViewById(R.id.event_name);
+                                event_name.setText(GlobalClass.selected_event_name);
+
+                                TextView event_location = (TextView) dialog.findViewById(R.id.event_location);
+                                event_location.setText(GlobalClass.selected_event_location);
+
+                                Button button = (Button) dialog.findViewById(R.id.ok);
+
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+
+                                TextView event_date = (TextView) dialog.findViewById(R.id.event_date);
+                                event_date.setText(GlobalClass.selected_event_date);
+
+                                dialog.setCanceledOnTouchOutside(false);
+
+                                dialog.show();
+
+                                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialogInterface) {
+//                                        finish();
+                                    }
+                                });
+                                // Toast.makeText(RegisterEvent.this, "Payment Transaction Completed!", Toast.LENGTH_SHORT).show();
+                                //finish();
+                            } else {
+                                Toast.makeText(SelectedEventActivity.this, "Payment Transaction Failed!", Toast.LENGTH_SHORT).show();
+                                // finish();
+                                progressDialog.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("ErrorMessage", e.getMessage());
+                            e.printStackTrace();
+                            progressDialog.dismiss();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley_error", error.getMessage());
+                        progressDialog.dismiss();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+
+                params.put("api_secret", prefs.getString("api_secret", ""));
+                params.put("stripe_token", "0");
+                params.put("amount", "0");
+                params.put("user_id", MainActivity.getId);
+                params.put("signin_type", LoginActivity.decider);
+                params.put("event_id", GlobalClass.selelcted_event_id);
+
+                Log.e("params", params.toString());
+
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(SelectedEventActivity.this).add(request);
+        // AppSingleton.getInstance().addToRequestQueue(request, "Payment");
     }
 
     public void sendLikeData() {
@@ -1142,6 +1255,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     Log.e("end", endEventTime);
 
                     GlobalClass.selected_event_date = obj.getString("start_date").substring(0, 10);
+
                     GlobalClass.selected_event_location = obj.getString("place");
 
                     GlobalClass.selelcted_event_fees = obj.getString("fee");

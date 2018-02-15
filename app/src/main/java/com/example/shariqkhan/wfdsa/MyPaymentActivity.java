@@ -59,7 +59,7 @@ public class MyPaymentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        imageFilter = (ImageView) toolbar.findViewById(R.id.filter);
+//        imageFilter = (ImageView) toolbar.findViewById(R.id.filter);
 
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -74,82 +74,82 @@ public class MyPaymentActivity extends AppCompatActivity {
         task.execute();
 
 
-        imageFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String[] items = {"Paid", "Unpaid", "All"};
-                new MaterialDialog.Builder(MyPaymentActivity.this)
-                        .title("Invoice Type")
-                        .items(items)
-                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                filterableString = text.toString();
-                                Log.e("string", filterableString);
-                                if (filterableString.equals("Paid")) {
-                                    paymentsList.clear();
-                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-
-                                        PaymentModel memberToCheck = new PaymentModel();
-                                        memberToCheck = arrayListSave.get(counter);
-                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-
-                                        if (memberToCheck.type.equals("1")) {
-
-                                            Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
-                                            paymentsList.add(memberToCheck);
-                                            Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
-
-                                        }
-
-                                    }
-                                    if(paymentsList.size()>0) {
-                                        paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
-                                        rvPayments.setAdapter(paymentsRVAdapter);
-                                    }
-
-                                } else if (filterableString.equals("All")) {
-                                    paymentsList.clear();
-                                    paymentsList = new ArrayList<>(arrayListSave);
-                                    Log.e("SizeAll", String.valueOf(paymentsList.size()));
-                                    paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, arrayListSave);
-                                    rvPayments.setAdapter(paymentsRVAdapter);
-
-                                } else if (filterableString.equals("Unpaid")) {
-                                    paymentsList.clear();
-                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-
-                                        PaymentModel memberToCheck = new PaymentModel();
-                                        memberToCheck = arrayListSave.get(counter);
-                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-
-                                        if (memberToCheck.type.equals("0")) {
-
-                                            Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
-                                            paymentsList.add(memberToCheck);
-                                            Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
-
-                                        }
-                                    }
-                                    Log.e("Jugar", String.valueOf(paymentsList.size()));
-                                    paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
-                                    rvPayments.setAdapter(paymentsRVAdapter);
-
-                                }
-
-
-                                //  Toast.makeText(MyPaymentActivity.this, text, Toast.LENGTH_SHORT).show();
-
-                                return true;
-
-                            }
-                        })
-                        .positiveText("Choose")
-                        .show();
-
-
-            }
-        });
+//        imageFilter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String[] items = {"Paid", "Unpaid", "All"};
+//                new MaterialDialog.Builder(MyPaymentActivity.this)
+//                        .title("Invoice Type")
+//                        .items(items)
+//                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+//                            @Override
+//                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+//                                filterableString = text.toString();
+//                                Log.e("string", filterableString);
+//                                if (filterableString.equals("Paid")) {
+//                                    paymentsList.clear();
+//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+//
+//                                        PaymentModel memberToCheck = new PaymentModel();
+//                                        memberToCheck = arrayListSave.get(counter);
+//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
+//
+//                                        if (memberToCheck.type.equals("1")) {
+//
+//                                            Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
+//                                            paymentsList.add(memberToCheck);
+//                                            Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
+//
+//                                        }
+//
+//                                    }
+//                                    if(paymentsList.size()>0) {
+//                                        paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
+//                                        rvPayments.setAdapter(paymentsRVAdapter);
+//                                    }
+//
+//                                } else if (filterableString.equals("All")) {
+//                                    paymentsList.clear();
+//                                    paymentsList = new ArrayList<>(arrayListSave);
+//                                    Log.e("SizeAll", String.valueOf(paymentsList.size()));
+//                                    paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, arrayListSave);
+//                                    rvPayments.setAdapter(paymentsRVAdapter);
+//
+//                                } else if (filterableString.equals("Unpaid")) {
+//                                    paymentsList.clear();
+//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+//
+//                                        PaymentModel memberToCheck = new PaymentModel();
+//                                        memberToCheck = arrayListSave.get(counter);
+//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
+//
+//                                        if (memberToCheck.type.equals("0")) {
+//
+//                                            Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
+//                                            paymentsList.add(memberToCheck);
+//                                            Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
+//
+//                                        }
+//                                    }
+//                                    Log.e("Jugar", String.valueOf(paymentsList.size()));
+//                                    paymentsRVAdapter = new PaymentsRVAdapter(MyPaymentActivity.this, paymentsList);
+//                                    rvPayments.setAdapter(paymentsRVAdapter);
+//
+//                                }
+//
+//
+//                                //  Toast.makeText(MyPaymentActivity.this, text, Toast.LENGTH_SHORT).show();
+//
+//                                return true;
+//
+//                            }
+//                        })
+//                        .positiveText("Choose")
+//                        .show();
+//
+//
+//            }
+//        });
 
 
     }
@@ -199,7 +199,7 @@ public class MyPaymentActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = GlobalClass.base_url+"wfdsa/apis/Payment/All_Payment";
+            String url = GlobalClass.base_url + "wfdsa/apis/Payment/All_Payment_by_role?user_id=" + MainActivity.getId + "&signin_type=" + LoginActivity.decider;
 
             Log.e("url", url);
 
@@ -232,10 +232,10 @@ public class MyPaymentActivity extends AppCompatActivity {
                         model.setId(obj.getString("payment_id"));
                         model.setInvoice_id(obj.getString("invoice_id"));
                         model.setDueDate(obj.getString("payment_date"));
-                        model.setTitle(obj.getString("title"));
+                        // model.setTitle(obj.getString("title"));
                         model.setType(obj.getString("payment_status"));
                         model.setAmount(obj.getString("payment_amount"));
-                        // model.setTitle("EVENT PAYMENT");
+                        model.setTitle("EVENT PAYMENT");
 
                         paymentsList.add(model);
 
