@@ -1,34 +1,71 @@
 package com.example.shariqkhan.wfdsa;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AboutActivity extends AppCompatActivity {
-    @BindView(R.id.ivLogo)
+
+
     ImageView ivLogo;
+
     ImageView ivBack;
 
+    Activity activity;
+
+    @BindView(R.id.about_text_new)
+    TextView about_text;
+    @BindView(R.id.contact_number)
+    TextView contact_number;
+    @BindView(R.id.email)
+    TextView email;
+    @BindView(R.id.address)
+    TextView address;
+
+
     @BindView(R.id.textView16)
-    TextView clickMeToViewUrl;
+    EditText clickMeToViewUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
+        activity = this;
+
+        ivLogo = (ImageView) findViewById(R.id.ivLogonew);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -56,6 +93,7 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
         // Picasso.with(this).load("http://wfdsa.org/wp-content/uploads/2016/02/logo.jpg").into(ivLogo);
+        loadData();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -65,5 +103,68 @@ public class AboutActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    void loadData() {
+
+        final ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Wait...");
+        dialog.show();
+        StringRequest request = new StringRequest(Request.Method.GET, GlobalClass.base_url + "wfdsa/apis/Announcement/Record",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+
+
+                            JSONObject job = new JSONObject(response);
+                            JSONObject result = job.getJSONObject("result");
+                            String res = result.getString("response");
+
+
+                            if (res.equals("About Us Data Successfully Recieved")) {
+
+                                JSONObject data = result.getJSONArray("data").getJSONObject(0);
+
+
+                                Picasso.with(activity).load(data.getString("upload_pic")).into(ivLogo);
+
+                                contact_number.setText(data.getString("phone"));
+                                String about_data = data.getString("about_text");
+                                Log.e("about", about_data);
+                                about_text.setText(about_data);
+                                email.setText(data.getString("contact_email"));
+                                address.setText(data.getString("contact_address"));
+
+                                dialog.dismiss();
+
+
+                            } else {
+                                dialog.dismiss();
+
+                                // finish();
+                            }
+                        } catch (JSONException e) {
+                            Log.e("ErrorMessage", e.getMessage());
+                            e.printStackTrace();
+                            dialog.dismiss();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley_error", error.getMessage());
+                        // parseVolleyError(error);
+                        dialog.dismiss();
+                    }
+                });
+
+        Volley.newRequestQueue(activity).add(request);
+
+
     }
 }

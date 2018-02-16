@@ -84,54 +84,59 @@ public class MyInvoices extends AppCompatActivity {
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 filterableString = text.toString();
                                 Log.e("string", filterableString);
-                                if (filterableString.equals("Paid")) {
-                                    paymentsList.clear();
-                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+                                if (paymentsList.size() < 1) {
 
-                                        PaymentModel memberToCheck = new PaymentModel();
-                                        memberToCheck = arrayListSave.get(counter);
-                                        Log.e("MEMBER", String.valueOf(memberToCheck));
+                                } else {
+                                    if (filterableString.equals("Paid")) {
+                                        paymentsList.clear();
+                                        for (int counter = 0; counter < arrayListSave.size(); counter++) {
 
-                                        if (memberToCheck.type.equals("1")) {
+                                            PaymentModel memberToCheck = new PaymentModel();
+                                            memberToCheck = arrayListSave.get(counter);
+                                            Log.e("MEMBER", String.valueOf(memberToCheck));
 
-                                            Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
-                                            paymentsList.add(memberToCheck);
-                                            Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
+                                            if (memberToCheck.type.equals("1")) {
+
+                                                Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
+                                                paymentsList.add(memberToCheck);
+                                                Log.e("SizeOfAmerica", String.valueOf(paymentsList.size()));
+
+                                            }
 
                                         }
+                                        if (paymentsList.size() > 0) {
+                                            invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, paymentsList);
+                                            rvPayments.setAdapter(invoiceAdapter);
+                                        }
 
-                                    }
-                                    if (paymentsList.size() > 0) {
+                                    } else if (filterableString.equals("All")) {
+                                        paymentsList.clear();
+                                        paymentsList = new ArrayList<>(arrayListSave);
+                                        Log.e("SizeAll", String.valueOf(paymentsList.size()));
+                                        invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, arrayListSave);
+                                        rvPayments.setAdapter(invoiceAdapter);
+
+                                    } else if (filterableString.equals("Unpaid")) {
+                                        paymentsList.clear();
+                                        for (int counter = 0; counter < arrayListSave.size(); counter++) {
+
+                                            PaymentModel memberToCheck = new PaymentModel();
+                                            memberToCheck = arrayListSave.get(counter);
+                                            Log.e("MEMBER", String.valueOf(memberToCheck));
+
+                                            if (memberToCheck.type.equals("0")) {
+
+                                                Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
+                                                paymentsList.add(memberToCheck);
+                                                Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
+
+                                            }
+                                        }
+                                        Log.e("Jugar", String.valueOf(paymentsList.size()));
                                         invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, paymentsList);
                                         rvPayments.setAdapter(invoiceAdapter);
+
                                     }
-
-                                } else if (filterableString.equals("All")) {
-                                    paymentsList.clear();
-                                    paymentsList = new ArrayList<>(arrayListSave);
-                                    Log.e("SizeAll", String.valueOf(paymentsList.size()));
-                                    invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, arrayListSave);
-                                    rvPayments.setAdapter(invoiceAdapter);
-
-                                } else if (filterableString.equals("Unpaid")) {
-                                    paymentsList.clear();
-                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-
-                                        PaymentModel memberToCheck = new PaymentModel();
-                                        memberToCheck = arrayListSave.get(counter);
-                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-
-                                        if (memberToCheck.type.equals("0")) {
-
-                                            Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
-                                            paymentsList.add(memberToCheck);
-                                            Log.e("SizeOfPak", String.valueOf(paymentsList.size()));
-
-                                        }
-                                    }
-                                    Log.e("Jugar", String.valueOf(paymentsList.size()));
-                                    invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, paymentsList);
-                                    rvPayments.setAdapter(invoiceAdapter);
 
                                 }
 

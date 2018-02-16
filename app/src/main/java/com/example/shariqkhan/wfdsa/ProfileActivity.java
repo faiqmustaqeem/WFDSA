@@ -518,7 +518,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             parameters.add(new BasicNameValuePair("first_name", etFirstName.getText().toString()));
             parameters.add(new BasicNameValuePair("last_name", etFirstName.getText().toString()));
-
             parameters.add(new BasicNameValuePair("cell", etMobileNumber.getText().toString()));
             parameters.add(new BasicNameValuePair("member_id", MainActivity.getId));
             parameters.add(new BasicNameValuePair("image", path));

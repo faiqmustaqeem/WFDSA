@@ -64,8 +64,8 @@ public class MyInvoicesAdapter extends RecyclerView.Adapter<MyInvoicesAdapter.My
         } else {
             // holder.tvPayNow.setText("UNPAID");
             holder.tvPayNow.setText("PAY NOW\n$" + dataModel.getAmount());
-
         }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
