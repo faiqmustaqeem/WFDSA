@@ -49,7 +49,7 @@ public class MyInvoicesAdapter extends RecyclerView.Adapter<MyInvoicesAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final PaymentModel dataModel = paymentsList.get(position);
         final String sendInvoice = dataModel.getInvoice_id();
         Log.e("invoice_id", sendInvoice);
@@ -97,7 +97,7 @@ public class MyInvoicesAdapter extends RecyclerView.Adapter<MyInvoicesAdapter.My
                 if (holder.tvPayNow.getText().equals("PAID")) {
                     Toast.makeText(context, "YOU ALREADY PAID FOR THIS!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Dialog d = new PaymentDialog(context, dataModel.getTitle(), dataModel.getAmount(), dataModel.getInvoice_id());
+                    Dialog d = new PaymentDialog(context, dataModel.getTitle(), dataModel.getAmount(), dataModel.getInvoice_id(), position);
                     d.show();
                 }
             }

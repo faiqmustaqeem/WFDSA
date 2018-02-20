@@ -771,10 +771,15 @@ public class MainActivity extends AppCompatActivity
 
                         JSONArray data = result.getJSONArray("data");
                         arrayList.clear();
+                        int count = 0;
                         for (int i = 0; i < data.length(); i++) {
-                            if (i == data.length() - 1) {
+
                                 EventsModel model = new EventsModel();
                                 JSONObject job = data.getJSONObject(i);
+
+                            String status = job.getString("status");
+
+                            if (status.equals("1")) {
                                 model.setId(job.getString("event_id"));
                                 model.setEventTitle(job.getString("title"));
                                 model.setVenueCity(job.getString("place"));
@@ -794,19 +799,25 @@ public class MainActivity extends AppCompatActivity
 
 
                                 arrayList.add(model);
+                                count++;
                             }
+
+                            if (count == 1) {
+                                break;
+                            }
+
                         }
 
                         if(arrayList.size() > 0) {
 
-                            Log.e("list", arrayList.get(0).getEventTitle());
+                            //  Log.e("list", arrayList.get(0).getEventTitle());
 
 
                             // EventsModel model=arrayList.remove(arrayList.size()-1);
                             //  arrayList.add(0,model);
                             //  Collections.reverse(arrayList);
                             eventsRVAdapter.notifyDataSetChanged();
-                            Log.e("list", arrayList.get(arrayList.size() - 1).getEventTitle());
+                            //  Log.e("list", arrayList.get(arrayList.size() - 1).getEventTitle());
 //                            eventsRVAdapter = new EventsRVAdapter(MainActivity.this, arrayList);
 //                            LinearLayoutManager mEventLayoutManager = new LinearLayoutManager(getApplicationContext());
 //

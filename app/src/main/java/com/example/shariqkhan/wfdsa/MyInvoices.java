@@ -33,13 +33,13 @@ import butterknife.ButterKnife;
 public class MyInvoices extends AppCompatActivity {
 
     public static String filterableString = "";
+    public static MyInvoicesAdapter invoiceAdapter;
+    public static ArrayList<PaymentModel> paymentsList = new ArrayList<PaymentModel>();
     @BindView(R.id.rvPayments)
     RecyclerView rvPayments;
-    MyInvoicesAdapter invoiceAdapter;
     Toolbar toolbar;
     ImageView imageFilter;
     ImageView image;
-    ArrayList<PaymentModel> paymentsList = new ArrayList<PaymentModel>();
     ArrayList<PaymentModel> arrayListSave;
     ProgressDialog progressDialog;
 
@@ -68,7 +68,7 @@ public class MyInvoices extends AppCompatActivity {
         });
 
 
-        Task task = new Task();
+        TaskAllInVoices task = new TaskAllInVoices();
         task.execute();
 
 
@@ -168,7 +168,7 @@ public class MyInvoices extends AppCompatActivity {
         return true;
     }
 
-    private class Task extends AsyncTask<Object, Object, String> {
+    public class TaskAllInVoices extends AsyncTask<Object, Object, String> {
 
         @Override
         protected String doInBackground(Object... voids) {

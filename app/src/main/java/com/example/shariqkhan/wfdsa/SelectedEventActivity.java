@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -661,6 +662,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                                 final Dialog dialog = new Dialog(SelectedEventActivity.this);
                                 dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                                // dialog.setCanceledOnTouchOutside(false);
 
                                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -716,8 +718,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley_error", error.getMessage());
+                        //  Log.e("Volley_error", error.getMessage());
                         progressDialog.dismiss();
+                        NetworkResponse response = error.networkResponse;
+                        if (response != null && response.data != null) {
+                            Log.e("Volley_error", error.getMessage());
+                        } else {
+                            Toast.makeText(SelectedEventActivity.this, "You application is not connected to internet", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }) {
             @Override
@@ -773,7 +781,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley_error", error.getMessage());
+//                Log.e("Volley_error", error.getMessage());
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.data != null) {
+                    Log.e("Volley_error", error.getMessage());
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "You application is not connected to internet", Toast.LENGTH_SHORT).show();
+                }
             }
         }) {
             @Override
@@ -987,7 +1001,13 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley_error", error.networkResponse.statusCode + "");
+                //Log.e("Volley_error", error.networkResponse.statusCode + "");
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.data != null) {
+                    Log.e("Volley_error", error.getMessage());
+                } else {
+                    Toast.makeText(SelectedEventActivity.this, "You application is not connected to internet", Toast.LENGTH_SHORT).show();
+                }
             }
         }) {
             @Override

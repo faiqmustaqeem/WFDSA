@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
     >
 
 
@@ -14,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/colorPrimary"
-
         app:titleTextColor="#fff">
 
         <TextView
@@ -31,6 +29,13 @@
 
 
     </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/map" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvPayments"

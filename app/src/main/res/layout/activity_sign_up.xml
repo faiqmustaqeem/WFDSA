@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
     >
 
     <include
@@ -13,6 +12,17 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <LinearLayout
         android:id="@+id/llBottomNav"
@@ -331,13 +341,13 @@
                     android:id="@+id/tvSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:gravity="center"
                     android:padding="12dp"
-                    android:text="Sign Up"
-                    android:layout_marginBottom="0dp"
                     android:paddingBottom="10dp"
+                    android:text="Sign Up"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
             </LinearLayout>

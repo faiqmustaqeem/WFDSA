@@ -155,7 +155,7 @@ public class InvoiceDialog extends Dialog {
                         JSONObject obj = rolesArray.getJSONObject(i);
 
                         model.setPrice(obj.getString("amount"));
-                        //  model.setName(obj.getString("name"));
+                        model.setName(obj.getString("name"));
 //                        model.setQuantity("5");
                         discussionList.add(model);
                     }

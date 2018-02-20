@@ -90,9 +90,10 @@ public class AnnouncementsActivity extends AppCompatActivity {
                                                          @Override
 
                                                          public void onLoadMore() {
-                                                             arrayListToShow.add(null);
-                                                             announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
+
                                                              if (page <= total_pages) {
+                                                                 arrayListToShow.add(null);
+                                                                 announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
                                                                  Handler mHand = new Handler();
                                                                  mHand.postDelayed(new Runnable() {
 
@@ -131,24 +132,27 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
 
         if (page <= total_pages) {
+            // int oldSize=arrayListToShow.size();
             int remaining = total_announcement - item;
             int added_now = 0;
 
             if (remaining < 6) {
                 for (int i = 0; i < remaining; i++) {
                     arrayListToShow.add(arrayList.get(item + i));
+                    announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
                 }
                 added_now = remaining;
             } else {
                 for (int i = 0; i < 6; i++) {
                     arrayListToShow.add(arrayList.get(item + i));
+                    announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
                 }
                 added_now = 6;
 
             }
 
             item += added_now;
-            announcementsRVAdapter.notifyDataSetChanged();
+            //announcementsRVAdapter.notifyItemRangeInserted(oldSize,added_now);
             page++;
             announcementsRVAdapter.setLoaded();
         }

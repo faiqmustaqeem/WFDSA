@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.shariqkhan.wfdsa.Model.AnnouncementsModel;
 import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
@@ -97,15 +99,19 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         AnnouncementsModel dataModel = announcementsList.get(position);
+
         if(holder instanceof MyViewHolder) {
             ((MyViewHolder)holder).tvTitle.setText(dataModel.getTitle());
             ((MyViewHolder)holder).tvDate.setText(dataModel.getDate());
             ((MyViewHolder)holder).tvAnnouncementDescription.setText(dataModel.getDescription());
 
             try {
-                if (dataModel.getImage().endsWith(".jpg") || dataModel.getImage().endsWith(".png")) {
+                if (!dataModel.getImage().equals("")) {
                     Log.e("imageUrl", dataModel.getImage());
-                    Glide.with(context).load(dataModel.getImage()).into(((MyViewHolder) holder).ivImage);
+
+                    Glide.with(context)
+                            .load(dataModel.getImage())
+                            .into(((MyViewHolder) holder).ivImage);
                 } else {
                     ((MyViewHolder) holder).ivImage.setVisibility(View.GONE);
                 }
@@ -148,6 +154,9 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         @BindView(R.id.tvAnnouncementDescription)
         TextView tvAnnouncementDescription;
+
+//        @BindView(R.id.image_progress)
+//        ProgressBar image_progress;
 
         public MyViewHolder(View view) {
             super(view);

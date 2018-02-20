@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
     tools:context="com.example.shariqkhan.wfdsa.MemberActivity">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/map" />
 
 
     <LinearLayout
@@ -69,18 +75,18 @@
             android:layout_gravity="center|top"
             android:text="Members"
             android:textAllCaps="false"
-            android:textStyle="bold"
             android:textColor="#fff"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/filter"
             android:layout_width="25dp"
             android:layout_height="28dp"
             android:layout_gravity="end|top"
             android:layout_marginEnd="12dp"
-            android:src="@drawable/icons8filter"
 
-            android:id="@+id/filter"
+            android:src="@drawable/icons8filter"
 
             />
 

@@ -332,31 +332,36 @@ public class AllEventsActivity extends AppCompatActivity {
                         for (int i = 0; i < data.length(); i++) {
                             EventsModel model = new EventsModel();
                             JSONObject job = data.getJSONObject(i);
-                            model.setId(job.getString("event_id"));
-                            model.setEventTitle(job.getString("title"));
-                            model.setVenueCity(job.getString("place"));
-                            String sub = job.getString("start_date");
 
-                            String filter = sub.substring(0, 2);
+                            String status = job.getString("status");
+                            if (status.equals("1")) {
+                                model.setId(job.getString("event_id"));
+                                model.setEventTitle(job.getString("title"));
+                                model.setVenueCity(job.getString("place"));
+                                String sub = job.getString("start_date");
 
-
-                            model.setDay(filter);
-
-                            model.setMonth(job.getString("start_date").substring(3, 6));
-                            model.setYear(job.getString("start_date").substring(6, 10));
-                            model.setTime(job.getString("start_date"));
-                            //   model.setImageUrl(job.getString("upload_image"));
-                            model.setPersonal(job.getString("permission"));
+                                String filter = sub.substring(0, 2);
 
 
-                            arrayList.add(model);
+                                model.setDay(filter);
+
+                                model.setMonth(job.getString("start_date").substring(3, 6));
+                                model.setYear(job.getString("start_date").substring(6, 10));
+                                model.setTime(job.getString("start_date"));
+                                //   model.setImageUrl(job.getString("upload_image"));
+                                model.setPersonal(job.getString("permission"));
+
+
+                                arrayList.add(model);
+
+                            }
                         }
                         if(arrayList.size()>0)
-                            Collections.reverse(arrayList);
+                            //  Collections.reverse(arrayList);
                         eventsRVAdapter.notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(AllEventsActivity.this, "Error!!", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(AllEventsActivity.this, "Error!!", Toast.LENGTH_LONG).show();
 
 
                         progressDialog.dismiss();

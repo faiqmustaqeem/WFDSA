@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -83,6 +84,7 @@ public class RegisterEvent extends AppCompatActivity {
     int monthToVerify;
     TextView eventname;
     TextView eventlocation;
+    TextView registrationFee;
 
     int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
@@ -104,9 +106,13 @@ public class RegisterEvent extends AppCompatActivity {
         setContentView(R.layout.event_registration);
         eventname = (TextView) findViewById(R.id.eventname);
         eventlocation = (TextView) findViewById(R.id.eventlocation);
+        registrationFee = (TextView) findViewById(R.id.regfee);
+
+        registrationFee.setText(GlobalClass.selelcted_event_fees);
 
         eventname.setText(getIntent().getStringExtra("name"));
         eventlocation.setText(getIntent().getStringExtra("location"));
+
 
 
         dialog = new ProgressDialog(RegisterEvent.this);
@@ -281,7 +287,7 @@ public class RegisterEvent extends AppCompatActivity {
 
                                     Log.e("api_sec", prefs.getString("api_secret", ""));
                                     Log.e("stripe_token", token.getId());
-                                    Log.e("amount", String.valueOf(500));
+                                    Log.e("amount", String.valueOf(GlobalClass.selelcted_event_fees));
                                     Log.e("user_id", MainActivity.getId);
                                     Log.e("signin_type", LoginActivity.decider);
 
@@ -385,7 +391,13 @@ public class RegisterEvent extends AppCompatActivity {
                 new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley_error" , error.getMessage() );
+                //Log.e("Volley_error" , error.getMessage() );
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.data != null) {
+                    Log.e("Volley_error", error.getMessage());
+                } else {
+                    Toast.makeText(RegisterEvent.this, "You application is not connected to internet", Toast.LENGTH_SHORT).show();
+                }
             }
         })
         {

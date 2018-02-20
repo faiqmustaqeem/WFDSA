@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -239,9 +240,13 @@ public class GalleryActivityMine extends AppCompatActivity {
                     },
                     new Response.ErrorListener() {
                         @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            Log.e("Error", volleyError.toString());
-                            Toast.makeText(getApplication(), volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onErrorResponse(VolleyError error) {
+                            NetworkResponse response = error.networkResponse;
+                            if (response != null && response.data != null) {
+                                Log.e("Volley_error", error.getMessage());
+                            } else {
+                                Toast.makeText(GalleryActivityMine.this, "You application is not connected to internet", Toast.LENGTH_SHORT).show();
+                            }
                             dialog.dismiss();
                             finish();
                         }

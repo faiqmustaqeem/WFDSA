@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.shariqkhan.wfdsa.GlobalClass;
 import com.example.shariqkhan.wfdsa.LoginActivity;
 import com.example.shariqkhan.wfdsa.MainActivity;
+import com.example.shariqkhan.wfdsa.MyInvoices;
 import com.example.shariqkhan.wfdsa.R;
 import com.example.shariqkhan.wfdsa.RegisterEvent;
 import com.stripe.android.Stripe;
@@ -75,15 +77,17 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
     String invoice_title;
     String invoice_fees;
     String invoice_id;
+    TextView amount;
+    int rv_index;
 
-    public PaymentDialog(Context a, String invoice_title, String invoice_fees, String invoice_id) {
+    public PaymentDialog(Context a, String invoice_title, String invoice_fees, String invoice_id, int rv_index) {
         super(a);
         // TODO Auto-generated constructor stub
         this.act = a;
         this.invoice_title = invoice_title;
         this.invoice_fees = invoice_fees;
         this.invoice_id = invoice_id;
-
+        this.rv_index = rv_index;
         Log.e("invoice_id", invoice_id);
 //        Dialog dialog = new Dialog(act);
     }
@@ -98,6 +102,8 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
         TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
 
         tvTitle.setText(invoice_title);
+        amount = findViewById(R.id.tvAmount);
+        amount.setText(invoice_fees);
 
         Window window = getWindow();
         window.setGravity(Gravity.CENTER);
@@ -264,76 +270,90 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
     }
 
     public void sendData() {
-        StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/apis/payment/invoice_Verification",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
-                        try {
+        if (checkFields()) {
+            StringRequest request = new StringRequest(Request.Method.POST, GlobalClass.base_url + "wfdsa/apis/payment/invoice_Verification",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-
-                            dialog.dismiss();
-
-                            JSONObject job = new JSONObject(response);
-                            JSONObject result = job.getJSONObject("result");
-                            String res = result.getString("response");
-                            Log.e("response", res);
-
-                            if (res.equals("Payment Successfully Paid")) {
+                            try {
 
 
-                                final MaterialDialog materialDialog = new MaterialDialog.Builder(act)
-                                        .title("Sucessfully Paid")
-                                        .content("you have succesfully paid for " + invoice_title)
-                                        .positiveText("OK")
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                dismiss();
-                                            }
-                                        })
-                                        .show();
+                                dialog.dismiss();
+
+                                JSONObject job = new JSONObject(response);
+                                JSONObject result = job.getJSONObject("result");
+                                String res = result.getString("response");
+                                Log.e("response", res);
+
+                                if (res.equals("Payment Successfully Paid")) {
 
 
-                            } else {
-                                Toast.makeText(act, "Payment Transaction Failed!", Toast.LENGTH_SHORT).show();
+                                    final MaterialDialog materialDialog = new MaterialDialog.Builder(act)
+                                            .title("Successfully Paid")
+                                            .content("you have successfully paid for " + invoice_title)
+                                            .positiveText("OK")
+                                            .canceledOnTouchOutside(false)
+                                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                @Override
+                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                    MyInvoices.paymentsList.get(rv_index).setType("1");
+                                                    MyInvoices.invoiceAdapter.notifyItemChanged(rv_index);
+                                                    dismiss();
+
+                                                }
+                                            })
+                                            .show();
+
+
+                                } else {
+                                    Toast.makeText(act, "Payment Transaction Failed!", Toast.LENGTH_SHORT).show();
+                                    dismiss();
+                                    // finish();
+                                }
+                            } catch (JSONException e) {
+                                Log.e("ErrorMessage", e.getMessage());
+                                e.printStackTrace();
                                 dismiss();
-                                // finish();
                             }
-                        } catch (JSONException e) {
-                            Log.e("ErrorMessage", e.getMessage());
-                            e.printStackTrace();
-                            dismiss();
+
                         }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //Log.e("Volley_error", error.getMessage());
+                            NetworkResponse response = error.networkResponse;
+                            if (response != null && response.data != null) {
+                                Log.e("Volley_error", error.getMessage());
+                            } else {
+                                Toast.makeText(act, "You application is not connected to internet", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    SharedPreferences prefs = act.getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley_error", error.getMessage());
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                SharedPreferences prefs = act.getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                    params.put("api_secret", prefs.getString("api_secret", ""));
+                    params.put("stripe_token", token_id);
+                    params.put("amount", invoice_fees);
+                    params.put("user_id", MainActivity.getId);
+                    params.put("signin_type", LoginActivity.decider);
+                    params.put("invoice_id", invoice_id);
 
-                params.put("api_secret", prefs.getString("api_secret", ""));
-                params.put("stripe_token", token_id);
-                params.put("amount", invoice_fees);
-                params.put("user_id", MainActivity.getId);
-                params.put("signin_type", LoginActivity.decider);
-                params.put("invoice_id", invoice_id);
+                    Log.e("params", params.toString());
 
-                Log.e("params", params.toString());
+                    return params;
+                }
+            };
 
-                return params;
-            }
-        };
+            Volley.newRequestQueue(act).add(request);
+            // AppSingleton.getInstance().addToRequestQueue(request, "Payment");
 
-        Volley.newRequestQueue(act).add(request);
-        // AppSingleton.getInstance().addToRequestQueue(request, "Payment");
+        }
     }
 
     void printMsg(String msg) {

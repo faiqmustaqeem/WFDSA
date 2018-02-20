@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/earth"
     tools:context="com.example.shariqkhan.wfdsa.MemberActivity">
 
 
@@ -68,13 +67,20 @@
             android:layout_gravity="center|top"
             android:text="CEO Members"
             android:textAllCaps="false"
-            android:textStyle="bold"
             android:textColor="#fff"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
 
 
     </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/map" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/memberList"
