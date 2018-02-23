@@ -1,14 +1,21 @@
 package com.example.shariqkhan.wfdsa.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.shariqkhan.wfdsa.Model.ModelMember;
 import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
@@ -39,7 +46,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
+    public void onBindViewHolder(final MyHolder holder, int position) {
         ModelMember member = arrayList.get(position);
 
         holder.memberWeb.setText(member.getMemberWeb());
@@ -51,7 +58,23 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         holder.compnayName.setText(member.getCompanyName());
         holder.countryName.setText(member.getCountry());
 
-        Glide.with(context).load(member.getCompany_logo()).into(holder.logoFront);
+        Glide.with(context).
+                load(member.getCompany_logo())
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                }).
+                into(holder.logoFront);
+
         Glide.with(context).load(member.getFlag_pic()).into(holder.logoTopLeft);
 
 
@@ -74,6 +97,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
         public ImageView logoFront;
         public TextView countryName;
         public ImageView logoTopLeft;
+        public ProgressBar progressBar;
 
 
         public MyHolder(View itemView) {
@@ -90,6 +114,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
             logoFront = (ImageView) view.findViewById(R.id.logo);
 
             logoTopLeft = (ImageView) view.findViewById(R.id.flag);
+            progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
 
         }

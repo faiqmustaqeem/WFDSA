@@ -393,7 +393,7 @@ public class RegisterEvent extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 //Log.e("Volley_error" , error.getMessage() );
                 NetworkResponse response = error.networkResponse;
-                if (response != null && response.data != null) {
+                if (response != null && response.data != null && error.getMessage() != null) {
                     Log.e("Volley_error", error.getMessage());
                 } else {
                     Toast.makeText(RegisterEvent.this, "You application is not connected to internet", Toast.LENGTH_SHORT).show();

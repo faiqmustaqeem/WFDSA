@@ -46,6 +46,7 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //                    rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -56,12 +57,14 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         // End has been reached
                         // Do something
                         if (onLoadMoreListener != null) {
+
                             onLoadMoreListener.onLoadMore();
                         }
                         loading = true;
                     }
                 }
             });
+
 
     }
     public void setLoaded() {
@@ -100,13 +103,14 @@ public class AnnouncementsRVAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         AnnouncementsModel dataModel = announcementsList.get(position);
 
+
         if(holder instanceof MyViewHolder) {
             ((MyViewHolder)holder).tvTitle.setText(dataModel.getTitle());
             ((MyViewHolder)holder).tvDate.setText(dataModel.getDate());
             ((MyViewHolder)holder).tvAnnouncementDescription.setText(dataModel.getDescription());
 
             try {
-                if (!dataModel.getImage().equals("")) {
+                if (!dataModel.getImage().equals("http://sastiride.com/wfdsa3/wfdsa/uploads/Announcement_Image/")) {
                     Log.e("imageUrl", dataModel.getImage());
 
                     Glide.with(context)

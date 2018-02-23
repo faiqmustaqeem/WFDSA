@@ -134,7 +134,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         storageRef = FirebaseStorage.getInstance().getReference();
 
-
+        profile_image.setClickable(false);
 //        Picasso.with(this).load(MainActivity.imageUrl).into(profile_image);
 
         if (!MainActivity.imageUrl.equals("")) {
@@ -212,6 +212,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         etLastName.setEnabled(true);
         etEmail.setEnabled(false);
         etMobileNumber.setEnabled(true);
+        profile_image.setClickable(true);
     }
 
     private void initUI() {

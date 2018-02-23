@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -15,6 +16,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -112,7 +114,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     //public static boolean checkedIn = false;
     public static String id;
     public static String pollResponseUrl = GlobalClass.base_url + "wfdsa/apis/Event/Get_Poll?";
-    public static boolean isCheckedIn;
+    public static boolean isCheckedIn = false;
+    public boolean isAnswered = false;
     public String AttendeesID;
     public String isLikeable;
     public String Eventname;
@@ -231,7 +234,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         ButterKnife.bind(this);
 
         GlobalClass.isAlreadyRegistered = false;
-        isCheckedIn = false;
+        // isCheckedIn = false;
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -478,59 +481,31 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                 if (GlobalClass.isAlreadyRegistered) {
                     if (!isCheckedIn) {
-                        final Dialog dialog = new Dialog(SelectedEventActivity.this);
-                        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        if (isLocationEnabled(SelectedEventActivity.this)) {
+                            Location startPoint = new Location("locationA");
+                            startPoint.setLatitude(currentLatitude);
+                            startPoint.setLongitude(currentLongitude);
 
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            Location endPoint = new Location("locationA");
+                            endPoint.setLatitude(destinationlat);
+                            endPoint.setLongitude(destinationLng);
 
-                        dialog.getWindow().setLayout(lp.width, lp.height);
-                        dialog.setContentView(R.layout.checked_in_dialog);
+                            double distance = startPoint.distanceTo(endPoint);
 
-                        // View view = LayoutInflater.from(SelectedEventActivity.this).inflate(R.layout.checked_in_dialog, null);
-                        TextView view1 = dialog.findViewById(R.id.Acceptance);
-                        TextView view2 = dialog.findViewById(R.id.Rejection);
-                        view2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                            if (distance < 1000) // person is near 1 km from event location
+                            {
+                                // check in api here
+                                setCheckedIn();
+
+
+                            } else {
+
+                                Toast.makeText(SelectedEventActivity.this, "You are not at event location!", Toast.LENGTH_SHORT).show();
                             }
-                        });
-
-                        view1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Location startPoint = new Location("locationA");
-                                startPoint.setLatitude(currentLatitude);
-                                startPoint.setLongitude(currentLongitude);
-
-                                Location endPoint = new Location("locationA");
-                                endPoint.setLatitude(destinationlat);
-                                endPoint.setLongitude(destinationLng);
-
-                                double distance = startPoint.distanceTo(endPoint);
-
-                                if (distance < 1000) // person is near 1 km from event location
-                                {
-                                    dialog.dismiss();
-
-
-                                    // check in api here
-                                    setCheckedIn();
-
-
-                                } else {
-                                    dialog.dismiss();
-                                    Toast.makeText(SelectedEventActivity.this, "You are not at event location!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SelectedEventActivity.this, "Please Enable Location in your settings", Toast.LENGTH_SHORT).show();
                                 }
 
-
-                            }
-                        });
-
-
-                        dialog.show();
                     } else {
 
                         Toast.makeText(SelectedEventActivity.this, "You have already checked in!", Toast.LENGTH_SHORT).show();
@@ -636,6 +611,28 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    public boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
+    }
     public void sendData() {
 
         final ProgressDialog progressDialog = new ProgressDialog(SelectedEventActivity.this);
@@ -859,8 +856,12 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
             case R.id.fabPolls:
                 if (isCheckedIn) {
-                    Task2 task2 = new Task2();
-                    task2.execute();
+                    if (!isAnswered) {
+                        Task2 task2 = new Task2();
+                        task2.execute();
+                    } else {
+                        Toast.makeText(this, "You have already answered this Poll !", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(this, "Polls are only for checked in users !", Toast.LENGTH_LONG).show();
                 }
@@ -1326,6 +1327,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         isCheckedIn = false;
                     }
 
+
+                    String answered = obj.getString("is_answered");
+                    if (answered.equals("yes")) {
+                        isAnswered = true;
+                    } else {
+                        isAnswered = false;
+                    }
+
                     destinationlat = Double.parseDouble(obj.getString("latitude"));
                     destinationLng = Double.parseDouble(obj.getString("longitude"));
 
@@ -1445,6 +1454,8 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 String getstatus = resultObj.getString("status");
 
                 if (getstatus.equals("success")) {
+
+                    isAnswered = true;
                     Toast.makeText(SelectedEventActivity.this, "Your Response Submitted!", Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();

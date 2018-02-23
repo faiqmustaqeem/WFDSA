@@ -261,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {
                                         phNo = "";
                                     }
-                                    //  String up_image = user_data.getString("upload_image");
+                                    String up_image = user_data.getString("upload_image");
 
 
                                     Log.e("email", email);
@@ -278,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                                     //editor.putString("type", "member");
                                     editor.putString("stype", "member");
 
-                                    // editor.putString("image", up_image);
+                                    editor.putString("image", up_image);
                                     editor.apply();
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -313,6 +313,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (error.getMessage() != null)
                         Log.e("Volley_error", error.getMessage());
                     }
                 }) {
@@ -468,7 +469,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             phNo = "";
                         }
-                      //  String up_image = user_data.getString("upload_image");
+                        String up_image = user_data.getString("upload_image");
 
 
                         Log.e("email", email);
@@ -485,7 +486,7 @@ public class LoginActivity extends AppCompatActivity {
                         //editor.putString("type", "member");
                         editor.putString("stype", "member");
 
-                       // editor.putString("image", up_image);
+                        editor.putString("image", up_image);
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -502,7 +503,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 } catch (JSONException e) {
-                    Log.e("Error", e.getMessage());
+                    //  Log.e("Error", e.getMessage());
                    // etMemberEmail.getEditText().setText("");
                    // etMemberPass.getEditText().setText("");
                     progressDialog.dismiss();

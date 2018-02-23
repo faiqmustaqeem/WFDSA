@@ -26,12 +26,28 @@
             android:scaleType="fitXY"
             android:src="@drawable/map" />
 
-        <ImageView
-            android:id="@+id/ivLogonew"
-            android:layout_width="match_parent"
-            android:layout_height="195dp"
-            android:layout_below="@+id/tool_bar"
-            android:scaleType="fitXY" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tool_bar">
+
+            <ImageView
+                android:id="@+id/ivLogonew"
+                android:layout_width="match_parent"
+                android:layout_height="195dp"
+                android:layout_below="@+id/tool_bar"
+                android:scaleType="fitXY" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+
+                />
+
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/about_text_new"

@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
 
 
 public class AnnouncementsActivity extends AppCompatActivity {
-    public static String URL = GlobalClass.base_url + "wfdsa/apis/Announcement/Announcement";
+    public static String URL = GlobalClass.base_url + "wfdsa/apis/Announcement/Announcement_byrole";
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
     AnnouncementsRVAdapter announcementsRVAdapter;
@@ -177,7 +177,8 @@ public class AnnouncementsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = URL;
+            String url = URL + "?signin_type=" + MainActivity.DECIDER + "&role=" + MainActivity.ROLE;
+            url = url.replace(" ", "%20");
 
             Log.e("url", url);
 
@@ -212,46 +213,48 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         model.setImage(obj.getString("upload_image"));
                         model.setDate(obj.getString("date"));
 
-                        String announce_for = obj.getString("announce_for");
+                        //  String announce_for = obj.getString("announce_for");
 
-                        if (obj.getString("status").equals("1")) {
-                        if (MainActivity.DECIDER.equals("member")) {
-                            Boolean conditionSatisfied = false;
-                            if (GlobalClass.member_role.contains(",")) {
-                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+                        arrayList.add(model);
 
-                                if (splitted_roles != null) {
-                                    for (int j = 0; j < splitted_roles.size(); j++) {
-                                        if (announce_for.contains(splitted_roles.get(j).toString())) {
-                                            conditionSatisfied = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                            }
-
-                            if (conditionSatisfied == true) // multiple roles
-                            {
-                                arrayList.add(model);
-                            } else if (announce_for.contains(GlobalClass.member_role)) {
-                                arrayList.add(model);
-
-                            } else if (announce_for.equals("Public")) {
-                                arrayList.add(model);
-                            } else {
-                                // dont add
-                            }
-                        } else {
-                            if (announce_for.equals("Public")) {
-                                arrayList.add(model);
-                            } else {
-                                // dont add
-                            }
-
-
-                        }
-                        }
+//                        if (obj.getString("status").equals("1")) {
+//                        if (MainActivity.DECIDER.equals("member")) {
+//                            Boolean conditionSatisfied = false;
+//                            if (GlobalClass.member_role.contains(",")) {
+//                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+//
+//                                if (splitted_roles != null) {
+//                                    for (int j = 0; j < splitted_roles.size(); j++) {
+//                                        if (announce_for.contains(splitted_roles.get(j).toString())) {
+//                                            conditionSatisfied = true;
+//                                            break;
+//                                        }
+//                                    }
+//                                }
+//
+//                            }
+//
+//                            if (conditionSatisfied == true) // multiple roles
+//                            {
+//                                arrayList.add(model);
+//                            } else if (announce_for.contains(GlobalClass.member_role)) {
+//                                arrayList.add(model);
+//
+//                            } else if (announce_for.equals("Public")) {
+//                                arrayList.add(model);
+//                            } else {
+//                                // dont add
+//                            }
+//                        } else {
+//                            if (announce_for.equals("Public")) {
+//                                arrayList.add(model);
+//                            } else {
+//                                // dont add
+//                            }
+//
+//
+//                        }
+//                        }
 
 
                     }
@@ -264,7 +267,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
                     }
                     if (total_announcement > 0) {
 
-                        Collections.reverse(arrayList);
+                        // Collections.reverse(arrayList);
                     }
                     if (total_announcement <= 6) {
                         arrayListToShow.addAll(arrayList);

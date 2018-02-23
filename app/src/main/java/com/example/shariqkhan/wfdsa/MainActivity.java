@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.EventsRVAdapter;
 import com.example.shariqkhan.wfdsa.Adapter.MainResourceAdapter;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity
     public static String getLastName;
     public static String getId;
     public static String DECIDER = "";
+    public static String ROLE = "";
     public static String stype;
     public static String imageUrl = "";
     static String password;
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity
     Button b1;
 
     ProgressDialog PGdialog;
+    ProgressDialog PGdialogAnnouncent;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -188,6 +191,7 @@ public class MainActivity extends AppCompatActivity
         getCountry = prefs.getString("country", "");
         getEmail = prefs.getString("email", "");
         DECIDER = prefs.getString("type", "");
+        ROLE = prefs.getString("role", "");
         stype = prefs.getString("stype", "");
         getId = prefs.getString("deciderId", "");
         GlobalClass.member_role = prefs.getString("role", "");
@@ -252,9 +256,14 @@ public class MainActivity extends AppCompatActivity
 
 
         try {
-            Glide.with(this).load(imageUrl).into(ivUserPic);
+
+            Glide.with(this)
+                    .load(imageUrl)
+                    .apply(new RequestOptions().placeholder(R.drawable.ic_profile_pic).error(R.drawable.ic_profile_pic))
+                    .into(ivUserPic);
         } catch (Exception e) {
-            ivUserPic.setImageResource(R.drawable.ic_user);
+            //ivUserPic.setImageResource(R.drawable.ic_user);
+            if (e.getMessage() != null)
             Log.e("PicsetMessage", e.getMessage());
         }
 
@@ -843,6 +852,8 @@ public class MainActivity extends AppCompatActivity
                 }
 
 
+            } else {
+                Toast.makeText(MainActivity.this, "you are not connected to internet", Toast.LENGTH_SHORT).show();
             }
 
             progressDialog.dismiss();
@@ -850,6 +861,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private class Task2 extends AsyncTask<Object, Object, String> {
+        ProgressDialog progressDialog;
 
         @Override
         protected String doInBackground(Object... voids) {
@@ -867,89 +879,94 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+
+            if (s != null) {
+                //Log.e("Res", s);
+                try {
+                    progressDialog.dismiss();
+
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
+                    if (getstatus.equals("success")) {
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
+                        //   roleArray = new String[rolesArray.length()];
+                        // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        AnnouncementsModel model = new AnnouncementsModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
-                        model.setId(obj.getString("announcement_id"));
-                        model.setTitle(obj.getString("title"));
-                        model.setDescription(obj.getString("announcement_message"));
-                        model.setImage(obj.getString("upload_image"));
-                        model.setDate(obj.getString("date"));
-                        String announce_for = obj.getString("announce_for");
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            AnnouncementsModel model = new AnnouncementsModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
+                            model.setId(obj.getString("announcement_id"));
+                            model.setTitle(obj.getString("title"));
+                            model.setDescription(obj.getString("announcement_message"));
+                            model.setImage(obj.getString("upload_image"));
+                            model.setDate(obj.getString("date"));
+                            String announce_for = obj.getString("announce_for");
 
-                        if (obj.getString("status").equals("1")) {
-                            if (MainActivity.DECIDER.equals("member")) {
+                            if (obj.getString("status").equals("1")) {
+                                if (MainActivity.DECIDER.equals("member")) {
 
-                                Boolean conditionSatisfied = false;
-                                if (GlobalClass.member_role.contains(",")) {
-                                    List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+                                    Boolean conditionSatisfied = false;
+                                    if (GlobalClass.member_role.contains(",")) {
+                                        List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
 
-                                    if (splitted_roles != null) {
-                                        for (int j = 0; j < splitted_roles.size(); j++) {
-                                            if (announce_for.contains(splitted_roles.get(j).toString())) {
-                                                conditionSatisfied = true;
-                                                break;
+                                        if (splitted_roles != null) {
+                                            for (int j = 0; j < splitted_roles.size(); j++) {
+                                                if (announce_for.contains(splitted_roles.get(j).toString())) {
+                                                    conditionSatisfied = true;
+                                                    break;
+                                                }
                                             }
                                         }
+
                                     }
 
-                                }
+                                    if (conditionSatisfied == true) // multiple roles
+                                    {
+                                        arrayList2.add(model);
+                                    } else if (announce_for.contains(GlobalClass.member_role)) {
+                                        arrayList2.add(model);
 
-                                if (conditionSatisfied == true) // multiple roles
-                                {
-                                    arrayList2.add(model);
-                                } else if (announce_for.contains(GlobalClass.member_role)) {
-                                    arrayList2.add(model);
-
-                                } else if (announce_for.equals("Public")) {
-                                    arrayList2.add(model);
+                                    } else if (announce_for.equals("Public")) {
+                                        arrayList2.add(model);
+                                    } else {
+                                        // dont add
+                                    }
                                 } else {
-                                    // dont add
-                                }
-                            } else {
-                                if (announce_for.equals("Public")) {
-                                    arrayList2.add(model);
-                                } else {
-                                    // dont add
-                                }
+                                    if (announce_for.equals("Public")) {
+                                        arrayList2.add(model);
+                                    } else {
+                                        // dont add
+                                    }
 
 
+                                }
                             }
                         }
-                    }
 
-                    ArrayList<AnnouncementsModel> an_list = new ArrayList<>();
-                    an_list.add(arrayList2.get(arrayList2.size() - 1));
-                    // Collections.reverse(arrayList2);
-                    announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, an_list,rvAnnouncements);
+                        ArrayList<AnnouncementsModel> an_list = new ArrayList<>();
+                        an_list.add(arrayList2.get(arrayList2.size() - 1));
+                        // Collections.reverse(arrayList2);
+                        announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, an_list, rvAnnouncements);
 //                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
 //                    rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
 //                    rvAnnouncements.setItemAnimator(new DefaultItemAnimator());
-                    rvAnnouncements.setAdapter(announcementsRVAdapter);
+                        rvAnnouncements.setAdapter(announcementsRVAdapter);
+
+                    }
+
+
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
 
                 }
-
-
-
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-
+            } else {
+                Toast.makeText(MainActivity.this, "you are not connected to internet", Toast.LENGTH_SHORT).show();
             }
-
 
         }
 
@@ -957,11 +974,16 @@ public class MainActivity extends AppCompatActivity
         protected void onPreExecute() {
             super.onPreExecute();
 
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setTitle("Fetching Announcement");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
         }
     }
 
     private class Task5 extends AsyncTask<Object, Object, String> {
-
+        ProgressDialog progressDialog;
         @Override
         protected String doInBackground(Object... voids) {
 
@@ -975,56 +997,63 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+
+            if (s != null) {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                Log.e("top_three", resultObj.toString());
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    Log.e("top_three", resultObj.toString());
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray resourcesData = resultObj.getJSONArray("data");
+                    if (getstatus.equals("success")) {
+                        JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    for (int i = 0; i < resourcesData.length(); i++) {
-                        JSONObject job = resourcesData.getJSONObject(i);
-                        TopThreeModel model = new TopThreeModel();
-                        model.setName(job.getString("title_2"));
-                        model.setPath(job.getString("upload_file"));
+                        for (int i = 0; i < resourcesData.length(); i++) {
+                            JSONObject job = resourcesData.getJSONObject(i);
+                            TopThreeModel model = new TopThreeModel();
+                            model.setName(job.getString("title_2"));
+                            model.setPath(job.getString("upload_file"));
 
-                        topThreeModelArrayList.add(model);
+                            topThreeModelArrayList.add(model);
+
+                        }
+
+
+                        TopThreeResourcesAdapter adapter = new TopThreeResourcesAdapter(topThreeModelArrayList, MainActivity.this);
+                        rvRespurces.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        rvRespurces.setAdapter(adapter);
+
 
                     }
 
 
-                    TopThreeResourcesAdapter adapter = new TopThreeResourcesAdapter(topThreeModelArrayList, MainActivity.this);
-                    rvRespurces.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                    rvRespurces.setAdapter(adapter);
+                    progressDialog.dismiss();
 
+
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
 
                 }
-
-
-                PGdialog.dismiss();
-
-
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-
+            } else {
+                Toast.makeText(MainActivity.this, "you are not connected to internet", Toast.LENGTH_SHORT).show();
             }
-            PGdialog.dismiss();
+
+
+            progressDialog.dismiss();
 
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            PGdialog = new ProgressDialog(MainActivity.this);
-            PGdialog.setTitle("Fetching Resources");
-            PGdialog.setCanceledOnTouchOutside(false);
-            // PGdialog.show();
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setTitle("Fetching Resources");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
 
         }
     }
