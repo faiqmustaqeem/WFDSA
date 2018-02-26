@@ -150,7 +150,8 @@
         <activity android:name=".Singleton.NoInternetactivity" />
         <activity android:name=".FullScreenImageActivity" />
         <activity android:name=".PaymentOptions" />
-        <activity android:name=".MyInvoices"></activity>
+        <activity android:name=".MyInvoices" />
+        <activity android:name=".Dialog.PaymentInvoiceDialog"></activity>
     </application>
 
 </manifest>

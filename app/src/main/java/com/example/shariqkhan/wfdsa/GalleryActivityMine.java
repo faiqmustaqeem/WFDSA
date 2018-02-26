@@ -76,6 +76,7 @@ public class GalleryActivityMine extends AppCompatActivity {
     String URL = GlobalClass.base_url+"wfdsa/apis/Event/Upload_Gallery";
     String id;
     private String imageURI;
+    int new_images_uploaded=0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,19 +135,26 @@ public class GalleryActivityMine extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.e("image", "1");
-                startActivityForResult(
-                        ImagePicker.create(GalleryActivityMine.this)
-                                .folderMode(true) // folder mode (false by default)
-                                .toolbarFolderTitle("Folder") // folder selection title
-                                .toolbarImageTitle("Tap to select") // image selection title
-                                .toolbarArrowColor(Color.BLACK) // Toolbar 'up' arrow color
-                                .multi() // multi mode (default mode)
-                                .showCamera(false)
-                                .limit(5) // max images can be selected (99 by default)
-                                .imageDirectory("Camera")
-                                .getIntent(GalleryActivityMine.this), IpCons.RC_IMAGE_PICKER);
+                if(SelectedEventActivity.photos_upload_left == 0)
+                {
+                    Toast.makeText(GalleryActivityMine.this,"You can not upload more Images , You have already uploaded 5 Images in this event",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    startActivityForResult(
+                            ImagePicker.create(GalleryActivityMine.this)
+                                    .folderMode(true) // folder mode (false by default)
+                                    .toolbarFolderTitle("Folder") // folder selection title
+                                    .toolbarImageTitle("Tap to select") // image selection title
+                                    .toolbarArrowColor(Color.BLACK) // Toolbar 'up' arrow color
+                                    .multi() // multi mode (default mode)
+                                    .showCamera(false)
+                                    .limit(SelectedEventActivity.photos_upload_left) // max images can be selected (99 by default)
+                                    .imageDirectory("Camera")
+                                    .getIntent(GalleryActivityMine.this), IpCons.RC_IMAGE_PICKER);
 
-                Log.e("image", "2");
+                    Log.e("image", "2");
+
+                }
 
 //                Intent intent = new Intent();
 //                intent.setType("image/*");
@@ -177,6 +185,8 @@ public class GalleryActivityMine extends AppCompatActivity {
             List<com.esafirm.imagepicker.model.Image> images = ImagePicker.getImages(data);
             encodedImageList.clear();
 
+
+
             for (int k = 0; k < images.size(); k++) {
                 com.esafirm.imagepicker.model.Image image = images.get(k);
                 String path = image.getPath();
@@ -202,6 +212,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                 jsonArray.put(encoded);
                 Log.e("forLoop", "o");
             }
+            new_images_uploaded=encodedImageList.size();
             //  Toast.makeText(this, String.valueOf(encodedImageList.size()), Toast.LENGTH_SHORT).show();
             try {
 
@@ -231,6 +242,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                             try {
 
                                 Toast.makeText(getApplication(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                SelectedEventActivity.photos_upload_left=SelectedEventActivity.photos_upload_left-new_images_uploaded;
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

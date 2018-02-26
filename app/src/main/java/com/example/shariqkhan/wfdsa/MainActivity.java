@@ -31,6 +31,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
@@ -71,7 +75,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.Inflater;
 
 import butterknife.BindView;
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity
     public static String getLastName;
     public static String getId;
     public static String DECIDER = "";
+    public static String SIGNIN_TYPE = "";
     public static String ROLE = "";
     public static String stype;
     public static String imageUrl = "";
@@ -194,6 +201,7 @@ public class MainActivity extends AppCompatActivity
         ROLE = prefs.getString("role", "");
         stype = prefs.getString("stype", "");
         getId = prefs.getString("deciderId", "");
+        SIGNIN_TYPE=prefs.getString("signin_type","");
         GlobalClass.member_role = prefs.getString("role", "");
         Log.e("role", GlobalClass.member_role);
 
@@ -206,7 +214,7 @@ public class MainActivity extends AppCompatActivity
         Log.e("email", getEmail);
         Log.e("contact_no", phoneNo);
         Log.e("password", password);
-        Log.e("type", DECIDER);
+        Log.e("type", stype);
         Log.e("imageUrl", imageUrl);
 
 
@@ -284,18 +292,9 @@ public class MainActivity extends AppCompatActivity
                                 editor.putString("apiSecretKey", "");
                                 editor.putString("userID", "");
                                 editor.commit();*/
-
-                                Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
                                 dialog.dismiss();
-                                ActivityCompat.finishAffinity(MainActivity.this);
-                                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                MainActivity.this.startActivity(logoutIntent);
-                                LoginManager.getInstance().logOut();
+                                logout();
 
-                                SharedPreferences preferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-                                SharedPreferences.Editor edit = preferences.edit();
-                                edit.clear();
-                                edit.commit();
 
                             }
                         })
@@ -417,6 +416,96 @@ public class MainActivity extends AppCompatActivity
             Log.e("ExceptionOfToken", e.getMessage());
             e.printStackTrace();
         }
+    }
+    public void logout() {
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle("Logging out");
+        progressDialog.setMessage("Please Wait");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        StringRequest request = new StringRequest(com.android.volley.Request.Method.POST, GlobalClass.base_url + "wfdsa/api/logout",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+//
+
+                        if (s != null) {
+                            try {
+
+                                JSONObject jsonobj = new JSONObject(s);
+
+
+
+
+
+                                JSONObject result = jsonobj.getJSONObject("result");
+                                String checkResult = result.getString("status");
+
+
+
+                                if (checkResult.equals("success")) {
+
+
+
+                                    Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
+
+                                    ActivityCompat.finishAffinity(MainActivity.this);
+                                    logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    MainActivity.this.startActivity(logoutIntent);
+                                    LoginManager.getInstance().logOut();
+
+                                    SharedPreferences preferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                                    SharedPreferences.Editor edit = preferences.edit();
+                                    edit.clear();
+                                    edit.commit();
+
+
+                                } else {
+
+                                        Toast.makeText(MainActivity.this , "Unable to Logout !",Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
+                                }
+
+
+                            } catch (JSONException e) {
+                             if(e.getMessage()!=null)
+                                Log.e("Error", e.getMessage());
+
+                                progressDialog.dismiss();
+                            }
+
+
+                        }
+
+                        progressDialog.dismiss();
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.getMessage() != null)
+                            Log.e("Volley_error", error.getMessage());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("signin_type", MainActivity.SIGNIN_TYPE);
+                params.put("user_id", MainActivity.getId);
+
+
+
+                Log.e("params", params.toString());
+
+                return params;
+            }
+        };
+        Volley.newRequestQueue(MainActivity.this).add(request);
+
     }
 
     private void initUI() {
@@ -866,7 +955,8 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = GlobalClass.base_url+"wfdsa/apis/Announcement/Announcement";
+            String url = GlobalClass.base_url+"wfdsa/apis/Announcement/single_announcement?signin_type="+SIGNIN_TYPE+"&role="+ROLE;
+            url=url.replace(" ","%20");
 
             Log.e("url", url);
 
@@ -896,7 +986,7 @@ public class MainActivity extends AppCompatActivity
                         //   roleArray = new String[rolesArray.length()];
                         // String idArray[] = new String[rolesArray.length()];
 
-                        for (int i = 0; i < rolesArray.length(); i++) {
+                        for (int i = 0; i < 1; i++) {
                             AnnouncementsModel model = new AnnouncementsModel();
                             JSONObject obj = rolesArray.getJSONObject(i);
                             model.setId(obj.getString("announcement_id"));
@@ -906,51 +996,14 @@ public class MainActivity extends AppCompatActivity
                             model.setDate(obj.getString("date"));
                             String announce_for = obj.getString("announce_for");
 
-                            if (obj.getString("status").equals("1")) {
-                                if (MainActivity.DECIDER.equals("member")) {
+                            arrayList2.add(model);
 
-                                    Boolean conditionSatisfied = false;
-                                    if (GlobalClass.member_role.contains(",")) {
-                                        List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
-
-                                        if (splitted_roles != null) {
-                                            for (int j = 0; j < splitted_roles.size(); j++) {
-                                                if (announce_for.contains(splitted_roles.get(j).toString())) {
-                                                    conditionSatisfied = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                    }
-
-                                    if (conditionSatisfied == true) // multiple roles
-                                    {
-                                        arrayList2.add(model);
-                                    } else if (announce_for.contains(GlobalClass.member_role)) {
-                                        arrayList2.add(model);
-
-                                    } else if (announce_for.equals("Public")) {
-                                        arrayList2.add(model);
-                                    } else {
-                                        // dont add
-                                    }
-                                } else {
-                                    if (announce_for.equals("Public")) {
-                                        arrayList2.add(model);
-                                    } else {
-                                        // dont add
-                                    }
-
-
-                                }
-                            }
                         }
 
-                        ArrayList<AnnouncementsModel> an_list = new ArrayList<>();
-                        an_list.add(arrayList2.get(arrayList2.size() - 1));
+                       // ArrayList<AnnouncementsModel> an_list = new ArrayList<>();
+                        //an_list.add(arrayList2.get(arrayList2.size() - 1));
                         // Collections.reverse(arrayList2);
-                        announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, an_list, rvAnnouncements);
+                        announcementsRVAdapter = new AnnouncementsRVAdapter(MainActivity.this, arrayList2, rvAnnouncements);
 //                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
 //                    rvAnnouncements.setLayoutManager(mAnnouncementLayoutManager);
 //                    rvAnnouncements.setItemAnimator(new DefaultItemAnimator());

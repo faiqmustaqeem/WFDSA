@@ -41,6 +41,8 @@ import butterknife.ButterKnife;
 
 public class AnnouncementsActivity extends AppCompatActivity {
     public static String URL = GlobalClass.base_url + "wfdsa/apis/Announcement/Announcement_byrole";
+    public static String URL_LOAD_MORE = GlobalClass.base_url + "wfdsa/apis/Announcement/Announcement_byrole_loading";
+
     @BindView(R.id.rvAnnouncements)
     RecyclerView rvAnnouncements;
     AnnouncementsRVAdapter announcementsRVAdapter;
@@ -48,6 +50,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
     ArrayList<AnnouncementsModel> arrayListToShow = new ArrayList<>();
 
     ProgressDialog progressDialog;
+    String last_announcement_id="";
 
     ImageView image;
     int item = 0;
@@ -90,26 +93,21 @@ public class AnnouncementsActivity extends AppCompatActivity {
                                                          @Override
 
                                                          public void onLoadMore() {
-
-                                                             if (page <= total_pages) {
-                                                                 arrayListToShow.add(null);
-                                                                 announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
-                                                                 Handler mHand = new Handler();
-                                                                 mHand.postDelayed(new Runnable() {
-
-                                                                     @Override
-                                                                     public void run() {
-                                                                         // TODO Auto-generated method stub
-                                                                         //progressBar.setVisibility(View.GONE);
-                                                                         arrayListToShow.remove(arrayListToShow.size() - 1);
-                                                                         announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
-                                                                         Log.e("page", page + "");
+                                                             Log.e("page", page + "");
                                                                          Log.e("total_members", total_announcement + "");
                                                                          Log.e("total_pages", total_pages + "");
-                                                                         loadNextDataFromApi();
+                                                             if (page < total_pages) {
+                                                                 arrayListToShow.add(null);
+                                                                 announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
+                                                                 loadNextDataFromApi();
 
-                                                                     }
-                                                                 }, 1000);
+//
+//                                                                         arrayListToShow.remove(arrayListToShow.size() - 1);
+//                                                                         announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
+//                                                                         Log.e("page", page + "");
+//                                                                         Log.e("total_members", total_announcement + "");
+//                                                                         Log.e("total_pages", total_pages + "");
+//
                                                              }
                                                          }
                                                      }
@@ -121,40 +119,17 @@ public class AnnouncementsActivity extends AppCompatActivity {
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi() {
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
-        //progressBar.setVisibility(View.VISIBLE);
 
 
 
 
-        if (page <= total_pages) {
-            // int oldSize=arrayListToShow.size();
-            int remaining = total_announcement - item;
-            int added_now = 0;
 
-            if (remaining < 6) {
-                for (int i = 0; i < remaining; i++) {
-                    arrayListToShow.add(arrayList.get(item + i));
-                    announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
-                }
-                added_now = remaining;
-            } else {
-                for (int i = 0; i < 6; i++) {
-                    arrayListToShow.add(arrayList.get(item + i));
-                    announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
-                }
-                added_now = 6;
+        if (page < total_pages) {
 
-            }
-
-            item += added_now;
+            TaskLoadMore task=new TaskLoadMore();
+            task.execute();
             //announcementsRVAdapter.notifyItemRangeInserted(oldSize,added_now);
-            page++;
-            announcementsRVAdapter.setLoaded();
+
         }
 
 
@@ -177,7 +152,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = URL + "?signin_type=" + MainActivity.DECIDER + "&role=" + MainActivity.ROLE;
+            String url = URL + "?signin_type=" + MainActivity.SIGNIN_TYPE + "&role=" + MainActivity.ROLE;
             url = url.replace(" ", "%20");
 
             Log.e("url", url);
@@ -217,58 +192,24 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
                         arrayList.add(model);
 
-//                        if (obj.getString("status").equals("1")) {
-//                        if (MainActivity.DECIDER.equals("member")) {
-//                            Boolean conditionSatisfied = false;
-//                            if (GlobalClass.member_role.contains(",")) {
-//                                List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
-//
-//                                if (splitted_roles != null) {
-//                                    for (int j = 0; j < splitted_roles.size(); j++) {
-//                                        if (announce_for.contains(splitted_roles.get(j).toString())) {
-//                                            conditionSatisfied = true;
-//                                            break;
-//                                        }
-//                                    }
-//                                }
-//
-//                            }
-//
-//                            if (conditionSatisfied == true) // multiple roles
-//                            {
-//                                arrayList.add(model);
-//                            } else if (announce_for.contains(GlobalClass.member_role)) {
-//                                arrayList.add(model);
-//
-//                            } else if (announce_for.equals("Public")) {
-//                                arrayList.add(model);
-//                            } else {
-//                                // dont add
-//                            }
-//                        } else {
-//                            if (announce_for.equals("Public")) {
-//                                arrayList.add(model);
-//                            } else {
-//                                // dont add
-//                            }
-//
-//
-//                        }
-//                        }
-
+                        if(i==rolesArray.length()-1)
+                        {
+                            last_announcement_id=model.getId();
+                        }
 
                     }
-                    total_announcement = arrayList.size();
+                    total_announcement = resultObj.getInt("total_counts");
+                    Log.e("total_announcement",total_announcement+"");
 
                     if (total_announcement % 6 == 0) {
                         total_pages = total_announcement / 6;
                     } else {
                         total_pages = (total_announcement / 6) + 1;
                     }
-                    if (total_announcement > 0) {
-
-                        // Collections.reverse(arrayList);
-                    }
+//                    if (total_announcement > 0) {
+//
+//                        // Collections.reverse(arrayList);
+//                    }
                     if (total_announcement <= 6) {
                         arrayListToShow.addAll(arrayList);
                         item = total_announcement;
@@ -310,86 +251,91 @@ public class AnnouncementsActivity extends AppCompatActivity {
         }
     }
 
-//    public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
-//        RecyclerView.LayoutManager mLayoutManager;
-//        // The minimum amount of items to have below your current scroll position
-//        // before loading more.
-//        private int visibleThreshold = 6;
-//        // The current offset index of data you have loaded
-//        private int currentPage = 0;
-//        // The total number of items in the dataset after the last load
-//        private int previousTotalItemCount = 0;
-//        // True if we are still waiting for the last set of data to load.
-//        private boolean loading = true;
-//        // Sets the starting page index
-//        private int startingPageIndex = 0;
-//
-//        public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
-//            this.mLayoutManager = layoutManager;
-//        }
-//
-//
-//        public int getLastVisibleItem(int[] lastVisibleItemPositions) {
-//            int maxSize = 0;
-//            for (int i = 0; i < lastVisibleItemPositions.length; i++) {
-//                if (i == 0) {
-//                    maxSize = lastVisibleItemPositions[i];
-//                } else if (lastVisibleItemPositions[i] > maxSize) {
-//                    maxSize = lastVisibleItemPositions[i];
-//                }
-//            }
-//            return maxSize;
-//        }
-//
-//        // This happens many times a second during a scroll, so be wary of the code you place here.
-//        // We are given a few useful parameters to help us work out if we need to load some more data,
-//        // but first we check if we are waiting for the previous load to finish.
-//        @Override
-//        public void onScrolled(RecyclerView view, int dx, int dy) {
-//            int lastVisibleItemPosition = 0;
-//            int totalItemCount = mLayoutManager.getItemCount();
-//
-//            lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-//
-//
-//            // If the total item count is zero and the previous isn't, assume the
-//            // list is invalidated and should be reset back to initial state
-//            if (totalItemCount < previousTotalItemCount) {
-//                this.currentPage = this.startingPageIndex;
-//                this.previousTotalItemCount = totalItemCount;
-//                if (totalItemCount == 0) {
-//                    this.loading = true;
-//                }
-//            }
-//            // If it’s still loading, we check to see if the dataset count has
-//            // changed, if so we conclude it has finished loading and update the current page
-//            // number and total item count.
-//            if (loading && (totalItemCount > previousTotalItemCount)) {
-//                loading = false;
-//                previousTotalItemCount = totalItemCount;
-//            }
-//
-//            // If it isn’t currently loading, we check to see if we have breached
-//            // the visibleThreshold and need to reload more data.
-//            // If we do need to reload some more data, we execute onLoadMore to fetch the data.
-//            // threshold should reflect how many total columns there are too
-//            if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-//                currentPage++;
-//                onLoadMore(currentPage, totalItemCount, view);
-//                loading = true;
-//            }
-//        }
-//
-//        // Call this method whenever performing new searches
-//        public void resetState() {
-//            this.currentPage = this.startingPageIndex;
-//            this.previousTotalItemCount = 0;
-//            this.loading = true;
-//        }
-//
-//        // Defines the process for actually loading more data based on page
-//        public abstract void onLoadMore(int page, int totalItemsCount, RecyclerView view);
-//
-//    }
+    private class TaskLoadMore extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... voids) {
+
+            String url = URL_LOAD_MORE + "?signin_type=" + MainActivity.SIGNIN_TYPE +"&announcement_id="+last_announcement_id +"&role=" + MainActivity.ROLE;
+            url = url.replace(" ", "%20");
+
+            Log.e("url", url);
+
+            String response = getHttpData.getData(url);
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Res", s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+
+
+                JSONObject resultObj = jsonObject.getJSONObject("result");
+                String getstatus = resultObj.getString("status");
+
+                if (getstatus.equals("success")) {
+
+                    arrayListToShow.remove(arrayListToShow.size() - 1);
+                    announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
+
+                    JSONArray rolesArray = resultObj.getJSONArray("data");
+                    //   roleArray = new String[rolesArray.length()];
+                    // String idArray[] = new String[rolesArray.length()];
+
+                    int arrayListOldIndex=arrayListToShow.size();
+                        arrayList.clear();
+                    for (int i = 0; i < rolesArray.length(); i++) {
+                        AnnouncementsModel model = new AnnouncementsModel();
+                        JSONObject obj = rolesArray.getJSONObject(i);
+                        model.setId(obj.getString("announcement_id"));
+                        model.setTitle(obj.getString("title"));
+                        model.setDescription(obj.getString("announcement_message"));
+                        model.setImage(obj.getString("upload_image"));
+                        model.setDate(obj.getString("date"));
+
+                        arrayList.add(model);
+
+                        if(i==rolesArray.length()-1)
+                        {
+                            last_announcement_id=model.getId();
+                        }
+
+
+
+                    }
+
+
+
+                    arrayListToShow.addAll(arrayList);
+                    announcementsRVAdapter.notifyItemRangeInserted(arrayListOldIndex,rolesArray.length());
+
+                    page++;
+                    announcementsRVAdapter.setLoaded();
+
+                }
+
+
+            } catch (JSONException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+
+            }
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+    }
+
+
 
 }

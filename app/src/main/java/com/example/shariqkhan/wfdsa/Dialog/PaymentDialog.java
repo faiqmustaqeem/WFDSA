@@ -341,7 +341,7 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
                     params.put("stripe_token", token_id);
                     params.put("amount", invoice_fees);
                     params.put("user_id", MainActivity.getId);
-                    params.put("signin_type", LoginActivity.decider);
+                    params.put("signin_type", MainActivity.SIGNIN_TYPE);
                     params.put("invoice_id", invoice_id);
 
                     Log.e("params", params.toString());

@@ -102,6 +102,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,6 +116,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
     public static String id;
     public static String pollResponseUrl = GlobalClass.base_url + "wfdsa/apis/Event/Get_Poll?";
     public static boolean isCheckedIn = false;
+    public static int photos_upload_left=0;
+    int total_seats=0;
+    int seats_left=0;
     public boolean isAnswered = false;
     public String AttendeesID;
     public String isLikeable;
@@ -579,7 +583,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (GlobalClass.selelcted_event_fees.equals("0")) {
+                 final Pattern sPattern
+                        = Pattern.compile("^[^1-9]+$");
+                boolean isZero=sPattern.matcher(GlobalClass.selelcted_event_fees).matches();
+                if (isZero) { // match with 0 , 0.0 , 00 , 000 etc
                     // register user without stripe
                     sendData();
 
@@ -734,7 +741,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 params.put("stripe_token", "0");
                 params.put("amount", "0");
                 params.put("user_id", MainActivity.getId);
-                params.put("signin_type", LoginActivity.decider);
+                params.put("signin_type", MainActivity.SIGNIN_TYPE);
                 params.put("event_id", GlobalClass.selelcted_event_id);
 
                 Log.e("params", params.toString());
@@ -792,7 +799,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 Map<String, String> params = new HashMap<String, String>();
 
                 params.put("user_id", MainActivity.getId);
-                params.put("signin_type", LoginActivity.decider);
+                params.put("signin_type", MainActivity.SIGNIN_TYPE);
                 params.put("event_id", GlobalClass.selelcted_event_id);
 
                 Log.e("params", params.toString());
@@ -1016,7 +1023,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 Map<String, String> params = new HashMap<String, String>();
 
                 params.put("user_id", MainActivity.getId);
-                params.put("signin_type", LoginActivity.decider);
+                params.put("signin_type", MainActivity.SIGNIN_TYPE);
                 params.put("event_id", GlobalClass.selelcted_event_id);
 
                 Log.e("params", params.toString());
@@ -1234,7 +1241,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         protected String doInBackground(Object... voids) {
 
 
-            String url = URL + "event_id=" + id + "&user_id=" + MainActivity.getId + "&signin_type=" + signintype;
+            String url = URL + "event_id=" + id + "&user_id=" + MainActivity.getId + "&signin_type=" + MainActivity.SIGNIN_TYPE;
 
             Log.e("url_selected_event", url);
 
@@ -1281,6 +1288,19 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
                     GlobalClass.selelcted_event_fees = obj.getString("fee");
 
+                    String noOfPhotosUploaded=obj.getString("photo_uploaded");
+
+                    photos_upload_left=5-Integer.parseInt(noOfPhotosUploaded);
+
+                    total_seats=Integer.parseInt(obj.getString("no_seats"));
+                    int seats_registered=Integer.parseInt(obj.getString("total_registered"));
+                    seats_left=total_seats-seats_registered;
+
+                    if(seats_left < 1 )
+                    {
+                        tvRegister.setText("Sorry , Seats Full ");
+                        tvRegister.setClickable(false);
+                    }
 
                     tvDayTime.setText(obj.getString("place"));
                     heelo.setText((obj.getString("start_date").substring(0, 10)));
@@ -1413,7 +1433,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             parameters.add(new BasicNameValuePair("poll_id", pollId));
 //            parameters.add(new BasicNameValuePair("remark", remark));
             parameters.add(new BasicNameValuePair("poll_answer_id", idKeep));
-            parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
+            parameters.add(new BasicNameValuePair("member_type", MainActivity.SIGNIN_TYPE));
 
             StringBuilder buffer = new StringBuilder();
 
@@ -1518,7 +1538,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             String answer = pollAnswerId.substring(0, pollAnswerId.length() - 2);
             Log.e("answer", answer);
             parameters.add(new BasicNameValuePair("poll_answer_id", answer));
-            parameters.add(new BasicNameValuePair("member_type", LoginActivity.decider));
+            parameters.add(new BasicNameValuePair("member_type", MainActivity.SIGNIN_TYPE));
 
             StringBuilder buffer = new StringBuilder();
 

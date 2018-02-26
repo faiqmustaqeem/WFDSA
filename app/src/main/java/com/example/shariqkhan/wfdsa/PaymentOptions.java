@@ -35,9 +35,9 @@ public class PaymentOptions extends AppCompatActivity {
         });
 
         String[] items = new String[]{"My Payments"};
-        if (LoginActivity.decider.equals("1")) {
+        if (MainActivity.SIGNIN_TYPE.equals("1")) {
             items = new String[]{"My Payments", "My Invoices"};
-        } else if (LoginActivity.decider.equals("2")) {
+        } else if (MainActivity.SIGNIN_TYPE.equals("2")) {
             items = new String[]{"My Payments"};
         }
         listview = (ListView) findViewById(R.id.listview);

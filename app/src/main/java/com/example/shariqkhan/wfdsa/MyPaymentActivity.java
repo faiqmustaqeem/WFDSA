@@ -199,7 +199,7 @@ public class MyPaymentActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... voids) {
 
-            String url = GlobalClass.base_url + "wfdsa/apis/Payment/All_Payment_by_role?user_id=" + MainActivity.getId + "&signin_type=" + LoginActivity.decider;
+            String url = GlobalClass.base_url + "wfdsa/apis/Payment/All_Payment_by_role?user_id=" + MainActivity.getId + "&signin_type=" + MainActivity.SIGNIN_TYPE;
 
             Log.e("url", url);
 

@@ -66,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/about_text_new"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="4">
 
             <TextView
@@ -92,6 +93,7 @@
             android:layout_below="@id/layout1"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="4">
 
             <TextView
@@ -118,6 +120,7 @@
             android:layout_below="@id/layout2"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:weightSum="4">
 
             <TextView

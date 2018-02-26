@@ -289,7 +289,7 @@ public class RegisterEvent extends AppCompatActivity {
                                     Log.e("stripe_token", token.getId());
                                     Log.e("amount", String.valueOf(GlobalClass.selelcted_event_fees));
                                     Log.e("user_id", MainActivity.getId);
-                                    Log.e("signin_type", LoginActivity.decider);
+                                    Log.e("signin_type", MainActivity.SIGNIN_TYPE);
 
                                   //  Toast.makeText(RegisterEvent.this, "there", Toast.LENGTH_SHORT).show();
 
@@ -410,7 +410,7 @@ public class RegisterEvent extends AppCompatActivity {
                 params.put("stripe_token", token_id);
                 params.put("amount", String.valueOf(GlobalClass.selelcted_event_fees));
                 params.put("user_id", MainActivity.getId);
-                params.put("signin_type", LoginActivity.decider);
+                params.put("signin_type", MainActivity.SIGNIN_TYPE);
                 params.put("event_id" , GlobalClass.selelcted_event_id);
 
                 Log.e("params" , params.toString());

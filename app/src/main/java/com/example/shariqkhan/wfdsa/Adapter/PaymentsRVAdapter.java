@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Dialog.InvoiceDialog;
 import com.example.shariqkhan.wfdsa.Dialog.PaymentDialog;
+import com.example.shariqkhan.wfdsa.Dialog.PaymentInvoiceDialog;
 import com.example.shariqkhan.wfdsa.Model.PaymentModel;
 import com.example.shariqkhan.wfdsa.MyPaymentActivity;
 import com.example.shariqkhan.wfdsa.R;
@@ -45,7 +46,7 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        PaymentModel dataModel = paymentsList.get(position);
+        final PaymentModel dataModel = paymentsList.get(position);
         final String sendInvoice = dataModel.getInvoice_id();
         Log.e("invoice_id", sendInvoice);
 
@@ -65,25 +66,19 @@ public class PaymentsRVAdapter extends RecyclerView.Adapter<PaymentsRVAdapter.My
             @Override
             public void onClick(View view) {
 
-                InvoiceDialog dialog = new InvoiceDialog(context, sendInvoice);
-                dialog.show();
-//                final Dialog dialog = new Dialog(context);
-//                dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//
-//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                dialog.getWindow().setLayout(lp.width, lp.height);
-//                dialog.setContentView(R.layout.invoice_dialog);
-//                dialog.show();
+                if(sendInvoice.equals("0"))
+                {
+                    PaymentInvoiceDialog dialog=new PaymentInvoiceDialog(context ,  dataModel.getId());
+                    dialog.show();
+                }
+                else
+                {
+                    InvoiceDialog dialog = new InvoiceDialog(context, sendInvoice);
+                    dialog.show();
+                }
+
             }
         });
-//
-//
-//        holder.tvTitle.setText(dataModel.getTitle());
-//        holder.tvDueDate.setText("Due Date "+dataModel.getDueDate());
-//        holder.tvPayNow.setText("PAY NOW\n$"+dataModel.getAmount());
 
         holder.tvPayNow.setOnClickListener(new View.OnClickListener() {
             @Override

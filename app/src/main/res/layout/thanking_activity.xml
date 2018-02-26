@@ -52,6 +52,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="XYZ event"
+                android:gravity="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -65,10 +66,10 @@
                 android:layout_weight="2"
                 android:ellipsize="end"
                 android:maxLines="3"
+                android:gravity="center"
                 android:text="Event Lcation"
                 android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+               />
 
 
 
@@ -80,9 +81,9 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Event Date"
+                android:gravity="center"
                 android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                 />
 
     </LinearLayout>
 

@@ -115,9 +115,10 @@ public class CEOActivity extends AppCompatActivity {
                                           @Override
 
                                           public void onLoadMore() {
-                                              arrayListToShow.add(null);
+
                                               adapter.notifyItemInserted(arrayListToShow.size());
                                               if (page <= total_pages) {
+                                                  arrayListToShow.add(null);
                                                   Handler mHand = new Handler();
                                                   mHand.postDelayed(new Runnable() {
 
@@ -244,7 +245,7 @@ public class CEOActivity extends AppCompatActivity {
                     }
                     if (total_members > 0) {
 
-                        Collections.reverse(arrayList);
+                       // Collections.reverse(arrayList);
                     }
                     if (total_members <= 6) {
                         arrayListToShow.addAll(arrayList);

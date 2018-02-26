@@ -159,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
                 editor.putString("type", "member");
+
                 editor.apply();
 
                 break;
@@ -253,11 +254,15 @@ public class LoginActivity extends AppCompatActivity {
                                     String phNo;
                                     String role = "";
 
+                                    SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
                                     if (user_data.getString("signin_type").equals("2")) {
+                                        editor.putString("signin_type", "2");
                                         phNo = user_data.getString("contact_no");
                                     } else if (user_data.getString("signin_type").equals("1")) {
                                         phNo = user_data.getString("cell");
                                         role = user_data.getString("role");
+                                        editor.putString("signin_type", "1");
                                     } else {
                                         phNo = "";
                                     }
@@ -265,7 +270,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                     Log.e("email", email);
-                                    SharedPreferences.Editor editor = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+
                                     editor.putString("role", role);
                                     editor.putString("api_secret", get_api_secret);
                                     editor.putString("deciderId", getId);
