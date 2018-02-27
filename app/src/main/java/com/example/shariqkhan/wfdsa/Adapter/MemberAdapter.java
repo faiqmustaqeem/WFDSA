@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,22 +23,25 @@ import com.example.shariqkhan.wfdsa.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ShariqKhan on 12/5/2017.
  */
 
-public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> {
+public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder>  implements Filterable {
 
 
 
-    ArrayList<ModelMember> arrayList = new ArrayList<>();
+    List<ModelMember> arrayList;
+    List<ModelMember> filteredlistMembers;
     Context context;
 
 
     public MemberAdapter(ArrayList<ModelMember> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
+        filteredlistMembers=arrayList;
     }
 
     @Override
@@ -47,7 +52,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
 
     @Override
     public void onBindViewHolder(final MyHolder holder, int position) {
-        ModelMember member = arrayList.get(position);
+        ModelMember member = filteredlistMembers.get(position);
 
         holder.memberWeb.setText(member.getMemberWeb());
         holder.memberName.setText(member.getMemberName());
@@ -82,7 +87,48 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MyHolder> 
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return filteredlistMembers.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredlistMembers = arrayList;
+                } else {
+                    List<ModelMember> filteredList = new ArrayList<>();
+                    for (ModelMember row : arrayList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (charString.equals("All")) {
+                            filteredList.add(row);
+                        }
+                        else if(charString.toLowerCase().equals(row.getRegion().toLowerCase()))
+                        {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    filteredlistMembers = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredlistMembers;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredlistMembers = (ArrayList<ModelMember>) filterResults.values;
+
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+            }
+        };
     }
 
     static class MyHolder extends RecyclerView.ViewHolder {

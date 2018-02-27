@@ -33,7 +33,7 @@ import java.util.Locale;
 public class MemberActivity extends AppCompatActivity {
 
     public RecyclerView listOfMembers;
-    RecyclerView.Adapter adapter;
+    MemberAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<ModelMember> arrayList = new ArrayList<>();
     ArrayList<ModelMember> arrayListSave;
@@ -125,33 +125,33 @@ public class MemberActivity extends AppCompatActivity {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 filterableString = text.toString();
-
-                                if (filterableString.equals("All")) {
-
-                                    arrayList = new ArrayList<>(arrayListSave);
-                                    //    Log.e("SizeAll", String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayListSave, MemberActivity.this);
-                                    listOfMembers.setAdapter(adapter);
-
-                                } else {
-                                    arrayList.clear();
-                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-
-                                        ModelMember memberToCheck = new ModelMember();
-                                        memberToCheck = arrayListSave.get(counter);
-                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-
-                                        if (memberToCheck.Country.equals(filterableString)) {
-                                            Log.e("SizeOfPak", String.valueOf(arrayList.size()));
-                                            arrayList.add(memberToCheck);
-                                            Log.e("SizeOfPak", String.valueOf(arrayList.size()));
-                                        }
-                                    }
-                                    Log.e("Jugar", String.valueOf(arrayList.size()));
-                                    adapter = new MemberAdapter(arrayList, MemberActivity.this);
-                                    listOfMembers.setAdapter(adapter);
-
-                                }
+                                    adapter.getFilter().filter(filterableString);
+//                                if (filterableString.equals("All")) {
+//
+//                                    arrayList = new ArrayList<>(arrayListSave);
+//                                    //    Log.e("SizeAll", String.valueOf(arrayList.size()));
+//                                    adapter = new MemberAdapter(arrayListSave, MemberActivity.this);
+//                                    listOfMembers.setAdapter(adapter);
+//
+//                                } else {
+//                                    arrayList.clear();
+//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
+//
+//                                        ModelMember memberToCheck = new ModelMember();
+//                                        memberToCheck = arrayListSave.get(counter);
+//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
+//
+//                                        if (memberToCheck.Country.equals(filterableString)) {
+//                                            Log.e("SizeOfPak", String.valueOf(arrayList.size()));
+//                                            arrayList.add(memberToCheck);
+//                                            Log.e("SizeOfPak", String.valueOf(arrayList.size()));
+//                                        }
+//                                    }
+//                                    Log.e("Jugar", String.valueOf(arrayList.size()));
+//                                    adapter = new MemberAdapter(arrayList, MemberActivity.this);
+//                                    listOfMembers.setAdapter(adapter);
+//
+//                                }
                                 //Toast.makeText(MemberActivity.this, text, Toast.LENGTH_SHORT).show();
                                 return true;
 
@@ -206,7 +206,7 @@ public class MemberActivity extends AppCompatActivity {
                         model.setMemberPhone(obj.getString("phone"));
                         model.setMemberEmail(obj.getString("email"));
                         model.setMemberFax(obj.getString("fax"));
-                        countries.add(obj.getString("country"));
+                       // countries.add(obj.getString("country"));
                         model.setCountry(obj.getString("country"));
                         model.setMemberName(obj.getString("member_name"));
                         model.setMemberWeb(obj.getString("website"));
@@ -216,8 +216,14 @@ public class MemberActivity extends AppCompatActivity {
                         model.setFlag_pic(obj.getString("flag_pic"));
                         model.setCompanyAddress(obj.getString("address"));
                         model.setCompanyName(obj.getString("company_name"));
+                        model.setRegion(obj.getString("region"));
 
-                        arrayList.add(model);
+                        countries.add(obj.getString("region"));
+
+                        if(obj.getString("status").equals("1"))
+                        {
+                            arrayList.add(model);
+                        }
 
                     }
                     arrayListSave = new ArrayList<>(arrayList);

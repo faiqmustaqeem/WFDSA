@@ -17,6 +17,7 @@ public class ModelMember {
     public String upload_image;
     public String firstname;
     private String wfdsa_title;
+    private String region;
 
     public String getCompany_logo() {
         return company_logo;
@@ -155,5 +156,13 @@ public class ModelMember {
 
     public void setWfdsa_title(String wfdsa_title) {
         this.wfdsa_title = wfdsa_title;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }
