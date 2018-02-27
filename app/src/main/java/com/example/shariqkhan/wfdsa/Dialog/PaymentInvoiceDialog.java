@@ -148,6 +148,7 @@ public class PaymentInvoiceDialog extends Dialog {
 
             }
             else {
+
                 Toast.makeText(act , "you are not connected to internet !" , Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }

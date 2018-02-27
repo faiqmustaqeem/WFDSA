@@ -54,9 +54,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.example.shariqkhan.wfdsa.SplashActivity.fetchAnnouncements;
-import static com.example.shariqkhan.wfdsa.SplashActivity.fetchEvents;
+//
+//import static com.example.shariqkhan.wfdsa.SplashActivity.fetchAnnouncements;
+//import static com.example.shariqkhan.wfdsa.SplashActivity.fetchEvents;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -121,8 +121,8 @@ public class LoginActivity extends AppCompatActivity {
                 edit.putString("type", "member");
                 edit.apply();
 
-                fetchEvents();
-                fetchAnnouncements();
+                //fetchEvents();
+                //fetchAnnouncements();
 //                Task task = new Task();
 //                task.execute();
                 login();
@@ -187,8 +187,8 @@ public class LoginActivity extends AppCompatActivity {
                 getPassword = etNonMemberPassowrd.getText().toString();
                 Log.e("Message", "Dhun dhun dhun");
 
-                fetchEvents();
-                fetchAnnouncements();
+//                fetchEvents();
+  //              fetchAnnouncements();
 //                Task task = new Task();
 //                task.execute();
                 login();

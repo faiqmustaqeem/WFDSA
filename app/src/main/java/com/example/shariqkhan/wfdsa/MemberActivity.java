@@ -77,30 +77,43 @@ public class MemberActivity extends AppCompatActivity {
         });
         imageFilter = (ImageView) toolbar.findViewById(R.id.filter);
 
+        try
+        {
 
-        imageFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<String> items = new ArrayList<String>(countries);
-                new MaterialDialog.Builder(MemberActivity.this)
-                        .title("Select Region")
-                        .items(items)
-                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                filterableString = text.toString();
-                                    adapter.getFilter().filter(filterableString);
+            imageFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ArrayList<String> items = new ArrayList<String>(countries);
+                    new MaterialDialog.Builder(MemberActivity.this)
+                            .title("Select Region")
+                            .items(items)
+                            .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                                @Override
+                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    if(text!=null && !text.toString().equals(""))
+                                    {
 
-                                return true;
+                                        filterableString = text.toString();
+                                        adapter.getFilter().filter(filterableString);
+                                    }
+                                    else {
+                                        adapter.getFilter().filter("All");
+                                    }
 
-                            }
-                        })
-                        .positiveText("Choose")
-                        .show();
+                                    return true;
+
+                                }
+                            })
+                            .positiveText("Choose")
+                            .show();
 
 
-            }
-        });
+                }
+            });
+        }catch (Exception e)
+        {
+            adapter.getFilter().filter("All");
+        }
 
 
     }
