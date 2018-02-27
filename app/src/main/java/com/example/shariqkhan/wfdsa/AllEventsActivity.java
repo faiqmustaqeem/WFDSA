@@ -377,9 +377,13 @@ public class AllEventsActivity extends AppCompatActivity {
 
 
             }
+            else {
+                Toast.makeText(AllEventsActivity.this , "You are not connected to internet" , Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
 
-            progressDialog.dismiss();
-        }
+
+                    }
     }
 
 

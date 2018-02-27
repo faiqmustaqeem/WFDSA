@@ -3,6 +3,7 @@ package com.example.shariqkhan.wfdsa;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -41,22 +42,28 @@ public class FirebaseMessagingServe extends FirebaseMessagingService {
     private void showNotification(String message) {
 
     //    Log.e("MessagePrint", message);
-        Intent i = new Intent(this, MainActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingntent =
-                PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+       SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+       boolean isLoggedIn=prefs.getBoolean("isLoggedIn",false);
+       if(isLoggedIn)
+       {
+           Intent i = new Intent(this, MainActivity.class);
+           i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+           PendingIntent pendingntent =
+                   PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setAutoCancel(true)
-                .setContentTitle("WFDSA")
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentText(messageToShow)
-                .setSmallIcon(R.drawable.frontlogo)
-                .setContentIntent(pendingntent);
-        Log.e("UriDeFAULT", String.valueOf(Settings.System.DEFAULT_NOTIFICATION_URI));
+           NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                   .setAutoCancel(true)
+                   .setContentTitle("WFDSA")
+                   .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                   .setContentText(messageToShow)
+                   .setSmallIcon(R.drawable.frontlogo)
+                   .setContentIntent(pendingntent);
+           Log.e("UriDeFAULT", String.valueOf(Settings.System.DEFAULT_NOTIFICATION_URI));
 
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+           NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+           manager.notify(0, builder.build());
+
+       }
 
     }
 

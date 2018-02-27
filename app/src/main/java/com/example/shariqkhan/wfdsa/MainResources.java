@@ -146,34 +146,36 @@ public class MainResources extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray resourcesData = resultObj.getJSONArray("data");
+                    if (getstatus.equals("success")) {
+                        JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    //    resourcesGroupList = new ArrayList<>(resourcesData.length());
+                        //    resourcesGroupList = new ArrayList<>(resourcesData.length());
 
 //
 //                    filesArray = new String[resourcesData.length()];
 //                    idArray = new String[resourcesData.length()];
 //
 //                    typeArray = new String[resourcesData.length()];
-                    //   titlesArray = new String[resourcesData.length()];
-                    for (int i = 0; i < resourcesData.length(); i++) {
-                        JSONObject job = resourcesData.getJSONObject(i);
-                        MainResourceModel model = new MainResourceModel();
-                        model.setResource_id(job.getString("categories_id"));
-                        // model.setTitle(job.getString("title_2"));
-                        //model.setResource_memeber(job.getString("resource_member"));
-                        model.setParent_name(job.getString("name"));
+                        //   titlesArray = new String[resourcesData.length()];
+                        for (int i = 0; i < resourcesData.length(); i++) {
+                            JSONObject job = resourcesData.getJSONObject(i);
+                            MainResourceModel model = new MainResourceModel();
+                            model.setResource_id(job.getString("categories_id"));
+                            // model.setTitle(job.getString("title_2"));
+                            //model.setResource_memeber(job.getString("resource_member"));
+                            model.setParent_name(job.getString("name"));
 
-                        arrayList.add(model);
+                            arrayList.add(model);
 
 
 //                        String resource_member = job.getString("resource_member");
@@ -215,64 +217,31 @@ public class MainResources extends AppCompatActivity {
 //
 //                        }
 
-                    }
-                    if (arrayList.size() > 0) {
-                        Collections.reverse(arrayList);
-                        MainResourceAdapter adapter = new MainResourceAdapter(arrayList, MainResources.this);
+                        }
+                        if (arrayList.size() > 0) {
+                            Collections.reverse(arrayList);
+                            MainResourceAdapter adapter = new MainResourceAdapter(arrayList, MainResources.this);
 
-                        list.setLayoutManager(new LinearLayoutManager(MainResources.this));
-                        list.setAdapter(adapter);
+                            list.setLayoutManager(new LinearLayoutManager(MainResources.this));
+                            list.setAdapter(adapter);
+                        }
+
                     }
+
+                    dialog.dismiss();
+
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
 
                 }
-
-//
-//                list.setAdapter(new ArrayAdapter<String>(MainResources.this, android.R.layout.simple_list_item_1, android.R.id.text1, filesArray));
-//                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        String get = parent.getItemAtPosition(position).toString();
-//                        String roleId = idArray[position];
-//                        String roleName = filesArray[position];
-//                        Log.e("role", get);
-//                        Log.e("id", roleId);
-////                if (get.equals(Array[0])) {
-////                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-////                } else if (get.equals(Array[1])) {
-////                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-////                } else if (get.equals(Array[2])) {
-////                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-////                } else if (get.equals(Array[3])) {
-////                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
-////
-////                }
-//
-//                        if (typeArray[position].equals("Member") && MainActivity.DECIDER.equals("nonmember")) {
-//                            Toast.makeText(MainResources.this, "This resource restricted to members only!", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Intent intent = new Intent(MainResources.this, MyResourcesActivity.class);
-//                            intent.putExtra("RoleName", roleId);
-//                            //  intent.putExtra("Name", roleName);
-//
-//                            startActivity(intent);
-//
-//                        }
-//
-//                    }
-//                });
-
                 dialog.dismiss();
-//                } else {
-//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
-
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
 
             }
-            dialog.dismiss();
+            else {
+                Toast.makeText(MainResources.this , "You are not connected to internet ! " , Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
 
         }
 

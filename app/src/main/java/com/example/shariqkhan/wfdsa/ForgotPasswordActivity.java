@@ -106,21 +106,23 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    Toast.makeText(ForgotPasswordActivity.this, resultObj.getString("response"), Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                    Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                    if (getstatus.equals("success")) {
+                        Toast.makeText(ForgotPasswordActivity.this, resultObj.getString("response"), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
 
 //                } else {
@@ -128,9 +130,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    dialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(ForgotPasswordActivity.this , "You are not connected to internet !" , Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
 

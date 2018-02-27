@@ -102,12 +102,6 @@ public class AnnouncementsActivity extends AppCompatActivity {
                                                                  loadNextDataFromApi();
 
 //
-//                                                                         arrayListToShow.remove(arrayListToShow.size() - 1);
-//                                                                         announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
-//                                                                         Log.e("page", page + "");
-//                                                                         Log.e("total_members", total_announcement + "");
-//                                                                         Log.e("total_pages", total_pages + "");
-//
                                                              }
                                                          }
                                                      }
@@ -166,76 +160,85 @@ public class AnnouncementsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
+                    if (getstatus.equals("success")) {
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
+                        //   roleArray = new String[rolesArray.length()];
+                        // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        AnnouncementsModel model = new AnnouncementsModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
-                        model.setId(obj.getString("announcement_id"));
-                        model.setTitle(obj.getString("title"));
-                        model.setDescription(obj.getString("announcement_message"));
-                        model.setImage(obj.getString("upload_image"));
-                        model.setDate(obj.getString("date"));
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            AnnouncementsModel model = new AnnouncementsModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
+                            model.setId(obj.getString("announcement_id"));
+                            model.setTitle(obj.getString("title"));
+                            model.setDescription(obj.getString("announcement_message"));
+                            model.setImage(obj.getString("upload_image"));
+                            model.setDate(obj.getString("date"));
 
-                        //  String announce_for = obj.getString("announce_for");
+                            //  String announce_for = obj.getString("announce_for");
 
-                        arrayList.add(model);
+                            arrayList.add(model);
 
-                        if(i==rolesArray.length()-1)
-                        {
-                            last_announcement_id=model.getId();
+                            if(i==rolesArray.length()-1)
+                            {
+                                last_announcement_id=model.getId();
+                            }
+
                         }
+                        total_announcement = resultObj.getInt("total_counts");
+                        Log.e("total_announcement",total_announcement+"");
 
-                    }
-                    total_announcement = resultObj.getInt("total_counts");
-                    Log.e("total_announcement",total_announcement+"");
-
-                    if (total_announcement % 6 == 0) {
-                        total_pages = total_announcement / 6;
-                    } else {
-                        total_pages = (total_announcement / 6) + 1;
-                    }
+                        if (total_announcement % 6 == 0) {
+                            total_pages = total_announcement / 6;
+                        } else {
+                            total_pages = (total_announcement / 6) + 1;
+                        }
 //                    if (total_announcement > 0) {
 //
 //                        // Collections.reverse(arrayList);
 //                    }
-                    if (total_announcement <= 6) {
-                        arrayListToShow.addAll(arrayList);
-                        item = total_announcement;
-                    } else {
-                        for (int k = 0; k < 6; k++) {
-                            arrayListToShow.add(arrayList.get(k));
+                        if (total_announcement <= 6) {
+                            arrayListToShow.addAll(arrayList);
+                            item = total_announcement;
+                        } else {
+                            for (int k = 0; k < 6; k++) {
+                                arrayListToShow.add(arrayList.get(k));
 
+                            }
+                            item = 6;
                         }
-                        item = 6;
-                    }
-                    page = 1;
-                    announcementsRVAdapter.notifyDataSetChanged();
+                        page = 1;
+                        announcementsRVAdapter.notifyDataSetChanged();
 
-                }
-                progressDialog.dismiss();
+                    }
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(AnnouncementsActivity.this,"You are not connected to internet",Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
+
 
 
         }
@@ -270,59 +273,68 @@ public class AnnouncementsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
+                    if (getstatus.equals("success")) {
 
-                    arrayListToShow.remove(arrayListToShow.size() - 1);
-                    announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
+                        arrayListToShow.remove(arrayListToShow.size() - 1);
+                        announcementsRVAdapter.notifyItemRemoved(arrayListToShow.size());
 
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
+                        //   roleArray = new String[rolesArray.length()];
+                        // String idArray[] = new String[rolesArray.length()];
 
-                    int arrayListOldIndex=arrayListToShow.size();
+                        int arrayListOldIndex=arrayListToShow.size();
                         arrayList.clear();
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        AnnouncementsModel model = new AnnouncementsModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
-                        model.setId(obj.getString("announcement_id"));
-                        model.setTitle(obj.getString("title"));
-                        model.setDescription(obj.getString("announcement_message"));
-                        model.setImage(obj.getString("upload_image"));
-                        model.setDate(obj.getString("date"));
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            AnnouncementsModel model = new AnnouncementsModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
+                            model.setId(obj.getString("announcement_id"));
+                            model.setTitle(obj.getString("title"));
+                            model.setDescription(obj.getString("announcement_message"));
+                            model.setImage(obj.getString("upload_image"));
+                            model.setDate(obj.getString("date"));
 
-                        arrayList.add(model);
+                            arrayList.add(model);
 
-                        if(i==rolesArray.length()-1)
-                        {
-                            last_announcement_id=model.getId();
+                            if(i==rolesArray.length()-1)
+                            {
+                                last_announcement_id=model.getId();
+                            }
+
+
+
                         }
 
 
 
+                        arrayListToShow.addAll(arrayList);
+                        announcementsRVAdapter.notifyItemRangeInserted(arrayListOldIndex,rolesArray.length());
+
+                        page++;
+                        announcementsRVAdapter.setLoaded();
+
                     }
 
 
-
-                    arrayListToShow.addAll(arrayList);
-                    announcementsRVAdapter.notifyItemRangeInserted(arrayListOldIndex,rolesArray.length());
-
-                    page++;
-                    announcementsRVAdapter.setLoaded();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
 
                 }
 
-
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+            }
+            else {
+                Toast.makeText(AnnouncementsActivity.this,"You are not connected to internet",Toast.LENGTH_LONG).show();
 
             }
 

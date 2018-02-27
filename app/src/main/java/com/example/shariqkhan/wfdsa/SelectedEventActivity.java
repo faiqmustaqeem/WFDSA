@@ -1054,57 +1054,59 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONObject rolesObj = resultObj.getJSONObject("data");
-                    JSONObject Obj0 = rolesObj.getJSONObject("0");
+                    if (getstatus.equals("success")) {
+                        JSONObject rolesObj = resultObj.getJSONObject("data");
+                        JSONObject Obj0 = rolesObj.getJSONObject("0");
 
-                    pollId = Obj0.getString("poll_id");
-                    choice = Obj0.getString("choice_selection");
-                    pollQuestion = Obj0.getString("poll_question");
+                        pollId = Obj0.getString("poll_id");
+                        choice = Obj0.getString("choice_selection");
+                        pollQuestion = Obj0.getString("poll_question");
 
-                    JSONArray choiceArray = rolesObj.getJSONArray("poll_answer");
-                    JSONArray idArray = rolesObj.getJSONArray("id");
+                        JSONArray choiceArray = rolesObj.getJSONArray("poll_answer");
+                        JSONArray idArray = rolesObj.getJSONArray("id");
 
-                    choice_array = new String[choiceArray.length()];
+                        choice_array = new String[choiceArray.length()];
 
-                    idKeepTrack = new String[idArray.length()];
+                        idKeepTrack = new String[idArray.length()];
 
-                    for (int i = 0; i < choiceArray.length(); i++) {
+                        for (int i = 0; i < choiceArray.length(); i++) {
 
-                        choice_array[i] = choiceArray.getString(i);
-                        idKeepTrack[i] = idArray.getString(i);
+                            choice_array[i] = choiceArray.getString(i);
+                            idKeepTrack[i] = idArray.getString(i);
 //
 //                        choice_array[i] = choiceArray.getString(Integer.parseInt(idKeepTrack[i]));
 //                        Log.e("Choices", choice_array[i]);
+                        }
+
                     }
 
-                }
-
-                progressDialog.dismiss();
+                    progressDialog.dismiss();
 
 
-                if (choice.equals("Single Choice")) {
-                    new MaterialDialog.Builder(SelectedEventActivity.this)
-                            .title(pollQuestion)
-                            .items(choice_array)
-                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                                @Override
-                                public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                                    pollResponse = charSequence.toString();
-                                    idKeep = idKeepTrack[i];
-                                    Log.e("id", idKeep);
-                                    Log.e("answer", choice_array[i]);
+                    if (choice.equals("Single Choice")) {
+                        new MaterialDialog.Builder(SelectedEventActivity.this)
+                                .title(pollQuestion)
+                                .items(choice_array)
+                                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                                    @Override
+                                    public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                                        pollResponse = charSequence.toString();
+                                        idKeep = idKeepTrack[i];
+                                        Log.e("id", idKeep);
+                                        Log.e("answer", choice_array[i]);
 
-                                    Task3 task3 = new Task3();
-                                    task3.execute();
+                                        Task3 task3 = new Task3();
+                                        task3.execute();
 
 //                                    final Dialog dialog = new Dialog(SelectedEventActivity.this);
 //                                    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1142,15 +1144,15 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 ////
 
 
-                                    return true;
-                                }
+                                        return true;
+                                    }
 
-                            })
-                            .positiveText("Choose")
-                            .show();
+                                })
+                                .positiveText("Choose")
+                                .show();
 
 
-                }
+                    }
 // else {
 //
 //
@@ -1215,10 +1217,16 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-                progressDialog.dismiss();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                    Toast.makeText(SelectedEventActivity.this, "You are not connected to internet !", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
             }
 
 
@@ -1254,131 +1262,134 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("EventDetailResponse", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+
+                Log.e("EventDetailResponse", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
+                    if (getstatus.equals("success")) {
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
 
 
-                    JSONObject obj = rolesArray.getJSONObject(0);
-                    tvAgenda.setText(obj.getString("title"));
-                    GlobalClass.selected_event_name = obj.getString("title");
+                        JSONObject obj = rolesArray.getJSONObject(0);
+                        tvAgenda.setText(obj.getString("title"));
+                        GlobalClass.selected_event_name = obj.getString("title");
 
-                    eventNameToPass = tvAgenda.getText().toString();
+                        eventNameToPass = tvAgenda.getText().toString();
 
-                    // tvAgendaDescription.setText(obj.getString(""));
+                        // tvAgendaDescription.setText(obj.getString(""));
 
-                    tvSpeakersDetails.setText(obj.getString("speaker"));
+                        tvSpeakersDetails.setText(obj.getString("speaker"));
 
-                    startEventTime = obj.getString("start_date");
-                    endEventTime = obj.getString("end_date");
+                        startEventTime = obj.getString("start_date");
+                        endEventTime = obj.getString("end_date");
 
-                    Log.e("start", startEventTime);
-                    Log.e("end", endEventTime);
+                        Log.e("start", startEventTime);
+                        Log.e("end", endEventTime);
 
-                    GlobalClass.selected_event_date = obj.getString("start_date").substring(0, 10);
+                        GlobalClass.selected_event_date = obj.getString("start_date").substring(0, 10);
 
-                    GlobalClass.selected_event_location = obj.getString("place");
+                        GlobalClass.selected_event_location = obj.getString("place");
 
-                    GlobalClass.selelcted_event_fees = obj.getString("fee");
+                        GlobalClass.selelcted_event_fees = obj.getString("fee");
 
-                    String noOfPhotosUploaded=obj.getString("photo_uploaded");
+                        String noOfPhotosUploaded=obj.getString("photo_uploaded");
 
-                    photos_upload_left=5-Integer.parseInt(noOfPhotosUploaded);
+                        photos_upload_left=5-Integer.parseInt(noOfPhotosUploaded);
 
-                    total_seats=Integer.parseInt(obj.getString("no_seats"));
-                    int seats_registered=Integer.parseInt(obj.getString("total_registered"));
-                    seats_left=total_seats-seats_registered;
+                        total_seats=Integer.parseInt(obj.getString("no_seats"));
+                        int seats_registered=Integer.parseInt(obj.getString("total_registered"));
+                        seats_left=total_seats-seats_registered;
 
-                    if(seats_left < 1 )
-                    {
-                        tvRegister.setText("Sorry , Seats Full ");
-                        tvRegister.setClickable(false);
-                    }
+                        if(seats_left < 1 )
+                        {
+                            tvRegister.setText("Sorry , Seats Full ");
+                            tvRegister.setClickable(false);
+                        }
 
-                    tvDayTime.setText(obj.getString("place"));
-                    heelo.setText((obj.getString("start_date").substring(0, 10)));
-                    address.setText(obj.getString("start_time"));
-                    loc = obj.getString("place");
-                    tvLikeQty.setText(obj.getString("total_likes"));
+                        tvDayTime.setText(obj.getString("place"));
+                        heelo.setText((obj.getString("start_date").substring(0, 10)));
+                        address.setText(obj.getString("start_time"));
+                        loc = obj.getString("place");
+                        tvLikeQty.setText(obj.getString("total_likes"));
 
-                    String agenda=obj.getString("agenda");
-                    tvAgendaDescription.setText(agenda);
-                    // AttendeesID = obj.getString("attendees_id");
+                        String agenda=obj.getString("agenda");
+                        tvAgendaDescription.setText(agenda);
+                        // AttendeesID = obj.getString("attendees_id");
 
-                    isLikeable = String.valueOf(obj.getString("is_like"));
-                    if (isLikeable.equals("0")) {
-                        Log.e("islike", "0");
+                        isLikeable = String.valueOf(obj.getString("is_like"));
+                        if (isLikeable.equals("0")) {
+                            Log.e("islike", "0");
 
-                    } else if (isLikeable.equals("1")) {
-                        Log.e("islike", "1");
-                        // tvLikeQty.setText(String.valueOf(Integer.parseInt(tvLikeQty.getText().toString())+1));
-                        likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
-                        likesView.setClickable(false);
-                    }
-                    String is_registered = String.valueOf(obj.getString("is_registered"));
+                        } else if (isLikeable.equals("1")) {
+                            Log.e("islike", "1");
+                            // tvLikeQty.setText(String.valueOf(Integer.parseInt(tvLikeQty.getText().toString())+1));
+                            likesView.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.like_blue), android.graphics.PorterDuff.Mode.MULTIPLY);
+                            likesView.setClickable(false);
+                        }
+                        String is_registered = String.valueOf(obj.getString("is_registered"));
 
-                    if (is_registered.equals("0")) {
-                        Log.e("is_registered", is_registered + "");
-                        GlobalClass.isAlreadyRegistered = false;
-                        ivdiscussion.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
-                        ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
-                        ivgallery.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    } else if (is_registered.equals("1")) {
-                        Log.e("is_registered", is_registered + "");
-                        tvRegister.setText("You are Registered for this Event");
-                        tvRegister.setClickable(false);
-                        GlobalClass.isAlreadyRegistered = true;
-                    }
+                        if (is_registered.equals("0")) {
+                            Log.e("is_registered", is_registered + "");
+                            GlobalClass.isAlreadyRegistered = false;
+                            ivdiscussion.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                            ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                            ivgallery.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        } else if (is_registered.equals("1")) {
+                            Log.e("is_registered", is_registered + "");
+                            tvRegister.setText("You are Registered for this Event");
+                            tvRegister.setClickable(false);
+                            GlobalClass.isAlreadyRegistered = true;
+                        }
 
-                    String is_checked_in = String.valueOf(obj.getString("is_checked_in"));
-                    Log.e("new_checked_in", is_checked_in);
-                    if (is_checked_in.equals("1")) {
-                        isCheckedIn = true;
-                        ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        String is_checked_in = String.valueOf(obj.getString("is_checked_in"));
+                        Log.e("new_checked_in", is_checked_in);
+                        if (is_checked_in.equals("1")) {
+                            isCheckedIn = true;
+                            ivcheck.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.lightGray), android.graphics.PorterDuff.Mode.MULTIPLY);
 //                        ivcheck.setClickable(false);
-                    } else if (is_checked_in.equals("0")) {
-                        isCheckedIn = false;
+                        } else if (is_checked_in.equals("0")) {
+                            isCheckedIn = false;
+                        }
+
+
+                        String answered = obj.getString("is_answered");
+                        if (answered.equals("yes")) {
+                            isAnswered = true;
+                        } else {
+                            isAnswered = false;
+                        }
+
+                        destinationlat = Double.parseDouble(obj.getString("latitude"));
+                        destinationLng = Double.parseDouble(obj.getString("longitude"));
+
+
+                        locationToSend = obj.getString("place") + " " + obj.getString("venue");
+
+
+                        mapFragment.getMapAsync(SelectedEventActivity.this);
+
+                        Eventname = obj.getString("title");
+                        tvCityCountry.setText(obj.getString("venue"));
+
+
+                        textToPost = tvAgenda.getText().toString()
+                                + " event will be held on \n" + startEventTime.substring(0, 11) + " in " + obj.getString("venue")
+                                + " at " + loc + " "
+                                + obj.getString("speaker")
+                                + "will be speaker." + "";
+
+                        textonFb = tvAgenda.getText().toString()
+                                + " event will be held on \n" + startEventTime + "\n" + obj.getString("speaker")
+                                + " will be speaker." + " \n";
                     }
-
-
-                    String answered = obj.getString("is_answered");
-                    if (answered.equals("yes")) {
-                        isAnswered = true;
-                    } else {
-                        isAnswered = false;
-                    }
-
-                    destinationlat = Double.parseDouble(obj.getString("latitude"));
-                    destinationLng = Double.parseDouble(obj.getString("longitude"));
-
-
-                    locationToSend = obj.getString("place") + " " + obj.getString("venue");
-
-
-                    mapFragment.getMapAsync(SelectedEventActivity.this);
-
-                    Eventname = obj.getString("title");
-                    tvCityCountry.setText(obj.getString("venue"));
-
-
-                    textToPost = tvAgenda.getText().toString()
-                            + " event will be held on \n" + startEventTime.substring(0, 11) + " in " + obj.getString("venue")
-                            + " at " + loc + " "
-                            + obj.getString("speaker")
-                            + "will be speaker." + "";
-
-                    textonFb = tvAgenda.getText().toString()
-                            + " event will be held on \n" + startEventTime + "\n" + obj.getString("speaker")
-                            + " will be speaker." + " \n";
-                }
-                progressDialog.dismiss();
+                    progressDialog.dismiss();
 
 
 //                } else {
@@ -1386,9 +1397,14 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("EventDetailError", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("EventDetailError", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }else {
+                Toast.makeText(SelectedEventActivity.this, "You are not connected to internet !", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
 
@@ -1465,31 +1481,39 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
+                    if (getstatus.equals("success")) {
 
-                    isAnswered = true;
-                    Toast.makeText(SelectedEventActivity.this, "Your Response Submitted!", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();
+                        isAnswered = true;
+                        Toast.makeText(SelectedEventActivity.this, "Your Response Submitted!", Toast.LENGTH_SHORT).show();
+                    }
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }else {
+                Toast.makeText(SelectedEventActivity.this, "You are not connected to internet !", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
+
 
 
         }

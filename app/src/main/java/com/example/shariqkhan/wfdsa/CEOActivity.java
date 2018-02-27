@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Adapter.CEOAdapter;
 import com.example.shariqkhan.wfdsa.Helper.getHttpData;
@@ -197,71 +198,73 @@ public class CEOActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Resources", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Resources", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                String resultObj = jsonObject.getString("success");
-                String getstatus = jsonObject.getString("msg");
+                    String resultObj = jsonObject.getString("success");
+                    String getstatus = jsonObject.getString("msg");
 
-                if (getstatus.startsWith("Members List is generating")) {
-                    Log.e("SuccessFull", "Inside");
-                    Log.e("CEO" , s);
+                    if (getstatus.startsWith("Members List is generating")) {
+                        Log.e("SuccessFull", "Inside");
+                        Log.e("CEO" , s);
 
-                    JSONArray rolesArray = jsonObject.getJSONArray("record");
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
+                        JSONArray rolesArray = jsonObject.getJSONArray("record");
+                        //   roleArray = new String[rolesArray.length()];
+                        // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        ModelMember model = new ModelMember();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            ModelMember model = new ModelMember();
+                            JSONObject obj = rolesArray.getJSONObject(i);
 
 
 
-                        model.setMemberPhone(obj.getString("telephone"));
-                        model.setMemberEmail(obj.getString("email"));
-                        model.setMemberFax(obj.getString("fax"));
-                        model.setCountry(obj.getString("name"));
-                        model.setFirstname(obj.getString("member_name"));
-                        model.setLastname("");
-                        model.setTitle(obj.getString("title"));
-                        model.setDesignation(obj.getString("designation"));
-                        model.setWfdsa_title(obj.getString("wfdsa_title"));
-                        model.setUpload_image(obj.getString("upload_image"));
-                        model.setCompanyAddress(obj.getString("address"));
-                        model.setCompanyName(obj.getString("company"));
-                        model.setFlag_pic(obj.getString("flag_pic"));
+                            model.setMemberPhone(obj.getString("telephone"));
+                            model.setMemberEmail(obj.getString("email"));
+                            model.setMemberFax(obj.getString("fax"));
+                            model.setCountry(obj.getString("name"));
+                            model.setFirstname(obj.getString("member_name"));
+                            model.setLastname("");
+                            model.setTitle(obj.getString("title"));
+                            model.setDesignation(obj.getString("designation"));
+                            model.setWfdsa_title(obj.getString("wfdsa_title"));
+                            model.setUpload_image(obj.getString("upload_image"));
+                            model.setCompanyAddress(obj.getString("address"));
+                            model.setCompanyName(obj.getString("company"));
+                            model.setFlag_pic(obj.getString("flag_pic"));
 
-                        arrayList.add(model);
-
-                    }
-                    total_members = arrayList.size();
-
-                    if (total_members % 6 == 0) {
-                        total_pages = total_members / 6;
-                    } else {
-                        total_pages = (total_members / 6) + 1;
-                    }
-                    if (total_members > 0) {
-
-                       // Collections.reverse(arrayList);
-                    }
-                    if (total_members <= 6) {
-                        arrayListToShow.addAll(arrayList);
-                        item = total_members;
-                    } else {
-                        for (int k = 0; k < 6; k++) {
-                            arrayListToShow.add(arrayList.get(k));
+                            arrayList.add(model);
 
                         }
-                        item = 6;
-                    }
-                    page = 1;
-                    adapter.notifyDataSetChanged();
+                        total_members = arrayList.size();
 
-                }
-                dialog.dismiss();
+                        if (total_members % 6 == 0) {
+                            total_pages = total_members / 6;
+                        } else {
+                            total_pages = (total_members / 6) + 1;
+                        }
+                        if (total_members > 0) {
+
+                            // Collections.reverse(arrayList);
+                        }
+                        if (total_members <= 6) {
+                            arrayListToShow.addAll(arrayList);
+                            item = total_members;
+                        } else {
+                            for (int k = 0; k < 6; k++) {
+                                arrayListToShow.add(arrayList.get(k));
+
+                            }
+                            item = 6;
+                        }
+                        page = 1;
+                        adapter.notifyDataSetChanged();
+
+                    }
+                    dialog.dismiss();
 
 
 //                } else {
@@ -269,11 +272,17 @@ public class CEOActivity extends AppCompatActivity {
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                dialog.dismiss();
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    dialog.dismiss();
+                    e.printStackTrace();
 
+                }
+
+            }
+            else {
+                Toast.makeText(CEOActivity.this , "You are not connected to internet" , Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
 
 

@@ -63,47 +63,11 @@ public class MemberActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        Locale[] locale = Locale.getAvailableLocales();
-//        final ArrayList<String> countries = new ArrayList<String>();
-//        countries.add("");
-//        String country;
-//        for (Locale loc : locale) {
-//            country = loc.getDisplayCountry();
-//            if (country.length() > 0 && !countries.contains(country)) {
-//                countries.add(country);
-//            }
-//        }
-//        Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
-//        for (int i = 0; i < 12; i++) {
-//
-//            ModelMember member = new ModelMember();
-//            member.setCompanyName("Codian-Soft-");
-//            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
-//            member.setMemberEmail("codianSoft@org");
-//            member.setMemberName("Shariq Khan");
-//            member.setMemberFax("03342477874");
-//            member.setMemberPhone("03342477874");
-//            member.setMemberWeb("www.codiansoft.com");
-//            if (i % 2 == 0) {
-//                member.setCountry("America");
-//            } else {
-//                member.setCountry("Pakistan");
-//            }
-//            arrayList.add(member);
-//
-//        }
-//        Log.e("Real", String.valueOf(arrayList.size()));
+
 
         Task2 task = new Task2();
         task.execute();
-      /*
-        arrayListSave = new ArrayList<>(arrayList);
-        Log.e("Clone", String.valueOf(arrayListSave.size()));
 
-        adapter = new MemberAdapter(arrayList);
-        listOfMembers.setAdapter(adapter);
-*/
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,33 +90,7 @@ public class MemberActivity extends AppCompatActivity {
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 filterableString = text.toString();
                                     adapter.getFilter().filter(filterableString);
-//                                if (filterableString.equals("All")) {
-//
-//                                    arrayList = new ArrayList<>(arrayListSave);
-//                                    //    Log.e("SizeAll", String.valueOf(arrayList.size()));
-//                                    adapter = new MemberAdapter(arrayListSave, MemberActivity.this);
-//                                    listOfMembers.setAdapter(adapter);
-//
-//                                } else {
-//                                    arrayList.clear();
-//                                    for (int counter = 0; counter < arrayListSave.size(); counter++) {
-//
-//                                        ModelMember memberToCheck = new ModelMember();
-//                                        memberToCheck = arrayListSave.get(counter);
-//                                        Log.e("MEMBER", String.valueOf(memberToCheck));
-//
-//                                        if (memberToCheck.Country.equals(filterableString)) {
-//                                            Log.e("SizeOfPak", String.valueOf(arrayList.size()));
-//                                            arrayList.add(memberToCheck);
-//                                            Log.e("SizeOfPak", String.valueOf(arrayList.size()));
-//                                        }
-//                                    }
-//                                    Log.e("Jugar", String.valueOf(arrayList.size()));
-//                                    adapter = new MemberAdapter(arrayList, MemberActivity.this);
-//                                    listOfMembers.setAdapter(adapter);
-//
-//                                }
-                                //Toast.makeText(MemberActivity.this, text, Toast.LENGTH_SHORT).show();
+
                                 return true;
 
                             }
@@ -185,70 +123,75 @@ public class MemberActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    Log.e("SuccessFull", "Inside");
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
+                    if (getstatus.equals("success")) {
+                        Log.e("SuccessFull", "Inside");
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
+                        //   roleArray = new String[rolesArray.length()];
+                        // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        ModelMember model = new ModelMember();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            ModelMember model = new ModelMember();
+                            JSONObject obj = rolesArray.getJSONObject(i);
 
-                        model.setMemberPhone(obj.getString("phone"));
-                        model.setMemberEmail(obj.getString("email"));
-                        model.setMemberFax(obj.getString("fax"));
-                       // countries.add(obj.getString("country"));
-                        model.setCountry(obj.getString("country"));
-                        model.setMemberName(obj.getString("member_name"));
-                        model.setMemberWeb(obj.getString("website"));
+                            model.setMemberPhone(obj.getString("phone"));
+                            model.setMemberEmail(obj.getString("email"));
+                            model.setMemberFax(obj.getString("fax"));
+                            // countries.add(obj.getString("country"));
+                            model.setCountry(obj.getString("country"));
+                            model.setMemberName(obj.getString("member_name"));
+                            model.setMemberWeb(obj.getString("website"));
 
 
-                        model.setCompany_logo(obj.getString("company_logo"));
-                        model.setFlag_pic(obj.getString("flag_pic"));
-                        model.setCompanyAddress(obj.getString("address"));
-                        model.setCompanyName(obj.getString("company_name"));
-                        model.setRegion(obj.getString("region"));
+                            model.setCompany_logo(obj.getString("company_logo"));
+                            model.setFlag_pic(obj.getString("flag_pic"));
+                            model.setCompanyAddress(obj.getString("address"));
+                            model.setCompanyName(obj.getString("company_name"));
+                            model.setRegion(obj.getString("region"));
 
-                        countries.add(obj.getString("region"));
+                            countries.add(obj.getString("region"));
 
-                        if(obj.getString("status").equals("1"))
-                        {
-                            arrayList.add(model);
+                            if(obj.getString("status").equals("1"))
+                            {
+                                arrayList.add(model);
+                            }
+
                         }
+                        arrayListSave = new ArrayList<>(arrayList);
+                        Log.e("Clone", String.valueOf(arrayListSave.size()));
+
+
+                        adapter = new MemberAdapter(arrayList, MemberActivity.this);
+                        listOfMembers.setAdapter(adapter);
 
                     }
-                    arrayListSave = new ArrayList<>(arrayList);
-                    Log.e("Clone", String.valueOf(arrayListSave.size()));
+                    dialog.dismiss();
 
 
-                    adapter = new MemberAdapter(arrayList, MemberActivity.this);
-                    listOfMembers.setAdapter(adapter);
+
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    dialog.dismiss();
+                    e.printStackTrace();
 
                 }
-                dialog.dismiss();
 
-
-//                } else {
-//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
-
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                dialog.dismiss();
-                e.printStackTrace();
 
             }
-
+            else {
+                Toast.makeText(MemberActivity.this , "you are not connected to internet !" , Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
 
         }
 

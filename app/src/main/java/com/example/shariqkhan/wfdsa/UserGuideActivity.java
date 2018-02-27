@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.shariqkhan.wfdsa.Adapter.UserGuideAdapter;
@@ -91,39 +92,47 @@ public class UserGuideActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
-                    //    roleArray = new String[rolesArray.length()];
+                    if (getstatus.equals("success")) {
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
+                        //    roleArray = new String[rolesArray.length()];
 
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        UserGuideModel model = new UserGuideModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            UserGuideModel model = new UserGuideModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
 
-                        model.setVideotitle(obj.getString("title"));
-                        model.setUploadVideo(obj.getString("upload_video"));
-                        arrayList.add(model);
-                        adapter.notifyDataSetChanged();
+                            model.setVideotitle(obj.getString("title"));
+                            model.setUploadVideo(obj.getString("upload_video"));
+                            arrayList.add(model);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
-                }
-                progressDialog.dismiss();
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(UserGuideActivity.this, "You are not connected to internet !", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
 

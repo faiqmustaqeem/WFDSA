@@ -311,58 +311,66 @@ public class GalleryActivityMine extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
 
-                if (getstatus.equals("success")) {
-                    JSONArray jsonArray = resultObj.getJSONArray("data");
+                    if (getstatus.equals("success")) {
+                        JSONArray jsonArray = resultObj.getJSONArray("data");
 
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
 
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        boolean isRegistered = GlobalClass.isAlreadyRegistered;
-                        boolean isCheckedIn = SelectedEventActivity.isCheckedIn;
-                        String permission = obj.getString("permission");
+                            JSONObject obj = jsonArray.getJSONObject(i);
+                            boolean isRegistered = GlobalClass.isAlreadyRegistered;
+                            boolean isCheckedIn = SelectedEventActivity.isCheckedIn;
+                            String permission = obj.getString("permission");
 
-                        if (permission.equals("1")) {
-                            if (isRegistered && isCheckedIn) {
-                                EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
-                                imagesList.add(model);
-                            }
-                        } else if (permission.equals("0")) {
-                            if (isRegistered) {
-                                EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
-                                imagesList.add(model);
+                            if (permission.equals("1")) {
+                                if (isRegistered && isCheckedIn) {
+                                    EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
+                                    imagesList.add(model);
+                                }
+                            } else if (permission.equals("0")) {
+                                if (isRegistered) {
+                                    EventGalleryModel model = new EventGalleryModel(obj.getString("event_id"), obj.getString("gallery_images"));
+                                    imagesList.add(model);
+                                }
                             }
                         }
-                    }
 
-                    gridAdapter = new EventGalleryGVadapter(GalleryActivityMine.this, R.layout.event_gallery_item, imagesList);
-                    gridView.setAdapter(gridAdapter);
+                        gridAdapter = new EventGalleryGVadapter(GalleryActivityMine.this, R.layout.event_gallery_item, imagesList);
+                        gridView.setAdapter(gridAdapter);
 //                    discussionRVAdapter = new InvoiceAdapter(act, discussionList);
 //                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
 //                    rvComments.setLayoutManager(mAnnouncementLayoutManager);
 //                    rvComments.setItemAnimator(new DefaultItemAnimator());
 //                    rvComments.setAdapter(discussionRVAdapter);
 
-                }
-                progressDialog.dismiss();
+                    }
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(GalleryActivityMine.this , "You are not connected to internet !" , Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
 

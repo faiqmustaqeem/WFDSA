@@ -83,40 +83,43 @@ public class CommiteesActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("data");
-                    roleArray = new String[rolesArray.length()];
-                    idArray = new String[rolesArray.length()];
+                    if (getstatus.equals("success")) {
+                        JSONArray rolesArray = resultObj.getJSONArray("data");
+                        roleArray = new String[rolesArray.length()];
+                        idArray = new String[rolesArray.length()];
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        LeaderShipModel model = new LeaderShipModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            LeaderShipModel model = new LeaderShipModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
 
-                        model.setGetRoleid(obj.getString("member_role_id"));
-                        model.setGetRoleName(obj.getString("name"));
-                        roleArray[i] = model.getGetRoleName();
-                        idArray[i] = model.getGetRoleid();
+                            model.setGetRoleid(obj.getString("member_role_id"));
+                            model.setGetRoleName(obj.getString("name"));
+                            roleArray[i] = model.getGetRoleName();
+                            idArray[i] = model.getGetRoleid();
+                        }
+
                     }
-
-                }
-                if(roleArray.length > 0) {
-                    listOfMembers.setAdapter(new ArrayAdapter<String>(CommiteesActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, roleArray));
-                    listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String get = parent.getItemAtPosition(position).toString();
-                            String roleId = idArray[position];
-                            String roleName = roleArray[position];
-                            Log.e("role", get);
-                            Log.e("id", roleId);
+                    if(roleArray.length > 0) {
+                        listOfMembers.setAdapter(new ArrayAdapter<String>(CommiteesActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, roleArray));
+                        listOfMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                String get = parent.getItemAtPosition(position).toString();
+                                String roleId = idArray[position];
+                                String roleName = roleArray[position];
+                                Log.e("role", get);
+                                Log.e("id", roleId);
 //                if (get.equals(Array[0])) {
 //                    Toast.makeText(LeaderShipActivity.this, get, Toast.LENGTH_SHORT).show();
 //                } else if (get.equals(Array[1])) {
@@ -129,27 +132,33 @@ public class CommiteesActivity extends AppCompatActivity {
 //                }
 
 
-                            Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
-                            intent.putExtra("RoleName", roleId);
-                            intent.putExtra("Name", roleName);
-                            intent.putExtra("url", GlobalClass.base_url + "wfdsa/roster/get_role_members?");
+                                Intent intent = new Intent(CommiteesActivity.this, CEOActivity.class);
+                                intent.putExtra("RoleName", roleId);
+                                intent.putExtra("Name", roleName);
+                                intent.putExtra("url", GlobalClass.base_url + "wfdsa/roster/get_role_members?");
 
-                            startActivity(intent);
+                                startActivity(intent);
 
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
 
-                progressDialog.dismiss();
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(CommiteesActivity.this , "You are not connected to internet" , Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
 

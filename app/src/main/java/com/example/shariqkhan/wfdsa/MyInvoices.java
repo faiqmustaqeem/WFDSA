@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.shariqkhan.wfdsa.Adapter.InvoiceAdapter;
@@ -186,57 +187,66 @@ public class MyInvoices extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
 
-                paymentsList.clear();
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
-                if (getstatus.equals("success")) {
-                    JSONArray rolesArray = resultObj.getJSONArray("payment_data");
-                    //    roleArray = new String[rolesArray.length()];
+                    paymentsList.clear();
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
+
+                    if (getstatus.equals("success")) {
+                        JSONArray rolesArray = resultObj.getJSONArray("payment_data");
+                        //    roleArray = new String[rolesArray.length()];
 
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        PaymentModel model = new PaymentModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            PaymentModel model = new PaymentModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
 
-                        // model.setId(obj.getString("payment_id"));
-                        model.setInvoice_id(obj.getString("invoice_id"));
-                        // model.setDueDate(obj.getString("payment_date"));
-                        model.setTitle(obj.getString("title"));
-                        model.setType(obj.getString("payment_status"));
-                        model.setAmount(obj.getString("grand_total"));
-                        //model.setTitle("EVENT PAYMENT");
+                            // model.setId(obj.getString("payment_id"));
+                            model.setInvoice_id(obj.getString("invoice_id"));
+                            // model.setDueDate(obj.getString("payment_date"));
+                            model.setTitle(obj.getString("title"));
+                            model.setType(obj.getString("payment_status"));
+                            model.setAmount(obj.getString("grand_total"));
+                            //model.setTitle("EVENT PAYMENT");
 
-                        paymentsList.add(model);
+                            paymentsList.add(model);
+
+                        }
+                        Collections.reverse(paymentsList);
+                        arrayListSave = new ArrayList<>(paymentsList);
+                        invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, paymentsList);
+                        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        rvPayments.setLayoutManager(mAnnouncementLayoutManager);
+                        rvPayments.setItemAnimator(new DefaultItemAnimator());
+                        rvPayments.setAdapter(invoiceAdapter);
+
+
+                        //  fetchMyPayments();
+
 
                     }
-                    Collections.reverse(paymentsList);
-                    arrayListSave = new ArrayList<>(paymentsList);
-                    invoiceAdapter = new MyInvoicesAdapter(MyInvoices.this, paymentsList);
-                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    rvPayments.setLayoutManager(mAnnouncementLayoutManager);
-                    rvPayments.setItemAnimator(new DefaultItemAnimator());
-                    rvPayments.setAdapter(invoiceAdapter);
-
-
-                    //  fetchMyPayments();
-
-
-                }
-                progressDialog.dismiss();
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(MyInvoices.this , "you are not connected to internet !" , Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
 

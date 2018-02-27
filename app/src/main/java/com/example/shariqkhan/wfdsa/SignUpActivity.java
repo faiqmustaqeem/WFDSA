@@ -430,6 +430,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             JSONObject jsonobj;
             if (s != null) {
+
                 try {
                     jsonobj = new JSONObject(s);
                     Log.e("JSON", s);
@@ -499,6 +500,9 @@ public class SignUpActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
 
+            }
+            else {
+                Toast.makeText(SignUpActivity.this , "Youn are not connected to internet !",Toast.LENGTH_LONG).show();
             }
 
             progressDialog.dismiss();

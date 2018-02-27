@@ -331,49 +331,54 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray resourcesData = resultObj.getJSONArray("data");
+                    if (getstatus.equals("success")) {
+                        JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    //    resourcesGroupList = new ArrayList<>(resourcesData.length());
+                        //    resourcesGroupList = new ArrayList<>(resourcesData.length());
 
 
-                    //   roleArray = new String[rolesArray.length()];
-                    // String idArray[] = new String[rolesArray.length()];
+                        //   roleArray = new String[rolesArray.length()];
+                        // String idArray[] = new String[rolesArray.length()];
 
-                    for (int i = 0; i < resourcesData.length(); i++) {
-                        JSONObject job = resourcesData.getJSONObject(i);
+                        for (int i = 0; i < resourcesData.length(); i++) {
+                            JSONObject job = resourcesData.getJSONObject(i);
 
-                        lat = Double.valueOf(job.getString("lat"));
-                        lng = Double.valueOf(job.getString("lng"));
-                        phNo = job.getString("contact_no");
+                            lat = Double.valueOf(job.getString("lat"));
+                            lng = Double.valueOf(job.getString("lng"));
+                            phNo = job.getString("contact_no");
 
-                        tvDiscussion.setText(job.getString("address"));
+                            tvDiscussion.setText(job.getString("address"));
+
+                        }
 
                     }
 
-                }
 
-
-                PGdialog.dismiss();
+                    PGdialog.dismiss();
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+
+                }
+                PGdialog.dismiss();
 
             }
-            PGdialog.dismiss();
+
 
         }
 

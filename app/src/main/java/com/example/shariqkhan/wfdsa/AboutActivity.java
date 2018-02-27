@@ -182,6 +182,7 @@ public class AboutActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if(error.getMessage()!=null)
                         Log.e("Volley_error", error.getMessage());
                         // parseVolleyError(error);
                         dialog.dismiss();

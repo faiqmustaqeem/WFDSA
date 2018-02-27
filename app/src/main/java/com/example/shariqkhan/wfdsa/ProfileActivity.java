@@ -606,6 +606,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
             }
+            else {
+                Toast.makeText(ProfileActivity.this , "You are not connected to internet !", Toast.LENGTH_LONG).show();
+            }
 
             progressDialog.dismiss();
         }
@@ -726,6 +729,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
 
 
+                }
+                else {
+                    Toast.makeText(ProfileActivity.this , "You are not connected to internet !", Toast.LENGTH_LONG).show();
                 }
 
                 progressDialog.dismiss();

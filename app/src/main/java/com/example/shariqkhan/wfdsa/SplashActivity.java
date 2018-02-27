@@ -30,24 +30,24 @@ public class SplashActivity extends AppCompatActivity {
      **/
     private final int SPLASH_DISPLAY_LENGTH = 2000;
 
-    public static void fetchAnnouncements() {
-        announcementsList = new ArrayList<AnnouncementsModel>();
-        announcementsList.add(new AnnouncementsModel("1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
-                "Announcement Title", "8th Sep 2017", "http://wfdsa.org/wp-content/uploads/2017/06/France.jpg"));
-        announcementsList.add(new AnnouncementsModel("2", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
-        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
-        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
-        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
-    }
-
-    public static void fetchEvents() {
-        eventsList = new ArrayList<EventsModel>();
-        eventsList.add(new EventsModel("1", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "personal"));
-        eventsList.add(new EventsModel("2", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
-        eventsList.add(new EventsModel("3", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
-        eventsList.add(new EventsModel("4", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
-        eventsList.add(new EventsModel("5", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "personal"));
-    }
+//    public static void fetchAnnouncements() {
+//        announcementsList = new ArrayList<AnnouncementsModel>();
+//        announcementsList.add(new AnnouncementsModel("1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+//                "Announcement Title", "8th Sep 2017", "http://wfdsa.org/wp-content/uploads/2017/06/France.jpg"));
+//        announcementsList.add(new AnnouncementsModel("2", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+//        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+//        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+//        announcementsList.add(new AnnouncementsModel("3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Announcement Title", "8th Sep 2017", ""));
+//    }
+//
+//    public static void fetchEvents() {
+//        eventsList = new ArrayList<EventsModel>();
+//        eventsList.add(new EventsModel("1", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "personal"));
+//        eventsList.add(new EventsModel("2", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
+//        eventsList.add(new EventsModel("3", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
+//        eventsList.add(new EventsModel("4", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "not"));
+//        eventsList.add(new EventsModel("5", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "WFDSA CEO COUNCIL MEETING (INVITATION ONLY) WFDSA CEO COUNCIL MEETING (INVITATION ONLY)", "France", "Paris", "01", "OCT", "2017", "9:00pm", "personal"));
+//    }
 
     /**
      * Called when the activity is first created.
@@ -78,8 +78,8 @@ public class SplashActivity extends AppCompatActivity {
         // Log.e("start","start");
 
 
-        fetchEvents();
-        fetchAnnouncements();
+     //   fetchEvents();
+       // fetchAnnouncements();
 
         new Handler().postDelayed(new Runnable() {
             @Override

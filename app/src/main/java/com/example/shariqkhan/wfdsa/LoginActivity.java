@@ -282,6 +282,7 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.putString("contact_no", phNo);
                                     //editor.putString("type", "member");
                                     editor.putString("stype", "member");
+                                    editor.putBoolean("isLoggedIn",true);
 
                                     editor.putString("image", up_image);
                                     editor.apply();

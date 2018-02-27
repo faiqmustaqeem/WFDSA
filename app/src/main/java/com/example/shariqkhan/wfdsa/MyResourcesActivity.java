@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.shariqkhan.wfdsa.Adapter.AnnouncementsRVAdapter;
@@ -123,111 +124,100 @@ public class MyResourcesActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
-                if (getstatus.equals("success")) {
-                    JSONArray resourcesData = resultObj.getJSONArray("data");
+                    if (getstatus.equals("success")) {
+                        JSONArray resourcesData = resultObj.getJSONArray("data");
 
-                    resourcesGroupList = new ArrayList<>();
-//
-//
-//                    //   roleArray = new String[rolesArray.length()];
-//                    // String idArray[] = new String[rolesArray.length()];
-//
-//                    for (int i = 0; i < resourcesData.length(); i++) {
-//                        JSONObject job = resourcesData.getJSONObject(i);
-//
-//
-//
-//                            resourcesSubItemsList.add(new ResourcesSubItems(file_id, path));
-//
-//                        resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), title, resourcesSubItemsList));
-//
-//                    }
-                    for (int i = 0; i < resourcesData.length(); i++) {
+                        resourcesGroupList = new ArrayList<>();
 
-                        JSONObject obj = resourcesData.getJSONObject(i);
+                        for (int i = 0; i < resourcesData.length(); i++) {
+
+                            JSONObject obj = resourcesData.getJSONObject(i);
 //                        String title = obj.getString("title_2");
 //                        String path = obj.getString("upload_file");
 //                        String file_id = obj.getString("resources_id");
-                        String name = obj.getString("name");
-                        JSONArray resources_array = obj.getJSONArray("resources");
+                            String name = obj.getString("name");
+                            JSONArray resources_array = obj.getJSONArray("resources");
 
 
-                        resourcesSubItemsList = new ArrayList<>();
+                            resourcesSubItemsList = new ArrayList<>();
 
-                        for (int index = 0; index < resources_array.length(); index++) {
+                            for (int index = 0; index < resources_array.length(); index++) {
 
-                            JSONObject resource = resources_array.getJSONObject(index);
+                                JSONObject resource = resources_array.getJSONObject(index);
 
-                            String title = resource.getString("title_2");
-                            String path = resource.getString("upload_file");
-                            String file_id = resource.getString("resources_id");
-                            String resource_member = resource.getString("resource_member");
+                                String title = resource.getString("title_2");
+                                String path = resource.getString("upload_file");
+                                String file_id = resource.getString("resources_id");
+                                String resource_member = resource.getString("resource_member");
 
 
-                            if (MainActivity.DECIDER.equals("member")) {
+                                if (MainActivity.DECIDER.equals("member")) {
 
-                                Boolean conditionSatisfied = false;
-                                if (GlobalClass.member_role.contains(",")) {
-                                    List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
+                                    Boolean conditionSatisfied = false;
+                                    if (GlobalClass.member_role.contains(",")) {
+                                        List<String> splitted_roles = Arrays.asList(GlobalClass.member_role.split(","));
 
-                                    if (splitted_roles != null) {
-                                        for (int j = 0; j < splitted_roles.size(); j++) {
-                                            if (resource_member.contains(splitted_roles.get(j).toString())) {
-                                                conditionSatisfied = true;
-                                                break;
+                                        if (splitted_roles != null) {
+                                            for (int j = 0; j < splitted_roles.size(); j++) {
+                                                if (resource_member.contains(splitted_roles.get(j).toString())) {
+                                                    conditionSatisfied = true;
+                                                    break;
+                                                }
                                             }
                                         }
+
                                     }
 
-                                }
+                                    if (conditionSatisfied == true) // multiple roles
+                                    {
+                                        resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
-                                if (conditionSatisfied == true) // multiple roles
-                                {
-                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
-
-                                } else if (resource_member.contains(GlobalClass.member_role)) {
-                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                    } else if (resource_member.contains(GlobalClass.member_role)) {
+                                        resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
 
-                                } else if (resource_member.equals("Public")) {
-                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                    } else if (resource_member.equals("Public")) {
+                                        resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
+                                    } else {
+                                        // dont add
+                                    }
                                 } else {
-                                    // dont add
-                                }
-                            } else {
-                                if (resource_member.equals("Public")) {
-                                    resourcesSubItemsList.add(new ResourcesSubItems(title, path));
+                                    if (resource_member.equals("Public")) {
+                                        resourcesSubItemsList.add(new ResourcesSubItems(title, path));
 
-                                } else {
-                                    // dont add
-                                }
+                                    } else {
+                                        // dont add
+                                    }
 
+
+                                }
 
                             }
 
+                            resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
+
+
                         }
 
-                        resourcesGroupList.add(new ResourcesGroup(String.valueOf(i), name, resourcesSubItemsList));
-
-
+                        if( resourcesGroupList.size()>0) {
+                            adapter = new ResourcesRVadapter(MyResourcesActivity.this, resourcesGroupList);
+                            rvResources.setLayoutManager(new LinearLayoutManager(MyResourcesActivity.this));
+                            rvResources.setAdapter(adapter);
+                        }
+                        dialog.dismiss();
                     }
-
-                    if( resourcesGroupList.size()>0) {
-                        adapter = new ResourcesRVadapter(MyResourcesActivity.this, resourcesGroupList);
-                        rvResources.setLayoutManager(new LinearLayoutManager(MyResourcesActivity.this));
-                        rvResources.setAdapter(adapter);
-                    }
-                    dialog.dismiss();
-                }
 
 
 //                } else {
@@ -235,13 +225,19 @@ public class MyResourcesActivity extends AppCompatActivity {
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    dialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(MyResourcesActivity.this, "You are not connected to internet !",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
 
-            dialog.dismiss();
+
         }
 
         @Override
