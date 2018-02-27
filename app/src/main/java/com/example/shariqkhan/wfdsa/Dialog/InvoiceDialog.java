@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 //import com.example.shariqkhan.wfdsa.Adapter.DiscussionRVAdapter;
@@ -132,52 +133,57 @@ public class InvoiceDialog extends Dialog {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
 
-                if (getstatus.equals("success")) {
-                  JSONObject object = resultObj.getJSONObject("data");
-                    totalAmount.setText(object.getString("amount"));
-                    Title.setText(object.getString("title"));
-                    // Duedate.setText(object.getString("name"));
+                    if (getstatus.equals("success")) {
+                        JSONObject object = resultObj.getJSONObject("data");
+                        totalAmount.setText(object.getString("amount"));
+                        Title.setText(object.getString("title"));
+                        // Duedate.setText(object.getString("name"));
 
-                    JSONArray rolesArray = object.getJSONArray("item");
+                        JSONArray rolesArray = object.getJSONArray("item");
 
 
-                    for (int i = 0; i < rolesArray.length(); i++) {
-                        InvoiceModel model = new InvoiceModel();
-                        JSONObject obj = rolesArray.getJSONObject(i);
+                        for (int i = 0; i < rolesArray.length(); i++) {
+                            InvoiceModel model = new InvoiceModel();
+                            JSONObject obj = rolesArray.getJSONObject(i);
 
-                        model.setPrice(obj.getString("amount"));
-                        model.setName(obj.getString("name"));
+                            model.setPrice(obj.getString("amount"));
+                            model.setName(obj.getString("name"));
 //                        model.setQuantity("5");
-                        discussionList.add(model);
+                            discussionList.add(model);
+                        }
+                        discussionRVAdapter = new InvoiceAdapter(act, discussionList);
+                        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
+                        rvComments.setLayoutManager(mAnnouncementLayoutManager);
+                        rvComments.setItemAnimator(new DefaultItemAnimator());
+                        rvComments.setAdapter(discussionRVAdapter);
+
                     }
-                    discussionRVAdapter = new InvoiceAdapter(act, discussionList);
-                    RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
-                    rvComments.setLayoutManager(mAnnouncementLayoutManager);
-                    rvComments.setItemAnimator(new DefaultItemAnimator());
-                    rvComments.setAdapter(discussionRVAdapter);
+                    progressDialog.dismiss();
 
+
+                } catch (JSONException e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
                 }
-                progressDialog.dismiss();
 
-//                } else {
-//                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
-
-            } catch (JSONException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+            }
+            else {
+                Toast.makeText(act, "you are not connected to internet !" , Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
+
 
 
         }

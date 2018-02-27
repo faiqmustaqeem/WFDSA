@@ -90,21 +90,7 @@ public class CEOActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//
-//        for (int i = 0; i < 12; i++) {
-//
-//            ModelMember member = new ModelMember();
-//            member.setCompanyAddress("bbshoppingmall-secondfloor-office3");
-//            member.setMemberEmail("codianSoft@org");
-//            member.setMemberName("Shariq Khan");
-//            member.setMemberFax("03342477874");
-//            member.setCompanyName("Codian-Soft-");
-//            member.setMemberPhone("03342477874");
-//            member.setMemberWeb("www.codiansoft.com");
-//            member.setCountry("Argentina");
-//            arrayList.add(member);
-//
-//        }
+
 
         Task2 task = new Task2();
         task.execute();
@@ -144,12 +130,7 @@ public class CEOActivity extends AppCompatActivity {
     }
 
     public void loadNextDataFromApi() {
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
-        //progressBar.setVisibility(View.VISIBLE);
+
 
 
         if (page <= total_pages) {

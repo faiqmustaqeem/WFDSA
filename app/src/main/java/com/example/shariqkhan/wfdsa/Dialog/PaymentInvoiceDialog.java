@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Adapter.InvoiceAdapter;
 import com.example.shariqkhan.wfdsa.GlobalClass;
@@ -110,36 +111,44 @@ public class PaymentInvoiceDialog extends Dialog {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("Res", s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
+            if(s!=null)
+            {
+                Log.e("Res", s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
 
 
-                JSONObject resultObj = jsonObject.getJSONObject("result");
-                String getstatus = resultObj.getString("status");
+                    JSONObject resultObj = jsonObject.getJSONObject("result");
+                    String getstatus = resultObj.getString("status");
 
 
-                if (getstatus.equals("success")) {
-                    JSONArray jsonArray = resultObj.getJSONArray("data");
-                    JSONObject object=jsonArray.getJSONObject(0);
+                    if (getstatus.equals("success")) {
+                        JSONArray jsonArray = resultObj.getJSONArray("data");
+                        JSONObject object=jsonArray.getJSONObject(0);
 
 
-                   // Title.setText("Event Payment");
-                    totalAmount.setText(object.getString("payment_amount"));
-                    event_name.setText(object.getString("title"));
-                    event_payment_date.setText(object.getString("payment_date"));
-                }
-                progressDialog.dismiss();
+                        // Title.setText("Event Payment");
+                        totalAmount.setText(object.getString("payment_amount"));
+                        event_name.setText(object.getString("title"));
+                        event_payment_date.setText(object.getString("payment_date"));
+                    }
+                    progressDialog.dismiss();
 
 //                } else {
 //                    Toast.makeText(LeaderShipActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 //                    finish();
 //                }
 
-            } catch (JSONException e) {
-                if(e.getMessage()!=null)
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    if(e.getMessage()!=null)
+                        Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                }
+
+            }
+            else {
+                Toast.makeText(act , "you are not connected to internet !" , Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
 

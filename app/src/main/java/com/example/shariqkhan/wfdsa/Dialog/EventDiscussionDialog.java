@@ -137,7 +137,7 @@ public class EventDiscussionDialog extends AppCompatActivity {
                         FirebaseDatabase.getInstance().getReference().child(SelectedEventActivity.id).push().setValue(
                                 new MessageModel(MainActivity.getFirstName + " " + MainActivity.getLastName,
                                         gettingText,
-                                        "dsa member",
+                                        MainActivity.ROLE,
                                         Date,
                                         time,
                                         MainActivity.imageUrl));
@@ -267,99 +267,12 @@ public class EventDiscussionDialog extends AppCompatActivity {
         } else {
             check = true;
         }
-        /*if (etName.getText().toString().equals("")) {
-            etName.setError("This field is required");
-            check = false;
-        } else {
-            check = true;
-        }*/
         return check;
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.tvSendComment:
-//                if (validComment()) {
-//                    //  loadMessages();
-//                    //get time
-//                    Date date = new Date();
-//                    Calendar cal = Calendar.getInstance();
-//                    SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
-//                    //get date
-//                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                    String time = sdfTime.format(date);
-//                    String Date = dateFormat.format(date);
-//
-//
-//                    //   Toast.makeText(this, "Button Clicked!", Toast.LENGTH_SHORT).show();
-//                    String gettingText = etComment.getText().toString();
-//                    if (!TextUtils.isEmpty(gettingText)) {
-//                        //Defining strings takay har bar reference mai likhna na paray
-//
-//                        String current_user_reference = "Messages/";
-//                        String chat_user_reference = "Messages/";
-//                        //for push id of user
-//
-//                        DatabaseReference user_message_push_id = mRootRef
-//                                .push();
-//
-//                        String push_id = user_message_push_id.getKey();
-//
-//                        Map messageMap = new HashMap();
-//                        messageMap.put("name", MainActivity.getFirstName + " " + MainActivity.getLastName);
-//                        messageMap.put("message", gettingText);
-//                        messageMap.put("post", "DSA MEMBER");
-//                        messageMap.put("date", Date);
-//                        messageMap.put("time", time);
-//
-//
-//                        Map messageUserMap = new HashMap();
-//
-//                        messageUserMap.put("/" + push_id, messageMap);
-//
-//
-//                        mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
-//                            @Override
-//                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//
-//                                if (databaseError != null) {
-//                                    Log.d("DbError", databaseError.getMessage().toString());
-//
-//                                } else {
-//                                    discussionList.clear();
-//                                    loadMessages();
-//                                }
-//                            }
-//                        });
-//
-//                    }
-//
-//                    // discussionRVAdapter.notifyDataSetChanged();
-//                    etComment.setText("");
-//                }
-//                break;
-//        }
-//    }
 
     private void loadMessages() {
         rvComments = (ListView) findViewById(R.id.rvComments);
-//        RecyclerView.LayoutManager mAnnouncementLayoutManager = new LinearLayoutManager(act);
-//        rvComments.setLayoutManager(mAnnouncementLayoutManager);
-//        rvComments.setItemAnimator(new DefaultItemAnimator());
-        //  rvComments.setAdapter(discussionRVAdapter);
-//        @BindView(R.id.tvSenderName)
-//        TextView tvSenderName;
-//        @BindView(R.id.tvDescription)
-//        TextView tvDescription;
-//        @BindView(R.id.tvDate)
-//        TextView tvDate;
-//        @BindView(R.id.tvTime)
-//        TextView tvTime;
-//        @BindView(R.id.tvComment)
-//        TextView tvComment;
-//        @BindView(R.id.ivSenderImage)
-//        ImageView ivSenderImage;
         adapter = new FirebaseListAdapter<MessageModel>(EventDiscussionDialog.this, MessageModel.class, R.layout.discussion_rv_item,
                 FirebaseDatabase.getInstance().getReference().child(SelectedEventActivity.id)) {
             @Override
@@ -394,65 +307,6 @@ public class EventDiscussionDialog extends AppCompatActivity {
 
 
         dialog.dismiss();
-//        // DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Messages").child(SelectedEventActivity.id);
-//        discussionList.clear();
-//
-//        mRootRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//
-////               Log.e("Inside", String.valueOf(dataSnapshot.getChildrenCount()));
-////               for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-////                   //arrayList.add(String.valueOf(dsp.geValue()));
-////                   MessageModel m = new MessageModel();
-////
-////                   String name = dsp.child("name").getValue().toString();
-////                   String message = dsp.child("message").getValue().toString();
-////                   String post = dsp.child("post").getValue().toString();
-////                   String date = dsp.child("date").getValue().toString();
-////                   String time = dsp.child("time").getValue().toString();
-////
-////
-////                   m.setName(name);
-////                   m.setMessage(message);
-////                   m.setPost(post);
-////                   m.setDate(date);
-////                   m.setTime(time);
-////                   discussionList.add(m);
-////                   Log.e("size", String.valueOf(discussionList.size()));
-////
-////
-////               }
-//
-//                MessageModel m = dataSnapshot.getValue(MessageModel.class);
-//
-//                    discussionList.add(m);
-//
-//
-//                discussionRVAdapter.notifyDataSetChanged();
-//
-//                Log.e("After notify!", String.valueOf(discussionList.size()));
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+
     }
 }

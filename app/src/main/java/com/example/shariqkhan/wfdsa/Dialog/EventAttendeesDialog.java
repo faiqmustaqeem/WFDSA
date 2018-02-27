@@ -141,7 +141,8 @@ public class EventAttendeesDialog extends Dialog implements View.OnClickListener
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Volley_error", error.networkResponse.statusCode + "");
+                    if(error.getMessage()!=null)
+                    Log.e("Volley_error", error.getMessage() + "");
                     none_going.setVisibility(View.VISIBLE);
                 }
             });

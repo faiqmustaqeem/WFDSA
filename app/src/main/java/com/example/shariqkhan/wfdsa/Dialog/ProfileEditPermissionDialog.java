@@ -247,6 +247,9 @@ public class ProfileEditPermissionDialog extends Dialog implements View.OnClickL
 
 
             }
+            else{
+                Toast.makeText(c ,"you are not connected to internet !",Toast.LENGTH_LONG ).show();
+            }
 
             progressDialog.dismiss();
         }
