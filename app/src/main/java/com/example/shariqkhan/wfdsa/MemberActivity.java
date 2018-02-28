@@ -172,11 +172,12 @@ public class MemberActivity extends AppCompatActivity {
                             model.setCompanyName(obj.getString("company_name"));
                             model.setRegion(obj.getString("region"));
 
-                            countries.add(obj.getString("region"));
+
 
                             if(obj.getString("status").equals("1"))
                             {
                                 arrayList.add(model);
+                                countries.add(obj.getString("region"));
                             }
 
                         }
@@ -196,7 +197,6 @@ public class MemberActivity extends AppCompatActivity {
                     Log.e("Error", e.getMessage());
                     dialog.dismiss();
                     e.printStackTrace();
-
                 }
 
 

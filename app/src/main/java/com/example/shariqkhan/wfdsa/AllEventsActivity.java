@@ -318,6 +318,7 @@ public class AllEventsActivity extends AppCompatActivity {
             JSONObject jsonobj;
             if (s != null) {
                 try {
+                    progressDialog.dismiss();
                     jsonobj = new JSONObject(s);
                     Log.e("JSON", s);
 
