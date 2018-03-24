@@ -57,6 +57,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
     int total_announcement;
     int total_pages;
     int page=0;
+    String[] monthsArray=new String[12];
 
  //   private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -70,7 +71,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("ANNOUNCEMENT");
+        mTitle.setText("ANNOUNCEMENTS");
         ImageView image;
         image = (ImageView) findViewById(R.id.ivBack);
 
@@ -80,6 +81,24 @@ public class AnnouncementsActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+
+        monthsArray[0]="Jan";
+        monthsArray[1]="Feb";
+        monthsArray[2]="March";
+        monthsArray[3]="April";
+        monthsArray[4]="May";
+        monthsArray[5]="June";
+        monthsArray[6]="July";
+        monthsArray[7]="Aug";
+        monthsArray[8]="Sep";
+        monthsArray[9]="Oct";
+        monthsArray[10]="Nov";
+        monthsArray[11]="Dec";
+
+
+
 
 
         Task task = new Task();
@@ -182,8 +201,13 @@ public class AnnouncementsActivity extends AppCompatActivity {
                             model.setTitle(obj.getString("title"));
                             model.setDescription(obj.getString("announcement_message"));
                             model.setImage(obj.getString("upload_image"));
-                            model.setDate(obj.getString("date"));
 
+
+                            int monthInNo=Integer.parseInt(obj.getString("date").substring(0,2))-1;
+                            String dateNew=obj.getString("date").substring(6,obj.getString("date").length());
+                            String day=obj.getString("date").substring(3,5);
+
+                            model.setDate(day+"-"+monthsArray[monthInNo]+"-"+dateNew);
                             //  String announce_for = obj.getString("announce_for");
 
                             arrayList.add(model);
@@ -302,7 +326,11 @@ public class AnnouncementsActivity extends AppCompatActivity {
                             model.setTitle(obj.getString("title"));
                             model.setDescription(obj.getString("announcement_message"));
                             model.setImage(obj.getString("upload_image"));
-                            model.setDate(obj.getString("date"));
+                            int monthInNo=Integer.parseInt(obj.getString("date").substring(0,2))-1;
+                            String dateNew=obj.getString("date").substring(6,obj.getString("date").length());
+                            String day=obj.getString("date").substring(3,5);
+
+                            model.setDate(day+"-"+monthsArray[monthInNo]+"-"+dateNew);
 
                             arrayList.add(model);
 

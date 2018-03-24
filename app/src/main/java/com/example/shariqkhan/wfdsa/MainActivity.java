@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences prefs;
     String refreshedToken;
     Button b1;
+    String[] monthsArray=new String[12];
+
 
     ProgressDialog PGdialog;
     ProgressDialog PGdialogAnnouncent;
@@ -171,6 +173,8 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
 
+
+
         FacebookSdk.sdkInitialize(getApplicationContext());
 
 
@@ -184,6 +188,20 @@ public class MainActivity extends AppCompatActivity
 //        Task6 task6 = new Task6();
 //        task6.execute();
         initUI();
+
+
+        monthsArray[0]="Jan";
+        monthsArray[1]="Feb";
+        monthsArray[2]="March";
+        monthsArray[3]="April";
+        monthsArray[4]="May";
+        monthsArray[5]="June";
+        monthsArray[6]="July";
+        monthsArray[7]="Aug";
+        monthsArray[8]="Sep";
+        monthsArray[9]="Oct";
+        monthsArray[10]="Nov";
+        monthsArray[11]="Dec";
 
 
 //
@@ -896,9 +914,23 @@ public class MainActivity extends AppCompatActivity
 
                                 String filter = sub.substring(0, 2);
 
-                                model.setDay(filter);
 
-                                model.setMonth(job.getString("start_date").substring(3, 6));
+                                int monthInNo=Integer.parseInt(filter);
+                                monthInNo=monthInNo-1;
+
+
+
+                                model.setDay(monthsArray[monthInNo]);
+
+
+
+
+
+
+                                model.setMonth(job.getString("start_date").substring(3,6));
+
+
+
                                 model.setYear(job.getString("start_date").substring(6, 10));
                                 model.setTime(job.getString("start_date"));
                                 //   model.setImageUrl(job.getString("upload_image"));
@@ -1002,7 +1034,14 @@ public class MainActivity extends AppCompatActivity
                             model.setTitle(obj.getString("title"));
                             model.setDescription(obj.getString("announcement_message"));
                             model.setImage(obj.getString("upload_image"));
-                            model.setDate(obj.getString("date"));
+
+
+                            int monthInNo=Integer.parseInt(obj.getString("date").substring(0,2))-1;
+                            String dateNew=obj.getString("date").substring(6,obj.getString("date").length());
+                            String day=obj.getString("date").substring(3,5);
+
+                            model.setDate(day+"-"+monthsArray[monthInNo]+"-"+dateNew);
+
                             String announce_for = obj.getString("announce_for");
 
                             arrayList2.add(model);

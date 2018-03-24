@@ -126,7 +126,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2">
 
-                <android.support.constraint.ConstraintLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
 
@@ -134,33 +134,27 @@
 
                     <TextView
                         android:id="@+id/textView2"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="10dp"
                         android:text="RESOURCES"
                         android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/rvResources"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_goneMarginLeft="10dp" />
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/cardView4"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2">
+                        android:layout_below="@id/textView2">
 
-                        <android.support.constraint.ConstraintLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/rectangle">
@@ -168,32 +162,28 @@
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/rvResources"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginRight="8dp"
                                 android:layout_marginTop="10dp"
-                                android:nestedScrollingEnabled="false"
-                                app:layout_constraintHorizontal_bias="0.7"
-                                app:layout_constraintLeft_toLeftOf="parent"
-                                app:layout_constraintRight_toRightOf="parent">
+                                android:nestedScrollingEnabled="false">
 
                             </android.support.v7.widget.RecyclerView>
 
-                        </android.support.constraint.ConstraintLayout>
+                        </RelativeLayout>
                     </android.support.v7.widget.CardView>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_alignParentRight="true"
                         android:background="@color/colorPrimaryDark"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cardView4">
+                        android:layout_below="@id/cardView4">
 
                         <TextView
                             android:id="@+id/tvViewAllResources"
@@ -204,8 +194,8 @@
                             android:padding="8dp"
                             android:text="View All"
                             android:textColor="@android:color/white" />
-                    </LinearLayout>
-                </android.support.constraint.ConstraintLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView

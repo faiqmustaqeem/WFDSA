@@ -34,9 +34,9 @@
                     android:id="@+id/tvDay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="01"
+                    android:text="March"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
 
@@ -113,12 +113,10 @@
                         android:id="@+id/tvCityCountry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:drawableLeft="@drawable/ic_loc"
-                        android:ellipsize="end"
                         android:gravity="center|left"
                         android:maxLines="1"
-                        android:text="Paris" />
+                        android:text="Paris,Paris,Paris,Paris,Paris,Paris,Paris,Paris,Paris,Paris," />
                 </LinearLayout>
 
             </RelativeLayout>

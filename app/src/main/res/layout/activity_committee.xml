@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:text="Committee"
+            android:text="Committees"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="17sp"

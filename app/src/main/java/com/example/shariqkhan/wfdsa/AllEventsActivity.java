@@ -55,12 +55,29 @@ public class AllEventsActivity extends AppCompatActivity {
     EventsRVAdapter eventsRVAdapter;
     ImageView image;
     String URL = GlobalClass.base_url+"wfdsa/apis/Event/Events";
+    String[] monthsArray=new String[12];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_events);
         ButterKnife.bind(this);
+
+
+        monthsArray[0]="Jan";
+        monthsArray[1]="Feb";
+        monthsArray[2]="March";
+        monthsArray[3]="April";
+        monthsArray[4]="May";
+        monthsArray[5]="June";
+        monthsArray[6]="July";
+        monthsArray[7]="Aug";
+        monthsArray[8]="Sep";
+        monthsArray[9]="Oct";
+        monthsArray[10]="Nov";
+        monthsArray[11]="Dec";
+
+
 
 //        RequestQueue queue = Volley.newRequestQueue(this);
 //
@@ -92,7 +109,7 @@ public class AllEventsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText("MY EVENTS");
+        mTitle.setText("EVENTS");
         image = (ImageView) findViewById(R.id.ivBack);
 
         image.setOnClickListener(new View.OnClickListener() {
@@ -335,16 +352,29 @@ public class AllEventsActivity extends AppCompatActivity {
                             JSONObject job = data.getJSONObject(i);
 
                             String status = job.getString("status");
+
+
                             if (status.equals("1")) {
+
+
                                 model.setId(job.getString("event_id"));
                                 model.setEventTitle(job.getString("title"));
                                 model.setVenueCity(job.getString("place"));
                                 String sub = job.getString("start_date");
 
+
                                 String filter = sub.substring(0, 2);
 
 
-                                model.setDay(filter);
+                                int monthInNo=Integer.parseInt(filter);
+                                monthInNo=monthInNo-1;
+
+
+
+                                model.setDay(monthsArray[monthInNo]);
+
+
+
 
                                 model.setMonth(job.getString("start_date").substring(3, 6));
                                 model.setYear(job.getString("start_date").substring(6, 10));

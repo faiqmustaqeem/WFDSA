@@ -120,6 +120,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ProfileActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
 
         <!-- <activity android:name=".model.ThankyouForRegistration" android:screenOrientation="portrait"/> -->

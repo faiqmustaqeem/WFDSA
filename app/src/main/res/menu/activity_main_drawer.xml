@@ -13,15 +13,12 @@
         <item
             android:id="@+id/nav_my_payment"
             android:icon="@drawable/ic_payment"
-            android:title="MY PAYMENT" />
+            android:title="MY PAYMENTS" />
         <item
             android:id="@+id/nav_announcement"
             android:icon="@drawable/ic_announcement"
             android:title="ANNOUNCEMENTS" />
-        <item
-            android:id="@+id/nav_about_wfdsa"
-            android:icon="@drawable/ic_about"
-            android:title="ABOUT WFDSA" />
+
         <item
             android:id="@+id/nav_about_wfdsa_leadership"
             android:icon="@drawable/leader"
@@ -35,7 +32,10 @@
             android:icon="@drawable/ic_member"
             android:title="DSA MEMBERS" />
 
-
+        <item
+            android:id="@+id/nav_about_wfdsa"
+            android:icon="@drawable/ic_about"
+            android:title="ABOUT WFDSA" />
         <item
             android:id="@+id/nav_contact_us"
             android:icon="@drawable/ic_contact"
