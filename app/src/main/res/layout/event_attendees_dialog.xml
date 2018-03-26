@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="18sp"
         android:layout_marginTop="18dp"
-        android:text="No on is going to this event yet .."
+        android:text="No one has registered in this event so far"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"

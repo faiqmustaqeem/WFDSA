@@ -190,6 +190,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             tvRegister.setText("You are Registered for this Event");
             tvRegister.setClickable(false);
         }
+
     }
 
     @Override
@@ -203,6 +204,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -355,7 +357,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             public void onClick(View view) {
                 Intent linkedinIntent = new Intent(Intent.ACTION_SEND);
                 linkedinIntent.setType("text/plain");
-                linkedinIntent.putExtra(Intent.EXTRA_TEXT, textToPost);
+                linkedinIntent.putExtra(Intent.EXTRA_TEXT, textonFb);
 
                 boolean linkedinAppFound = false;
                 List<ResolveInfo> matches2 = getPackageManager()
@@ -393,7 +395,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
 
-                SimpleDateFormat df3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                SimpleDateFormat df3 = new SimpleDateFormat("MM-dd-yyyy HH:mm", Locale.getDefault());
 //                String st = df3.format(startEventTime);
 //                String en = df3.format(endEventTime);
                 Date date = new Date();
@@ -407,7 +409,10 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                 long elapsedHours = 0;
                 long different = 0;
 
-                long timeInMiliStart = 0;
+                Calendar c=Calendar.getInstance();
+                c.set(Integer.parseInt(startEventTime.substring(0,2)),Integer.parseInt(startEventTime.substring(3,5)),Integer.parseInt(startEventTime.substring(6,10)));
+
+                long timeInMiliStart = 0; //c.getTimeInMillis();
                 long timeInMiliEnd = 0;
 
                 long difference = 0;
@@ -507,8 +512,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                 Toast.makeText(SelectedEventActivity.this, "You are not at event location!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
+
                             Toast.makeText(SelectedEventActivity.this, "Please Enable Location in your settings", Toast.LENGTH_SHORT).show();
-                                }
+                        }
 
                     } else {
 
@@ -1087,6 +1093,11 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
 //                        choice_array[i] = choiceArray.getString(Integer.parseInt(idKeepTrack[i]));
 //                        Log.e("Choices", choice_array[i]);
                         }
+
+                    }
+                    else
+                    {
+                        Toast.makeText(SelectedEventActivity.this, "no poll for this event so far!", Toast.LENGTH_LONG).show();
 
                     }
 

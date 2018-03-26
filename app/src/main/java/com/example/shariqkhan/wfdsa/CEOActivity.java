@@ -213,6 +213,7 @@ public class CEOActivity extends AppCompatActivity {
                             model.setDesignation(obj.getString("designation"));
                             model.setWfdsa_title(obj.getString("wfdsa_title"));
                             model.setUpload_image(obj.getString("upload_image"));
+                            Log.e("imagelink" , obj.getString("upload_image"));
                             model.setCompanyAddress(obj.getString("address"));
                             model.setCompanyName(obj.getString("company"));
                             model.setFlag_pic(obj.getString("flag_pic"));

@@ -49,10 +49,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
+
+import id.zelory.compressor.Compressor;
 
 /**
  * Created by Codiansoft on 12/29/2017.
@@ -135,11 +138,7 @@ public class GalleryActivityMine extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.e("image", "1");
-                if(SelectedEventActivity.photos_upload_left == 0)
-                {
-                    Toast.makeText(GalleryActivityMine.this,"You can not upload more Images , You have already uploaded 5 Images in this event",Toast.LENGTH_LONG).show();
-                }
-                else {
+
                     startActivityForResult(
                             ImagePicker.create(GalleryActivityMine.this)
                                     .folderMode(true) // folder mode (false by default)
@@ -148,19 +147,13 @@ public class GalleryActivityMine extends AppCompatActivity {
                                     .toolbarArrowColor(Color.BLACK) // Toolbar 'up' arrow color
                                     .multi() // multi mode (default mode)
                                     .showCamera(false)
-                                    .limit(SelectedEventActivity.photos_upload_left) // max images can be selected (99 by default)
+                                    .limit(5) // max images can be selected (99 by default)
                                     .imageDirectory("Camera")
                                     .getIntent(GalleryActivityMine.this), IpCons.RC_IMAGE_PICKER);
 
                     Log.e("image", "2");
 
-                }
 
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Choose application"), 100);
             }
         });
 
@@ -185,18 +178,26 @@ public class GalleryActivityMine extends AppCompatActivity {
             List<com.esafirm.imagepicker.model.Image> images = ImagePicker.getImages(data);
             encodedImageList.clear();
 
-
-
             for (int k = 0; k < images.size(); k++) {
                 com.esafirm.imagepicker.model.Image image = images.get(k);
                 String path = image.getPath();
                 if (!path.equals("")) {
                     Log.e("path", path);
-                    Bitmap bm = BitmapFactory.decodeFile(path);
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-                    encodedImageList.add(encodedImage);
+                    File file=new File(path);
+                    File compressedImageFile;
+                    try {
+                        compressedImageFile = new Compressor(this).compressToFile(file);
+                        Bitmap bm = BitmapFactory.decodeFile(compressedImageFile.getPath());
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bm.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        String encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                        encodedImageList.add(encodedImage);
+                        Log.e("compressed" , "successful");
+                    } catch (IOException e) {
+                        Log.e("compressed" , "failed");
+                        e.printStackTrace();
+                    }
+
                 }
 
             }
@@ -242,7 +243,7 @@ public class GalleryActivityMine extends AppCompatActivity {
                             try {
 
                                 Toast.makeText(getApplication(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                SelectedEventActivity.photos_upload_left=SelectedEventActivity.photos_upload_left-new_images_uploaded;
+                                //SelectedEventActivity.photos_upload_left=SelectedEventActivity.photos_upload_left-new_images_uploaded;
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

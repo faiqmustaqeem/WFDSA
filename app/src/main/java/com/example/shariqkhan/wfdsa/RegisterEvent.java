@@ -118,6 +118,7 @@ public class RegisterEvent extends AppCompatActivity {
         dialog = new ProgressDialog(RegisterEvent.this);
         dialog.setTitle("Payment in progress");
         dialog.setTitle("Please Wait");
+        dialog.setCanceledOnTouchOutside(false);
 
         tilAddress = (TextInputLayout) findViewById(R.id.tilAddress);
         tilFirstName = (TextInputLayout) findViewById(R.id.tilFirstName);

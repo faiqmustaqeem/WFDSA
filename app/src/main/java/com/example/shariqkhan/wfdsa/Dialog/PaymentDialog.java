@@ -46,7 +46,9 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -65,8 +67,11 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
     EditText cardNumber;
     EditText cvcNo;
     EditText email;
+    EditText etAddress;
+    EditText etContactNumber;
     Spinner monthSpinner;
     Spinner yearSpinner;
+    Spinner spinnerCountry;
     String year;
     String month;
 
@@ -79,6 +84,8 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
     String invoice_id;
     TextView amount;
     int rv_index;
+    String countryName="";
+
 
     public PaymentDialog(Context a, String invoice_title, String invoice_fees, String invoice_id, int rv_index) {
         super(a);
@@ -114,9 +121,41 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
         cardNumber = (EditText) findViewById(R.id.etCardNumber);
         cvcNo = (EditText) findViewById(R.id.etCVCcode);
         email = (EditText) findViewById(R.id.etEmail);
+        etContactNumber=(EditText)findViewById(R.id.etContactNumber);
+        etAddress=(EditText)findViewById(R.id.etAddress);
+        spinnerCountry=(Spinner)findViewById(R.id.spinnerCountry);
 
         monthSpinner = findViewById(R.id.spCardExpiryMonth);
         yearSpinner = findViewById(R.id.spCardExpiryYear);
+
+
+        Locale[] locale = Locale.getAvailableLocales();
+        ArrayList<String> countries = new ArrayList<String>();
+        countries.add("");
+        String country;
+        for (Locale loc : locale) {
+            country = loc.getDisplayCountry();
+
+
+            if (country.length() > 0 && !countries.contains(country)) {
+                countries.add(country);
+            }
+        }
+        Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, countries);
+        spinnerCountry.setAdapter(adapter3);
+        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                countryName = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         dialog = new ProgressDialog(act);
@@ -264,6 +303,20 @@ public class PaymentDialog extends Dialog implements View.OnClickListener{
         }
         if (year.equals("")) {
             printMsg("select card expiry Year");
+            return false;
+        }
+        if (countryName.equals("")) {
+            printMsg("select country");
+            return false;
+        }
+        if(etAddress.getText().toString().equals(""))
+        {
+            printMsg("Enter Address");
+            return false;
+        }
+        if(etContactNumber.getText().toString().equals(""))
+        {
+            printMsg("Enter Contact number");
             return false;
         }
         return true;

@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.shariqkhan.wfdsa.Dialog.ProfileEditPermissionDialog;
 import com.example.shariqkhan.wfdsa.Singleton.MySingleton;
+import com.facebook.share.Share;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -73,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public static final int GALLERY_CONSTANT = 1;
     public static boolean canEdit = false;
     public static Uri uri;
-    public static String path;
+    public String path;
     static String newFirstName;
     static String newLastName;
     static String newEmail;
@@ -126,6 +127,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Log.e("email", MainActivity.getEmail);
 //
         ButterKnife.bind(this);
+     //   path="";
+       SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+
+        path=prefs.getString("image","");
+        Log.e("role", GlobalClass.member_role);
+
 
         initUI();
         newFirstName = MainActivity.getFirstName;
@@ -243,7 +250,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
 
@@ -254,7 +262,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     .start(this);
         }
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            Log.e("crop_image" , "crop");
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 uri = result.getUri();
@@ -273,9 +283,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(ProfileActivity.this, "WorkingFine", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
                             Uri url = task.getResult().getDownloadUrl();
                             path = url.toString();
+                            Log.e("image_path" , path);
 
                             SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
 
@@ -518,10 +529,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //                params.put("image", path)
 
             parameters.add(new BasicNameValuePair("first_name", etFirstName.getText().toString()));
-            parameters.add(new BasicNameValuePair("last_name", etFirstName.getText().toString()));
+            parameters.add(new BasicNameValuePair("last_name", etLastName.getText().toString()));
             parameters.add(new BasicNameValuePair("cell", etMobileNumber.getText().toString()));
             parameters.add(new BasicNameValuePair("member_id", MainActivity.getId));
+
             parameters.add(new BasicNameValuePair("image", path));
+
+            Log.e("image1" , path);
 
             StringBuilder buffer = new StringBuilder();
 
