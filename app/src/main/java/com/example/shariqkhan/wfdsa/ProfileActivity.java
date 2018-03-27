@@ -692,7 +692,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
                     String Line = "";
 
-                    while ((Line = reader.readLine()) != null) {
+                    while ((Line = reader.readLine()) != null)
+                    {
                         Log.e("reader", Line);
                         Log.e("buffer", buffer.toString());
                         buffer.append(Line);

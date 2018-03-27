@@ -47,7 +47,7 @@ public class TopThreeResourcesAdapter extends RecyclerView.Adapter<TopThreeResou
             holder.image.setImageResource(R.drawable.ppttfile);
         } else if (model.getPath().contains(".pdf")) {
             holder.image.setImageResource(R.drawable.pdf);
-        } else if (model.getPath().contains(".xls")) {
+        } else if (model.getPath().contains(".xls") || model.getPath().contains(".csv")) {
             holder.image.setImageResource(R.drawable.excel);
         } else {
             holder.image.setImageResource(R.drawable.fileother);

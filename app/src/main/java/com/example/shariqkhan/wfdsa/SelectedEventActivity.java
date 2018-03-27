@@ -1062,7 +1062,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
             super.onPostExecute(s);
             if(s!=null)
             {
-                Log.e("Res", s);
+                Log.e("Res_poll", s);
                 try {
                     JSONObject jsonObject = new JSONObject(s);
 
@@ -1095,11 +1095,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         }
 
                     }
-                    else
-                    {
-                        Toast.makeText(SelectedEventActivity.this, "no poll for this event so far!", Toast.LENGTH_LONG).show();
 
-                    }
 
                     progressDialog.dismiss();
 
@@ -1162,6 +1158,11 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                                 .positiveText("Choose")
                                 .show();
 
+
+                    }
+                    else
+                    {
+                        Toast.makeText(SelectedEventActivity.this, "no poll for this event so far!", Toast.LENGTH_LONG).show();
 
                     }
 // else {
@@ -1232,6 +1233,7 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                     progressDialog.dismiss();
+                    Toast.makeText(SelectedEventActivity.this, "no poll for this event so far!", Toast.LENGTH_LONG).show();
                 }
 
             }

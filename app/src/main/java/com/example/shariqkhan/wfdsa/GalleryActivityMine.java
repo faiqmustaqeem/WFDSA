@@ -181,6 +181,7 @@ public class GalleryActivityMine extends AppCompatActivity {
             for (int k = 0; k < images.size(); k++) {
                 com.esafirm.imagepicker.model.Image image = images.get(k);
                 String path = image.getPath();
+                Log.e("path"+k , path);
                 if (!path.equals("")) {
                     Log.e("path", path);
                     File file=new File(path);
@@ -211,9 +212,9 @@ public class GalleryActivityMine extends AppCompatActivity {
 
             for (String encoded : encodedImageList) {
                 jsonArray.put(encoded);
-                Log.e("forLoop", "o");
+                Log.e("value_image", encoded);
             }
-            new_images_uploaded=encodedImageList.size();
+         //   new_images_uploaded=encodedImageList.size();
             //  Toast.makeText(this, String.valueOf(encodedImageList.size()), Toast.LENGTH_SHORT).show();
             try {
 
