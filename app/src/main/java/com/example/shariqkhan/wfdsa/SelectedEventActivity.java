@@ -324,6 +324,9 @@ public class SelectedEventActivity extends AppCompatActivity implements OnMapRea
                         .queryIntentActivities(linkedinIntent, 0);
 
                 for (ResolveInfo info : matches2) {
+
+
+
                     if (info.activityInfo.packageName.toLowerCase().startsWith(
                             "com.facebook")) {
                         linkedinIntent.setPackage(info.activityInfo.packageName);

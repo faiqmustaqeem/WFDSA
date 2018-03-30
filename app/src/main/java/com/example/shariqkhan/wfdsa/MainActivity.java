@@ -839,7 +839,7 @@ public class MainActivity extends AppCompatActivity
             HttpClient httpClient = new DefaultHttpClient();
 
 
-            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Events");
+            HttpPost post = new HttpPost(GlobalClass.base_url+"wfdsa/apis/Event/Single_event");
             Log.e("Must", "Must");
 
 
@@ -896,7 +896,7 @@ public class MainActivity extends AppCompatActivity
 
                         JSONArray data = result.getJSONArray("data");
                         arrayList.clear();
-                        int count = 0;
+
                         for (int i = 0; i < data.length(); i++) {
 
                                 EventsModel model = new EventsModel();
@@ -914,19 +914,10 @@ public class MainActivity extends AppCompatActivity
 
                                 String filter = sub.substring(0, 2);
 
-
                                 int monthInNo=Integer.parseInt(filter);
                                 monthInNo=monthInNo-1;
 
-
-
                                 model.setDay(monthsArray[monthInNo]);
-
-
-
-
-
-
                                 model.setMonth(job.getString("start_date").substring(3,6));
 
 
@@ -938,12 +929,9 @@ public class MainActivity extends AppCompatActivity
 
 
                                 arrayList.add(model);
-                                count++;
+
                             }
 
-                            if (count == 1) {
-                                break;
-                            }
 
                         }
 

@@ -33,33 +33,13 @@
 
         />
 
-    <TextView
-        android:id="@+id/pinchu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/invoiceDate"
-        android:layout_below="@+id/invoiceDate"
-        android:text="Total Amount:"
-        android:textSize="16sp"
-        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/totlAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/invoiceDate"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/pinchu"
-        android:text=""
-        android:textSize="16sp"
-        android:textStyle="bold"
-        />
 
     <TextView
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/totlAmount"
+        android:layout_below="@+id/invoiceTitle"
         android:layout_centerHorizontal="true"
         android:text="Items"
         android:textSize="16sp"
@@ -80,6 +60,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -128,6 +109,27 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/pinchu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/invoiceDate"
+        android:layout_below="@+id/linearLayout"
+        android:text="Total Amount:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/totlAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/pinchu"
+        android:text="0"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
     <ImageView
         android:id="@+id/close"
         android:layout_width="wrap_content"

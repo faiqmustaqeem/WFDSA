@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_my_events"
             android:icon="@drawable/ic_events"
-            android:title="MY EVENTS" />
+            android:title="EVENTS" />
         <item
             android:id="@+id/nav_resources"
             android:icon="@drawable/ic_resources"
-            android:title="MY RESOURCES" />
+            android:title="RESOURCES" />
         <item
             android:id="@+id/nav_my_payment"
             android:icon="@drawable/ic_payment"
-            android:title="MY PAYMENTS" />
+            android:title="PAYMENTS" />
         <item
             android:id="@+id/nav_announcement"
             android:icon="@drawable/ic_announcement"

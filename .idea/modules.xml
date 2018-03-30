@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WFDSA.iml" filepath="$PROJECT_DIR$/WFDSA.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\faiq\wfdsa\WFDSA\www.iml" filepath="C:\faiq\wfdsa\WFDSA\www.iml" />
+      <module fileurl="file://C:/faiq/wfdsa/WFDSA/www.iml" filepath="C:/faiq/wfdsa/WFDSA/www.iml" />
     </modules>
   </component>
 </project>

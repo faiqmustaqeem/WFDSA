@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 
 public class GlobalClass {
+
     public static ArrayList<EventsModel> eventsList;
     public static ArrayList<AnnouncementsModel> announcementsList;
     public static String selected_resource="";
@@ -25,5 +26,7 @@ public class GlobalClass {
     public static ArrayList<Long> list_downloads = new ArrayList<>();
     public static String download_file_name = "";
     public static String image_link = "";
+
+
 
 }

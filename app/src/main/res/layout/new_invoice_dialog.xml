@@ -33,35 +33,14 @@
 
          />
 
-    <TextView
-        android:id="@+id/pinchu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/invoiceDate"
-        android:layout_below="@+id/invoiceDate"
-        android:text="Total Amount:"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/totlAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/invoiceDate"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/pinchu"
-        android:text=""
-        android:textSize="16sp"
-        android:textStyle="bold"
-         />
 
     <TextView
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/totlAmount"
         android:layout_centerHorizontal="true"
-        android:text="Items"
+        android:layout_marginTop="20dp"
+        android:text=""
         android:textSize="16sp"
         android:textStyle="bold"
         />
@@ -88,6 +67,29 @@
         >
 
     </android.support.v7.widget.RecyclerView>
+
+
+    <TextView
+        android:id="@+id/pinchu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/invoiceDate"
+        android:layout_below="@+id/rvAttendees"
+        android:text="Total Amount:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/totlAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvAttendees"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/pinchu"
+        android:text="0"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
 
 
     <ImageView

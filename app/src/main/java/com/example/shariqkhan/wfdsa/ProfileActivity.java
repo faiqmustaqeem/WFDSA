@@ -48,6 +48,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public static final int GALLERY_CONSTANT = 1;
     public static boolean canEdit = false;
     public static Uri uri;
-    public String path;
+    public String path="";
     static String newFirstName;
     static String newLastName;
     static String newEmail;
@@ -127,10 +128,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Log.e("email", MainActivity.getEmail);
 //
         ButterKnife.bind(this);
-     //   path="";
        SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
-        path=prefs.getString("image","");
         Log.e("role", GlobalClass.member_role);
 
 
@@ -272,45 +271,45 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 File file = new File(uri.getPath());
 
 
-                DatabaseReference fb = FirebaseDatabase.getInstance().getReference();
-                String imageName = fb.push().getKey();
-
-                StorageReference imageRef = storageRef.child("profile_images").child(imageName + ".jpg");
+//                DatabaseReference fb = FirebaseDatabase.getInstance().getReference();
+//                String imageName = fb.push().getKey();
+//
+//                StorageReference imageRef = storageRef.child("profile_images").child(imageName + ".jpg");
 
 //                Compressor imageComp = new Compressor(ProfileActivity.this).compressToFile(file)
 
-                imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                            Uri url = task.getResult().getDownloadUrl();
-                            path = url.toString();
-                            Log.e("image_path" , path);
-
-                            SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
-
-                            edit.putString("image", path);
-                            edit.apply();
-
-
-                            Log.e("url", String.valueOf(url));
-
-                        }
-                    }
-                });
-
-//                try {
-//                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-//                    path = convertTOString(bmp);
-//                    Log.e("Path", path);
+//                imageRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<UploadTask.TaskSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(ProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+//                            Uri url = task.getResult().getDownloadUrl();
+//                            path = url.toString();
+//                            Log.e("image_path" , path);
+//
+//                            SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+//
+//                            edit.putString("image", path);
+//                            edit.apply();
 //
 //
-//                } catch (IOException e) {
-//                    Log.e("ExceptionFoundOfImage", e.getMessage());
+//                            Log.e("url", String.valueOf(url));
 //
-//                    e.printStackTrace();
-//                }
+//                        }
+//                    }
+//                });
+
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    path = convertTOString(bmp);
+                    Log.e("Path_image", path);
+
+
+                } catch (IOException e) {
+                    Log.e("ExceptionFoundOfImage", e.getMessage());
+
+                    e.printStackTrace();
+                }
 
 
                 Log.e("Uri", String.valueOf(uri));
@@ -579,6 +578,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     String checkResult = result.getString("status");
 
                     if (checkResult.equals("success")) {
+
+                        JSONArray dataArray=result.getJSONArray("data");
+                        JSONObject data=dataArray.getJSONObject(0);
+                        String image_link=data.getString("upload_image");
+
+
 //
 //                            Log.e("insidepost", checkResult);
 //                            String get_api_secret = result.getString("api_secret");
@@ -598,6 +603,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         editor.putString("first_name", etFirstName.getText().toString());
                         editor.putString("last_name", etLastName.getText().toString());
                         editor.putString("contact_no", etMobileNumber.getText().toString());
+                        editor.putString("image" , image_link);
+
+//                            SharedPreferences.Editor edit = getSharedPreferences("SharedPreferences", MODE_PRIVATE).edit();
+//
+//                            edit.putString("image", path);
+//                            edit.apply();
 
 
                         editor.apply();

@@ -108,9 +108,9 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
       rvAnnouncements.setAdapter(announcementsRVAdapter);
 
-        announcementsRVAdapter.setOnLoadMoreListener(new AnnouncementsRVAdapter.OnLoadMoreListener() {
+        announcementsRVAdapter.setOnLoadMoreListener(new AnnouncementsRVAdapter.OnLoadMoreListener()
+                                                     {
                                                          @Override
-
                                                          public void onLoadMore() {
                                                              Log.e("page", page + "");
                                                                          Log.e("total_members", total_announcement + "");
@@ -119,7 +119,6 @@ public class AnnouncementsActivity extends AppCompatActivity {
                                                                  arrayListToShow.add(null);
                                                                  announcementsRVAdapter.notifyItemInserted(arrayListToShow.size());
                                                                  loadNextDataFromApi();
-
 //
                                                              }
                                                          }
@@ -129,8 +128,6 @@ public class AnnouncementsActivity extends AppCompatActivity {
 
     }
 
-    // Append the next page of data into the adapter
-    // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi() {
 
 
@@ -226,10 +223,7 @@ public class AnnouncementsActivity extends AppCompatActivity {
                         } else {
                             total_pages = (total_announcement / 6) + 1;
                         }
-//                    if (total_announcement > 0) {
-//
-//                        // Collections.reverse(arrayList);
-//                    }
+
                         if (total_announcement <= 6) {
                             arrayListToShow.addAll(arrayList);
                             item = total_announcement;

@@ -133,7 +133,6 @@ public class MainResources extends AppCompatActivity {
 
             //String url = "http://codiansoft.com/wfdsa/apis/Announcement/Announcement";
 
-
 //
             String response = getHttpData.getData(GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_ctg");
             Log.e("url", GlobalClass.base_url + "wfdsa/apis/Resources/Get_resource_ctg");
